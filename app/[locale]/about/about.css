@@ -1,0 +1,73 @@
+.bgcolor{
+    background-color: rgb(231, 231, 231);
+}
+.aboutbg {
+    position: relative;
+    z-index: 10;
+    background-size: cover;
+  
+    background-repeat: no-repeat;
+    background: url('../../../public/about/about.jpg') center / cover no-repeat;
+  
+}
+
+
+.bg2 {
+    color: var(--color-alt-content-primary) !important;
+    border-radius: 1.2rem !important;
+    padding: 40px !important;
+    background: #193063 url('../../../public/about/sleepandbed.svg') no-repeat bottom center / contain !important;
+    background-size: auto 70px !important;
+}
+
+@media screen and (max-width:426px) {
+    .bg2 {
+
+        background-size: auto 35px !important;
+    }
+}
+
+@media screen and (max-width:321px) {
+    .bg2 {
+
+        background-size: auto 33px !important;
+    }
+}
+
+
+
+.aboutheader {
+    position: relative;
+    color: white;
+    font-size: clamp(1.5rem, 4vw, 2.5rem); 
+    font-weight: bold;
+    padding: 20px 40px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    text-align: center;
+}
+
+.aboutbg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(23, 36, 48, 0.7) !important; /* Applying the rgba value for transparency */
+    z-index: 1; /* Ensure the overlay is above the background image */
+}
+
+.bg-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(23, 36, 48, 0.7) !important; /* Applying the rgba value for transparency */
+    z-index: 1; /* Ensure the overlay is above the background image */
+  }
+  

@@ -1,0 +1,134 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String    @default("NO_NAME")
+  email         String    @unique(map: "user_email_idx")
+ clerkUserId   String
+  password      String?
+  role          String    @default("user")
+
+  createdAt     DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime  @updatedAt
+  
+
+}
+enum ProductType {
+  MATTRESS
+  PILLOW
+  QUILT
+  PAD
+}
+
+model Product {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type        ProductType
+  images      String[]
+  titleEn     String
+  titleKa     String
+  secondtext String
+  secondtextEn String
+  categoryEn  String
+  categoryKa  String
+  pad         Pad?
+  mattress    Mattress?
+  pillow      Pillow?
+  quilt       Quilt?
+    createdAt   DateTime @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime @updatedAt
+}
+
+
+model Mattress {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product         Product  @relation(fields: [id], references: [id])
+  height          String
+  firmnessLevel   Int      @default(0)
+  descriptionEn String
+  descriptionKa String
+  minitext    String
+  minitextEn  String
+  springTech   Boolean
+  breathable   Boolean
+  doubleSided  Boolean
+  orthopaedic  Boolean
+  superSoftFoam Boolean @default(false)
+  visconFabric Boolean @default(false)
+  graphiteViscoFoam Boolean @default(false)
+  carbonYarnTechnologyPillowTopMattress Boolean @default(false)
+  middleComfortLayer Boolean @default(false)
+  visconFabricSoftComfortLayer Boolean @default(false)
+  copperViscoLayer Boolean @default(false)
+  cncFoamTechnology Boolean @default(false)
+  knitte       Boolean
+  wool         Boolean
+  visco        Boolean
+  dns          Boolean
+  latex        Boolean
+  coconutLayer Boolean @default(false)
+  washable     Boolean
+}
+
+model Pad {
+  id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product  Product  @relation(fields: [id], references: [id])
+  firmness String
+  firmnessEn String
+  height   String
+
+  descriptionEn String
+  descriptionKa String
+ minitext    String
+  minitextEn  String
+  springTech   Boolean
+  breathable      Boolean
+  doubleSided     Boolean
+  orthopaedic     Boolean
+  knitte Boolean
+  wool Boolean
+  visco Boolean
+  dns Boolean
+  latex Boolean
+  coconutLayer Boolean @default(false)
+ washable Boolean
+}
+
+model Pillow {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product     Product  @relation(fields: [id], references: [id])
+  size        String
+  weight      Int
+  minitext    String
+  minitextEn  String
+  outerFabric String
+  filling     String
+  packaging   String
+   outerFabricEn String
+  fillingEn     String
+  packagingEn   String
+}
+
+model Quilt {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product       Product  @relation(fields: [id], references: [id])
+  dimensions    String
+  fabric        String
+  filling       String
+
+    fabricEn        String
+  fillingEn       String
+  weight        String
+ minitext    String
+  minitextEn  String
+}

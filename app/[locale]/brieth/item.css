@@ -1,0 +1,202 @@
+.productbg {
+    position: relative; 
+
+    max-width: 1500px; 
+    height: 50vh; 
+    min-height: 300px; 
+    border-radius: 30px;
+    background: url('../../../public/prod/productsbg.jpg') center / cover no-repeat;
+    margin: 0 auto; /* Centers it */
+}
+
+.aboutheader {
+    position: relative;
+    color: white;
+    font-size: clamp(1.5rem, 4vw, 2.5rem); 
+    font-weight: bold;
+    padding: 20px 40px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    text-align: center;
+}
+
+
+
+  .productLink .active{
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+  }
+  
+  .productLink:hover {
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+  }
+
+  .links {
+    display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+  }
+
+  /* Default Item Styles for larger screens */
+.item {
+  display: flex;
+  justify-content: center;
+  margin: 0 30px;
+}
+
+/* For small screens, use flexbox and center the items */
+@media (max-width: 767px) {
+  .item {
+    width: 100%;
+    display: flex; /* Ensures the items are treated as flex containers */
+    justify-content: center; /* Centers the items horizontally */
+    margin: 10px 0; /* Adjust the margin as needed */
+  }
+}
+
+/* Card Styles (unchanged) */
+.card {
+  position: relative;
+  width: 300px;
+  margin: 60px 0;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* Additional Styles for Cards */
+.card-header,
+.card-footer {
+  position: absolute;
+  width: 100%;
+  background: rgb(231, 231, 231);
+  padding: 10px 15px;
+  align-items: center;
+  transition: 0.3s ease-in-out;
+  visibility: hidden;
+}
+
+.card-header {
+  bottom: calc(100% - 70px);
+}
+
+.card-footer {
+  top: calc(100% - 70px);
+}
+
+.card:hover .card-header {
+  bottom: 100%;
+  box-shadow: 0px -15px 12px -7px rgba(0, 0, 0, 0.1);
+  visibility: visible;
+}
+
+.card:hover .card-footer {
+  top: 100%;
+  box-shadow: 0px 15px 12px -7px rgba(0, 0, 0, 0.1);
+  visibility: visible;
+}
+
+.card-body {
+  height: 400px;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Additional Effects for Card Hover */
+.card.effect2 .card-header,
+.card.effect2 .card-footer {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.card.effect2:hover .card-header,
+.card.effect2:hover .card-footer {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.pag {
+  margin: 0 auto !important;
+}
+
+.bg-overlay {
+  position: relative;
+  z-index: 10;
+  background-size: cover;
+
+  background-repeat: no-repeat;
+}
+
+@media screen and (max-width:426px) {
+  .bg-overlay {
+    position: relative;
+    z-index: 10;
+    background-size: cover;
+    background-position: left;
+    background-repeat: no-repeat;
+  }
+}
+
+.allcontainer{
+ 
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100%;
+    max-width: 1440px; 
+
+}
+
+
+.bg-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(23, 36, 48, 0.7) !important; /* Applying the rgba value for transparency */
+  z-index: 1; /* Ensure the overlay is above the background image */
+}
+
+
+/* Add this CSS */
+.productLink {
+  display: inline-block; /* Ensures links behave like block elements but align inline */
+  padding: 10px 20px; /* Consistent padding for all links */
+  transition: all .2s ease-in-out;
+  color: #000;
+  font-size: 16px; /* Set font size */
+  text-transform: capitalize; /* Optional: Ensures text is consistent */
+  text-decoration: none; /* Optional: Removes underline */
+  border: 1px solid black;
+
+  background-color: #fff;
+}
+
+.productLink.active {
+  background-color: #000; /* Optional: Background color for active link */
+  color: #fff; /* Optional: Text color for active link */
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .productLink {
+    flex: 1; /* This ensures that links grow to fill available space */
+    text-align: center; /* Ensures text is centered */
+    font-size: 12px; /* Smaller font size on mobile */
+  }
+}

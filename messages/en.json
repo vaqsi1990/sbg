@@ -1,0 +1,146 @@
+{
+  "cataloge": {
+    "whyUsTitle": "Why us?",
+    "bestSleepForEveryone": "The Best Sleep for Everyone",
+    "sleep": "The Best Sleep for Everyone",
+    "header": "You can browse our catalogs to get detailed information about our wide range and innovative solutions, and see our logos that reflect the strength and values of our brand. We meticulously work on every detail to offer you the very best.",
+    "first": "Our company, which exports to over 25 countries across 7 continents, stands out with its eco-friendly energy production system. Our facilities generate their own energy through solar panel systems and are entirely based on environmentally friendly and renewable energy sources.",
+    "second": "Our products, designed with powerful and specialized technologies and featuring a comfortable and ergonomic structure, are carefully selected to offer every visitor an unforgettable sleep experience.",
+    "button": "Download",
+    "collection": "Sleep & Bed Full Collection ENG"
+  },
+  "infopage":{
+
+    "Infoheading": "Ensure your peaceful sleep",
+    "Infoparagraph": "Currently, Sleep & Bed exports to more than 25 countries and 7 continents. The facility features an eco-friendly energy production system. Sleep & Bed facilities generate their own energy using solar panel systems and rely exclusively on eco-friendly and renewable energy sources."
+  },
+  "contactinfo": {
+    "address": "Batumi: A. Pushkin 117 \nKutaisi: I. Chavchavadze 51",
+    "contacts": "Contact Info",
+    "batumi": "batumi",
+    "tbilisi":"tbilisi",
+    "kobuleti":"kobuleti",
+    "kutaisi":"kutaisi",
+    "mondayToFriday": "Monday–Sunday",
+    "saturday": "Saturday",
+    "sunday": "Sunday: Closed"
+   
+  },
+  "navitems": {
+    "products": "Products",
+    "pillows": "Pillows",
+    "blanket": "Blanket",
+    "matrass": "Matress",
+    "toper": "Toper",
+    "catalogue": "Catalogue",
+    "aboutUs": "About Us",
+    "whySleepAndBed": "Why Sleep & Bed?",
+    "gallery": "Gallery"
+  },
+  "products": {
+  "all": "all",
+  "MATTRESS": "MATTRESS",
+  "PILLOW": "PILLOW",
+  "QUILT": "QUILT",
+  "PAD": "TOPPER",
+  "noProducts": "There are no products in this category."
+},
+"slice":{
+"ourProducts":"Our products",
+"viewAll":"Exolore"
+},
+"text":{
+"first":"The Best of Sleep for Everyone",
+"sec":"The Most Natural Sleep for Everyone",
+"last":"The Most Comfortable Sleep for Everyone"
+},
+"hero":{
+"heroheader":"Make the best choice with SLEEP&BED ​​GEORGIA",
+"herolink":"Explore our products"
+},
+  "about": {
+    "products": "Products",
+    "more":"Show more",
+    "wait": "No products found. Please check back later.",
+    "less":"Show",
+    "comf": "Your comfort is our priority.",
+    "sleep":"Best sleep for everyone",
+    "page":"page",
+    "our":"We offer high-quality, environmentally friendly sleep products designed with the latest technology. Our commitment goes beyond just products - we offer reliability, comfort and innovation to improve sleep quality worldwide.",
+    "story":"Our story",
+    "sb":"    Sleep&Bed, originally founded under the name Vizyon Mattress in 2011 as part of the Mitsan Group, has grown into a rapidly expanding sleep brand with hundreds of sales points and dozens of stores across 4 continents in more than 25 countries. With eco-conscious production principles, automated production lines, rollpack technology, and high-quality product standards — all powered by our self-sustaining 25,000 m² facility — Sleep&Bed is driven by experienced R&D and manufacturing teams who understand local sleep cultures, climate needs, and habits across the globe. We’re proud to be one of the leading advocates and producers of sleep culture worldwide. From the very beginning, Sleep&Bed has stood at the forefront of the industry — thanks to our ability to manufacture our own sponge and felt, our fast and integrated production cycle, our unique collection of products, and our brand presence that resonates across the global market."
+  },
+  "sertificats":{
+    "serf":"Certificates",
+    "serfText":" All products manufactured under our brand comply with international quality and health standards, which are strictly controlled according to different regions of the world.",
+   "BSCI": "BSCI certifies that our production meets international standards in work conditions, employee rights, and social responsibility.",
+  "RCS": "RCS confirms our products are made from recycled materials and support sustainable, eco-friendly production.",
+  "Sertipur": "Sertipur guarantees our foams are safe, chemical-free, and produced with health and sustainability in mind.",
+  "ISO9001": "ISO 9001 shows our commitment to high-quality production, customer satisfaction, and continuous improvement.",
+  "ISO14001": "ISO 14001 proves our processes are environmentally responsible and aligned with global sustainability goals.",
+  "ISO45000": "ISO 45001 reflects our dedication to safe workplaces and employee health through international safety standards.",
+  "GRS": "GRS certifies our use of recycled materials and responsible production practices, supporting a greener future.",
+  "OEKOTEX": "OEKO-TEX ensures our textiles are free from harmful chemicals and meet high safety and eco standards."
+  },
+  "new":{
+    "ourProducts":"New Products"
+    
+  },
+  "whyUsTitle": "Why Us?",
+    "bestSleepForEveryone": "The Best Sleep for Everyone",
+    "whyFranchise": "Why Become a Sleep&Bed Franchise?",
+    "franchiseDescription1": "Sleep&Bed is a mattress manufacturing brand operating successfully in the retail sector since 1976 under the umbrella of Mitsan Group. Thanks to our long-standing history and innovative vision, we stand out not only for our production capacity but also for our comprehensive support to franchisees and sustainable business models.",
+    "franchiseDescription2": "With in-house foam production and CNC cutting technologies, we control every stage of our production process and maintain the highest quality standards. We continue our global expansion, exporting to over 50 countries across 4 continents. Our roll-pack mattress packaging system provides up to 75% savings in logistics, storage, and transportation costs.",
+    "franchiseDescription3": "Our young, dynamic, and expert team fosters warm, trustworthy, and family-like relationships with both customers and franchisees. We've strengthened our experience in contract manufacturing by investing in our own brand, and since 2021, we’ve been expanding our franchise network.",
+    "franchiseDescription4": "As a brand committed to sustainability and environmental sensitivity, we prioritize quality policies and international certifications. Our goal is not just to sell products but to empower our franchisees—members of the Sleep&Bed family—with a competitive and sustainable business model for the global market.",
+    "targetMarketPosition": "Target Market and Positioning",
+    "marketDescription": "Thanks to our diverse product collection, Sleep&Bed offers sleep solutions tailored to various sleeping habits, climate conditions, and budget ranges across all continents.",
+    "ourProductPortfolio": "Our Product Portfolio Includes:",
+    "mattressesPillows": "Mattresses, pillows, duvets, mattress protectors",
+    "mattressProtectors": "Mattress protectors, duvet sets",
+    "bedFramesBases": "Bed frames, bases, headboards",
+    "roomAromatizers": "Room aromatizers",
+    "hotelCollection": "Hotel Collection",
+    "kidsCollection": "Kids Collection",
+    "petCollection": "Cat & Dog Collection",
+    "productPortfolioDescription": "With our production infrastructure, we offer products at all levels—from premium segments to online retail items. Our innovative approach and efficiency allow us to deliver solutions to all customer segments worldwide.",
+    "franchiseBenefits": "Franchise Benefits",
+    "franchiseSupport": "Support for Franchisees",
+    "comprehensiveSupport": "Comprehensive support includes:",
+    "marketingSupport": "Marketing & advertising support: social media content, photo and video shoots, catalog design, digital marketing strategies, SEO support.",
+    "storeSupport": "Store support: store concept projects and 3D designs, architectural project drawings, in-store decoration, product labels.",
+    "salesTraining": "Training & sales management: staff training, sales tracking systems, target setting, and performance reporting.",
+    "digitalInfrastructure": "Room aromatizers, decorative accessories",
+    "customerSatisfaction": "Digital infrastructure: Shopify-based e-commerce system, corporate website, and CRM support.",
+    "advertisingSupport": "Customer satisfaction: warranty certificates, installation guides, complaint management and resolution processes.",
+    "socialMediaCampaigns": "Advertising & Promotion Support",
+    "promoPackages": "Campaign content and social media posts tailored for franchisees.",
+    "emailMarketingStrategies": "Promotional packages for store openings and special events.",
+    "regionalAdPlanning": "Strategies to increase customer traffic through email marketing and discount coupons.",
+    "franchiseApplicationProcess": "Franchise Application Process",
+    "franchiseSteps": "To become a Sleep&Bed franchisee, follow these steps:",
+    "franchiseApplication": "Franchise Application Steps:",
+    "applicationForm": "Application Form: Fill out the franchise application form on our website.",
+    "approval": "Evaluation & Approval: Your application will be reviewed by our management team.",
+    "storeLocation": "Store Location: Store or showroom location will be analyzed and approved.",
+    "competitorAnalysis": "Competitor Analysis: Overview of competing stores and product portfolios to determine strategies in the region.",
+    "productSelection": "Product Selection: Product assortment and collection are chosen based on the region.",
+    "architecturalDesign": "Architectural Design: Technical content is provided and 3D design projects are prepared.",
+    "agreementSigning": "Approval & Agreement: Once the project is approved, formal agreements are signed.",
+    "openingPlan": "Opening Plan: Target opening date is set and implementation begins.",
+    "productionProcess": "Production Process: Selected collection moves into production.",
+    "storeSetup": "Store Setup: Store installation is completed.",
+    "productDelivery": "Product Delivery: Products are delivered to the store.",
+    "storeOpening": "Store Opening: Opening event is organized.",
+    "annualPlanning": "Annual Planning: Goals and promotional budgets are determined.",
+    "buildBetterSleep": "Building a Better Sleep World Together",
+    "visionAndPhilosophy": "Our Vision & Philosophy",
+    "sleepIsIntegrity": "At Sleep&Bed, we started with the mission of becoming a global brand. Our motto, 'Sleep is Integrity', forms the foundation of our service philosophy.",
+    "sleepExperience": "We understand that quality sleep doesn’t come from the mattress alone. A true sleep experience comes from harmony—between the mattress, pillow, cover, air, and scent of the room. That’s why we’ve made it our mission to deliver the best sleep in every aspect.",
+    "strongFranchiseChain": "With our franchisees and sub-franchisees, we’ve built a strong system that benefits everyone involved—growing stronger every day.",
+    "franchiseChainGrowth": "Today, Sleep&Bed enhances the sleep experience of millions through stores, showrooms, and corner points on various continents. We’re always here to support the success stories of our business partners.",
+    "joinUs": "Join the Sleep&Bed Family",
+    "global":"Together with our franchisees and sub-franchisees, we have established a strong system that can be enjoyed by everyone around the world, and this chain continues to grow every day.",
+    "becomePartOfFamily": "Become a part of our growing family and offer top-quality sleep products..."
+  }
+  
