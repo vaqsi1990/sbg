@@ -13,7 +13,11 @@ export default function AdminSwitch({ products }: { products: ProductType[] }) {
   <div className="flex flex-wrap justify-center gap-6 ">
     <button
       onClick={() => setActiveComponent("all")}
-      className="inline-flex cursor-pointer px-5 py-3 text-black  hover:bg-[#203e72] hover:text-white border border-[#203e72] rounded-md"
+      className={`inline-flex cursor-pointer px-5 py-3 rounded-md border border-[#203e72] ${
+        activeComponent === "all"
+          ? "bg-[#203e72] text-white"
+          : "text-black hover:bg-[#203e72] hover:text-white"
+      }`}
     >
       <svg
         aria-hidden="true"
@@ -34,14 +38,20 @@ export default function AdminSwitch({ products }: { products: ProductType[] }) {
 
     <button
       onClick={() => setActiveComponent("form")}
-      className="inline-flex cursor-pointer px-5 py-3 text-white  bg-[#203e72]  rounded-md"
+      className={`inline-flex cursor-pointer px-5 py-3 rounded-md border border-[#203e72] ${
+        activeComponent === "form"
+          ? "bg-[#203e72] text-white"
+          : "text-black hover:bg-[#203e72] hover:text-white"
+      }`}
     >
       <svg
         aria-hidden="true"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
-        className="flex-shrink-0 h-6 w-6 text-white -ml-1 mr-2"
+        className={`flex-shrink-0 h-6 w-6 -ml-1 mr-2 ${
+          activeComponent === "form" ? "text-white" : "text-current"
+        }`}
       >
         <path
           strokeLinecap="round"

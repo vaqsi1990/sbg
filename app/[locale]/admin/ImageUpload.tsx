@@ -21,9 +21,9 @@ const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
   };
 
   return (
-    <div className="bg-black text-white p-4 rounded">
+    <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4">
       <UploadButton
-        className="text-white font-bold py-2 px-4 rounded"
+        className="ut-button:bg-[#203e72] ut-button:text-white ut-allowed-content:text-gray-500"
         endpoint="imageUploader"
         onClientUploadComplete={handleUploadComplete}
         onUploadError={(error: Error) => {
@@ -33,14 +33,14 @@ const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
 
       {imageUrls.length > 0 ? (
         <div className="mt-4 space-y-2">
-          <h2 className="text-lg font-semibold">Uploaded Images</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <h2 className="text-sm font-semibold text-black">ატვირთული სურათები</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {imageUrls.map((url, index) => (
-              <Image  
+              <Image
                 key={index}
                 src={url}
                 alt={`Uploaded ${index}`}
-                className="rounded border border-gray-500"
+                className="rounded border border-gray-200 object-cover"
                 width={200}
                 height={200}
               />
@@ -48,7 +48,7 @@ const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
           </div>
         </div>
       ) : (
-        <p className="mt-2 text-gray-400">No images uploaded yet.</p>
+        <p className="mt-2 text-sm text-gray-500">სურათი ჯერ არ არის ატვირთული</p>
       )}
     </div>
   );
