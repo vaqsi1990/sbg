@@ -1,5 +1,22 @@
 import { z } from "zod";
 
+const optionalTrimmedString = z.preprocess(
+  (val) =>
+    val === null || val === undefined || (typeof val === "string" && val.trim() === "")
+      ? undefined
+      : val,
+  z.string().optional()
+);
+
+const optionalInt = z.preprocess(
+  (val) => {
+    if (val === "" || val === null || val === undefined) return undefined;
+    if (typeof val === "number" && Number.isNaN(val)) return undefined;
+    return val;
+  },
+  z.number().int().optional()
+);
+
 export const BaseProductSchema = z.object({
   titleEn: z.string(),
   titleKa: z.string(),
@@ -68,8 +85,8 @@ export const PadSchema = z.object({
 
 // Pillow-specific schema
 export const PillowSchema = z.object({
-  size: z.string().optional(),
-  weight: z.number().optional(),
+  size: optionalTrimmedString,
+  weight: optionalInt,
   outerFabric: z.string(),
   filling: z.string(),
   packaging: z.string(),
