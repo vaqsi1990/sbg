@@ -71,6 +71,9 @@ model Mattress {
   visconFabricSoftComfortLayer Boolean @default(false)
   copperViscoLayer Boolean @default(false)
   cncFoamTechnology Boolean @default(false)
+  softComfortLayer Boolean @default(false)
+  firmComfortLayer Boolean @default(false)
+  aloeveraFabric Boolean @default(false)
   knitte       Boolean
   wool         Boolean
   visco        Boolean

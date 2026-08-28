@@ -21,6 +21,9 @@ type Feature = {
     | 'visconFabricSoftComfortLayer'
     | 'copperViscoLayer'
     | 'cncFoamTechnology'
+    | 'softComfortLayer'
+    | 'firmComfortLayer'
+    | 'aloeveraFabric'
     | 'knitte'
     | 'wool'
     | 'visco'
@@ -59,6 +62,9 @@ const FEATURES: Feature[] = [
   { key: 'visconFabricSoftComfortLayer', label: 'Viscon Fabric რბილი კომფორტის ფენა', labelEn: 'Viscon Fabric Soft Comfort Layer', href: '/viscon-soft-comfort-layer', logo: '/filters/knitted.jpg' },
   { key: 'copperViscoLayer', label: 'Copper Visco ფენა', labelEn: 'Copper Visco Layer', href: '/copper-visco-layer', logo: '/filters/visco.jpg' },
   { key: 'cncFoamTechnology', label: 'CNC ქაფის ტექნოლოგია', labelEn: 'CNC Foam Technology', href: '/cnc-foam-technology', logo: '/filters/dns.jpg' },
+  { key: 'softComfortLayer', label: 'რბილი კომფორტის ფენა', labelEn: 'Soft Comfort Layer', href: '/soft-comfort-layer', logo: '/filters/soft.jpg' },
+  { key: 'firmComfortLayer', label: 'მაგარი კომფორტის ფენა', labelEn: 'Firm Comfort Layer', href: '/firm-comfort-layer', logo: '/filters/firmcomfort.jpg' },
+  { key: 'aloeveraFabric', label: 'ალოე ვერას ქსოვილი', labelEn: 'Aloevera Fabric', href: '/aloevera-fabric', logo: '/filters/aloevera.jpg' },
   { key: 'knitte', label: 'ნაქსოვი', labelEn: 'Knitted', href: '/knitte', logo: '/filters/knitted.jpg' },
   { key: 'wool', label: 'ბამბა', labelEn: 'Wool', href: '/wool', logo: '/filters/wool.jpg' },
   { key: 'visco', label: 'ვისკო', labelEn: 'Visco', href: '/visco', logo: '/filters/visco.jpg' },
@@ -68,7 +74,6 @@ const FEATURES: Feature[] = [
   { key: 'washable', label: 'რეცხვადი ქეისი', labelEn: 'Washable', href: '/wash', logo: '/filters/wash.jpg' },
   { key: 'cncFoamTechnology', label: 'რეცხვადი ქეისი', labelEn: 'CNC Foam Technology', href: '/cnc-foam-technology', logo: '/filters/cnc.jpg' },
   { key: 'middleComfortLayer', label: 'საშუალო კომფორტის ფენა', labelEn: 'Middle Comfort Layer', href: '/wash', logo: '/filters/comfort.jpg' },
-  { key: 'visconFabricSoftComfortLayer', label: 'რბილი კომფორტის ფენა', labelEn: 'Soft Comfort Layer', href: '/viscon-soft-comfort-layer', logo: '/filters/comfort.jpg' },
 ];
 
 const DetailPage = async(props: {
@@ -138,6 +143,9 @@ const DetailPage = async(props: {
         'visconFabricSoftComfortLayer',
         'copperViscoLayer',
         'cncFoamTechnology',
+        'softComfortLayer',
+        'firmComfortLayer',
+        'aloeveraFabric',
       ];
       if (mattressOnlyFeatures.includes(key)) return false;
       return product.pad?.[key as keyof Pad];

@@ -32,6 +32,9 @@ export interface FeatureFields {
   visconFabricSoftComfortLayer?: boolean;
   copperViscoLayer?: boolean;
   cncFoamTechnology?: boolean;
+  softComfortLayer?: boolean;
+  firmComfortLayer?: boolean;
+  aloeveraFabric?: boolean;
   knitte?: boolean;
   wool?: boolean;
   visco?: boolean;

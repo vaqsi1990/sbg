@@ -17,7 +17,10 @@ type MattressFeatureKey =
   | "middleComfortLayer"
   | "visconFabricSoftComfortLayer"
   | "copperViscoLayer"
-  | "cncFoamTechnology";
+  | "cncFoamTechnology"
+  | "softComfortLayer"
+  | "firmComfortLayer"
+  | "aloeveraFabric";
 
 interface Props {
   products: ProductTypes[];
