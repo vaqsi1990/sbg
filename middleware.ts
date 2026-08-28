@@ -32,7 +32,7 @@ export function middleware(request: NextRequest) {
     return new NextResponse("Authentication Required!", {
       status: 401,
       headers: {
-        "WWW-Authenticate": "Basic realm='private_pages'",
+        "WWW-Authenticate": 'Basic realm="private_pages"',
       },
     });
   }
