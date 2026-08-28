@@ -23,7 +23,7 @@ export default function AdminLogin() {
     setPending(false);
 
     if (!result.success) {
-      setError(result.message);
+      setError(result.message ?? "შეცდომა");
       return;
     }
 

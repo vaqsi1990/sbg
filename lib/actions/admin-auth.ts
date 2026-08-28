@@ -17,7 +17,11 @@ const cookieOptions = {
   maxAge: 60 * 60 * 24 * 7,
 };
 
-export async function loginAdmin(password: string) {
+type LoginResult =
+  | { success: true }
+  | { success: false; message: string };
+
+export async function loginAdmin(password: string): Promise<LoginResult> {
   if (!process.env.ADMIN_PASSWORD) {
     return { success: false, message: "ADMIN_PASSWORD is not configured" };
   }
