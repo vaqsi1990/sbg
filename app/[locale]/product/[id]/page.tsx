@@ -186,6 +186,19 @@ const DetailPage = async(props: {
   const assignedFeatures = (product.catalogItems ?? [])
     .map((row) => row.item)
     .filter((item) => item.kind === "FEATURE" && !item.legacyKey);
+  const pillowBadges =
+    product.type === "PILLOW" && product.pillow
+      ? [
+          product.pillow.weight
+            ? `${product.pillow.weight} ${isGe ? "გრამი" : "gram"}`
+            : "",
+          (isGe ? product.pillow.outerFabric : product.pillow.outerFabricEn) ?? "",
+          (isGe ? product.pillow.filling : product.pillow.fillingEn) ?? "",
+          (isGe ? product.pillow.packaging : product.pillow.packagingEn) ?? "",
+        ]
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : [];
   return (
     <section className="w-full mx-auto max-w-[1440px]">
       <div className="text-black ">
@@ -272,18 +285,6 @@ const DetailPage = async(props: {
       {product.pillow.size && (
         <p><strong>{isGe ? 'ზომა' : 'Size'}:</strong> {product.pillow.size}</p>
       )}
-      {product.pillow.weight && (
-        <p><strong>{isGe ? 'წონა' : 'Weight'}:</strong> {product.pillow.weight} {isGe ? 'გრამი' : 'gram'}</p>
-      )}
-      {(isGe ? product.pillow.outerFabric : product.pillow.outerFabricEn) && (
-        <p><strong>{isGe ? 'გარეთა ქსოვილი' : 'Outer Fabric'}:</strong> {isGe ? product.pillow.outerFabric : product.pillow.outerFabricEn}</p>
-      )}
-      {(isGe ? product.pillow.filling : product.pillow.fillingEn) && (
-        <p><strong>{isGe ? 'შევსება' : 'Filling'}:</strong> {isGe ? product.pillow.filling : product.pillow.fillingEn}</p>
-      )}
-      {(isGe ? product.pillow.packaging : product.pillow.packagingEn) && (
-        <p><strong>{isGe ? 'შეფუთვა' : 'Packaging'}:</strong> {isGe ? product.pillow.packaging : product.pillow.packagingEn}</p>
-      )}
     </>
   )}
 
@@ -359,7 +360,20 @@ const DetailPage = async(props: {
           
         </div>
 
-       
+        {pillowBadges.length > 0 ? (
+          <div className="container mx-auto mt-8 mb-4 px-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {pillowBadges.map((badge) => (
+              <div
+                key={badge}
+                className="min-h-[56px] px-4 py-3 rounded-xl border border-[#1e3a6e] bg-[#ececec] text-black text-base lg:text-lg font-medium text-center flex items-center justify-center"
+              >
+                {badge}
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        
         {(product.type === 'MATTRESS' && product.mattress && (isGe ? product.mattress.descriptionKa : product.mattress.descriptionEn)) ||
  (product.type === 'PAD' && product.pad && (isGe ? product.pad.descriptionKa : product.pad.descriptionEn)) ? (
   <div className="container mt-10 text-center mx-auto gap-6 lg:gap-12">
