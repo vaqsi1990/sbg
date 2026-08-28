@@ -31,7 +31,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <main className="flex min-h-[60vh] items-center justify-center px-4 py-16">
+    <main className="flex min-h-screen items-center justify-center px-4 py-16">
       <form
         onSubmit={onSubmit}
         className="w-full max-w-md space-y-5 rounded-xl border border-gray-200 bg-white p-8 shadow-sm"
