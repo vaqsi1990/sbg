@@ -132,7 +132,8 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
         await prisma.quilt.create({
           data: {
             id: createdProduct.id,
-            dimensions: parsed.dimensions,
+            size1: parsed.size1?.trim() || null,
+            size2: parsed.size2?.trim() || null,
             fabric: parsed.fabric,
             filling: parsed.filling,
             fabricEn: parsed.fabricEn,
@@ -477,7 +478,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       await prisma.quilt.update({
         where: { id: product.id },
         data: {
-          dimensions: product.dimensions,
+          size1: product.size1?.trim() || null,
+          size2: product.size2?.trim() || null,
           fabric: product.fabric,
           fabricEn: product.fabricEn,
           filling: product.filling,

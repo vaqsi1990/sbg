@@ -101,7 +101,8 @@ export const PillowSchema = z.object({
 
 // Quilt-specific schema
 export const QuiltSchema = z.object({
-  dimensions: z.string(),
+  size1: optionalTrimmedString,
+  size2: optionalTrimmedString,
   fabric: z.string(),
   fabricEn: z.string(),
   filling: z.string(),

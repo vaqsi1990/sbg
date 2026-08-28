@@ -570,14 +570,15 @@ export default function ProductFormFields({
       {productType === "QUILT" && (
         <FormSection step={4} title="საბნის დეტალები">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input {...form.register("dimensions")} placeholder="ზომები" className={inputClass} />
             <Input type="text" {...form.register("weight")} placeholder="წონა" className={inputClass} />
             <Input {...form.register("fabric")} placeholder="ქსოვილი (KA)" className={inputClass} />
             <Input {...form.register("fabricEn")} placeholder="Fabric (EN)" className={inputClass} />
             <Input {...form.register("filling")} placeholder="შევსება (KA)" className={inputClass} />
             <Input {...form.register("fillingEn")} placeholder="Filling (EN)" className={inputClass} />
-            <textarea {...form.register("minitext")} placeholder="დამატებითი ტექსტი (KA)" className={textareaClass} />
-            <textarea {...form.register("minitextEn")} placeholder="Extra text (EN)" className={textareaClass} />
+            <textarea {...form.register("minitext")} placeholder="მოკლე ტექსტი (KA)" className={textareaClass} />
+            <textarea {...form.register("minitextEn")} placeholder="Short text (EN)" className={textareaClass} />
+            <Input {...form.register("size1")} placeholder="ზომა 1 (არასავალდებულო)" className={inputClass} />
+            <Input {...form.register("size2")} placeholder="ზომა 2 (არასავალდებულო)" className={inputClass} />
           </div>
         </FormSection>
       )}

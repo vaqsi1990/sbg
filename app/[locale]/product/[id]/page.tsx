@@ -7,6 +7,7 @@ import { Mattress, Pad } from '@prisma/client';
 import ProductCarousel from '../ProductCarousel';
 import { getAllProduct } from '@/lib/actions/actions';
 import { getCatalogItems } from '@/lib/actions/catalog';
+import QuiltSizePicker from '../QuiltSizePicker';
 type Feature = {
   key:
     | 'height'
@@ -200,6 +201,12 @@ const DetailPage = async(props: {
           .map((value) => value.trim())
           .filter(Boolean)
       : [];
+  const quiltSizes =
+    product.type === "QUILT" && product.quilt
+      ? [product.quilt.size1, product.quilt.size2]
+          .filter((size): size is string => Boolean(size?.trim()))
+          .map((size) => size.trim())
+      : [];
   return (
     <section className="w-full mx-auto max-w-[1440px]">
       <div className="text-black ">
@@ -267,6 +274,10 @@ const DetailPage = async(props: {
   </p>
 )}
 
+{product.type === 'QUILT' && quiltSizes.length > 0 && (
+  <QuiltSizePicker sizes={quiltSizes} isGe={isGe} />
+)}
+
 {product.type === 'PAD' && product.pad?.minitext && (
   <p className="mt-4 text-[15px] w-full">
     {isGe ? product.pad.minitext : product.pad.minitextEn}
@@ -291,9 +302,6 @@ const DetailPage = async(props: {
 
   {product.type === 'QUILT' && product.quilt && (
     <>
-      {product.quilt.dimensions && (
-        <p><strong>{isGe ? 'ზომა' : 'Dimensions'}:</strong> {product.quilt.dimensions}</p>
-      )}
       {(isGe ? product.quilt.fabric : product.quilt.fabricEn) && (
         <p><strong>{isGe ? 'ქსოვილი' : 'Fabric'}:</strong> {isGe ? product.quilt.fabric : product.quilt.fabricEn}</p>
       )}

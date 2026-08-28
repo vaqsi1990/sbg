@@ -158,13 +158,13 @@ model Pillow {
 model Quilt {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   product       Product  @relation(fields: [id], references: [id], onDelete: Cascade)
-  dimensions    String
+  size1         String?
+  size2         String?
   fabric        String
   filling       String
-
-    fabricEn        String
-  fillingEn       String
+  fabricEn      String
+  fillingEn     String
   weight        String
- minitext    String
-  minitextEn  String
+  minitext      String
+  minitextEn    String
 }
