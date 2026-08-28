@@ -3,37 +3,28 @@
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "@/i18n/navigation";
-import { useTranslations} from "next-intl";
-
+import { useTranslations } from "next-intl";
 import Cards from "../Cards/Cards";
 import { ProductType } from "@/lib/ProductType";
-import "./single.css";
-
 
 export default function ProductSlice({ products }: { products: ProductType[] }) {
-  const t = useTranslations("slice"); // გამოიყენე შენი namespace თუ გაქვს
-
+  const t = useTranslations("slice");
 
   return (
-    <section className="mt-5 pt-16">
+    <section className="py-16 bg-white">
       <div className="container px-6 mx-auto">
-        <div className="flex flex-col md:flex-row lg:flex-row justify-between items-center mb-6 lg:mb-0">
-          <h2 className="text-xl lg:text-[25px] leading-tight text-center mb-4 font-semibold">
-            {t("ourProducts")} 
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+          <h2 className="section-heading text-center md:text-left">
+            {t("ourProducts")}
           </h2>
-          <div className="flex items-center gap-2 group">
-            <Link
-              href={`/all`}
-              className="flex text-[16px] lg:text-[18px] gap-2 items-center hover:text-primary font-medium transition-all border-primary"
-            >
-              <span>{t("viewAll")}</span> {/* მაგალითად: დაათვალიერე */}
-              <span className="transform group-hover:translate-x-2 group-hover:scale-110 transition-all duration-300">
-                <FaArrowRight />
-              </span>
-            </Link>
-          </div>
+          <Link
+            href="/all"
+            className="flex items-center gap-2 text-[15px] lg:text-base font-medium text-brand hover:text-brand-dark transition-colors group"
+          >
+            <span>{t("viewAll")}</span>
+            <FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
         </div>
-
         <Cards products={products} />
       </div>
     </section>

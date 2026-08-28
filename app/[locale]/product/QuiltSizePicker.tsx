@@ -18,22 +18,22 @@ export default function QuiltSizePicker({ sizes, isGe }: QuiltSizePickerProps) {
 
   if (sizes.length === 1) {
     return (
-      <p className="mt-4 text-[15px]">
-        <strong>{isGe ? "ზომა" : "Size"}:</strong> {sizes[0]}
+      <p className="mt-4 text-[15px] text-text-secondary">
+        <span className="font-semibold text-gray-900">{isGe ? "ზომა" : "Size"}:</span> {sizes[0]}
       </p>
     );
   }
 
   return (
     <div className="mt-4">
-      <label className="mb-2 block text-sm font-semibold">
+      <label className="mb-2 block text-sm font-semibold text-gray-900">
         {isGe ? "ზომა" : "Size"}
       </label>
       <Select defaultValue={sizes[0]}>
-        <SelectTrigger className="w-full max-w-xs rounded-xl border border-gray-300 bg-white">
+        <SelectTrigger className="w-full max-w-xs rounded-xl border border-gray-200 bg-white shadow-sm focus:ring-brand/20">
           <SelectValue placeholder={isGe ? "აირჩიე ზომა" : "Choose size"} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="rounded-xl">
           {sizes.map((size) => (
             <SelectItem key={size} value={size}>
               {size}

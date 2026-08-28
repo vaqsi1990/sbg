@@ -1,8 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import React from "react";
-import { useLocale } from 'next-intl';
+import { useLocale } from "next-intl";
 import { ProductType } from "@/lib/ProductType";
-
 import Image from "next/image";
 
 interface CardsProps {
@@ -11,54 +10,52 @@ interface CardsProps {
 
 function Cards({ products }: CardsProps) {
   const locale = useLocale();
-  const isGe = locale === 'ge';
+  const isGe = locale === "ge";
 
   return (
     <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-4">
       {products.map((product) => {
         const title = isGe ? product.titleKa : product.titleEn;
         const category = isGe ? product.categoryKa : product.categoryEn;
-        const primaryImage: string = product.images?.[0] ?? '/default-image.jpg';
+        const primaryImage: string = product.images?.[0] ?? "/default-image.jpg";
         const secondaryImage: string = product.images?.[1] ?? primaryImage;
 
         return (
-          <div key={product.id} className="max-w-sm w-full rounded-2xl shadow-xl mb-9 relative group">
-            <div className="w-full h-96 cursor-pointer overflow-hidden relative rounded-lg">
-              <Link href={`/product/${product.id}`}>
+          <article
+            key={product.id}
+            className="group relative w-full overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+          >
+            <Link href={`/product/${product.id}`} className="block">
+              <div className="aspect-[3/4] overflow-hidden relative">
                 <Image
-                  height={384}
+                  height={480}
                   width={384}
-                  quality={70}
+                  quality={75}
                   loading="lazy"
                   src={primaryImage}
                   alt={title}
-                  className="w-full h-full object-cover rounded-lg transition-all duration-500 group-hover:scale-105 group-hover:opacity-0"
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-0"
                 />
                 <Image
-                  height={384}
+                  height={480}
                   width={384}
-                  quality={70}
+                  quality={75}
                   loading="lazy"
                   src={secondaryImage}
                   alt={title}
-                  className="absolute inset-0 w-full h-full object-cover rounded-lg opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
                 />
-              </Link>
-            </div>
-
-            <div className="border border-gray-100 bg-white rounded-b-2xl flex flex-col justify-between leading-normal">
+              </div>
               <div className="p-4">
-                <Link href={`/product/${product.id}`}>
-                  <h2 className="relative text-gray-800 font-bold text-xl after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300 hover:after:w-full">
-                    {title}
-                  </h2>
-                </Link>
-                <p className="text-[16px] lg:text-[18px] mb-5 text-gray-600 font-normal">
+                <p className="text-xs font-medium uppercase tracking-wide text-brand mb-1.5">
                   {category}
                 </p>
+                <h2 className="text-gray-900 font-semibold text-lg leading-snug group-hover:text-brand transition-colors">
+                  {title}
+                </h2>
               </div>
-            </div>
-          </div>
+            </Link>
+          </article>
         );
       })}
     </div>

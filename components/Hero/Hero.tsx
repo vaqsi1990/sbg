@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 function Hero() {
   const t = useTranslations("hero");
   return (
-    <section className="relative w-full h-[850px] text-white flex items-center overflow-hidden">
+    <section className="relative w-full min-h-[70vh] md:h-[85vh] max-h-[900px] text-white flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <video
           className="w-full h-full object-cover"
@@ -18,21 +18,15 @@ function Hero() {
           <source src="/hero/sleep-and-bed-video.mp4" type="video/mp4" />
         </video>
       </div>
-      <div className="absolute inset-0 bg-black/30 z-10" />
-      <div className="container mx-auto flex flex-col relative z-10 items-center justify-center h-full">
-        <h1 className="text-white text-center text-[25px] md:text-[50px] font-normal">
-          Sleep & Bed Georgia
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/60 z-10" />
+      <div className="container mx-auto flex flex-col relative z-10 items-center justify-center h-full px-4 py-24 text-center">
+        <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4">
+          Sleep &amp; Bed Georgia
         </h1>
-        <p className="max-w-[672px] mb-7 text-white text-bold text-center mx-auto lg:text-xl">
+        <p className="max-w-2xl mb-8 text-white/90 text-base md:text-xl leading-relaxed">
           {t("heroheader")}
         </p>
-        <Link
-          href="/all"
-          className="outline-none rounded-lg cursor-pointer transition-all duration-150 ease-in-out 
-                 border border-solid border-black px-4 py-2 sm:px-6 sm:py-3 
-                 text-[14px] sm:text-[18px] uppercase focus:outline-none 
-                 bg-[#203e72] hover:text-white"
-        >
+        <Link href="/all" className="btn-primary text-sm sm:text-base px-8 py-3">
           {t("herolink")}
         </Link>
       </div>

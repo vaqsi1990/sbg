@@ -40,7 +40,7 @@ export default function SearchComponent() {
   }, 300);
 
   return (
-    <div className="relative w-full  bg-white rounded-md mb-8">
+    <div className="relative w-44 lg:w-52">
       <Input
         type="text"
         placeholder="Search"
@@ -49,10 +49,10 @@ export default function SearchComponent() {
           setQuery(e.target.value);
           handleSearch(e.target.value);
         }}
-        className="pl-10 pr-4"
+        className="h-9 pl-9 pr-3 text-sm bg-white/95 border-white/20 rounded-xl"
       />
-      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-        <SearchIcon className="w-5 h-5" />
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <SearchIcon className="w-4 h-4" />
       </span>
     </div>
   );

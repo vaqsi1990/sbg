@@ -3,10 +3,8 @@
 import React, { useState } from "react";
 import { FiMenu, FiX, FiChevronDown } from "react-icons/fi";
 import LocalLanguage from "./language";
-
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-
 
 export default function Navbar() {
   const t = useTranslations("navitems");
@@ -46,17 +44,14 @@ export default function Navbar() {
   };
 
   const handleMouseLeave = () => {
-    const timeout = setTimeout(() => {
-      setHovered(null);
-    }, 200); 
+    const timeout = setTimeout(() => setHovered(null), 200);
     setSubmenuCloseTimeout(timeout);
   };
 
   return (
-    <nav className="fixed z-50 w-full text-white">
-      <div className="flex items-center justify-between mx-auto px-6">
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-6">
+    <nav className="w-full text-white">
+      <div className="flex items-center justify-between md:justify-start md:px-2">
+        <div className="hidden md:flex gap-8">
           {navItems.map((item, index) => (
             <div
               key={index}
@@ -66,22 +61,19 @@ export default function Navbar() {
             >
               <Link
                 href={item.link}
-                className="flex text-[18px] items-center gap-2 hover:text-gray-300"
+                className="flex items-center gap-1.5 text-[15px] lg:text-[17px] font-medium text-white/90 hover:text-white transition-colors"
               >
                 {item.label}
                 {item.children && (
                   <FiChevronDown
-                    className={`transition ${
-                      hovered === index ? "rotate-180" : ""
-                    }`}
+                    className={`transition-transform duration-200 ${hovered === index ? "rotate-180" : ""}`}
                   />
                 )}
               </Link>
 
-              {/* Submenu */}
               {hovered === index && item.children && (
                 <div
-                  className="absolute left-0 top-full mt-2 w-48 shadow-md bg-[#EBEBEB] p-4 rounded-md"
+                  className="absolute left-0 top-full mt-3 w-52 rounded-xl bg-white p-2 shadow-xl ring-1 ring-black/5"
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseLeave={handleMouseLeave}
                 >
@@ -89,7 +81,7 @@ export default function Navbar() {
                     <Link
                       key={idx}
                       href={child.link}
-                      className="relative block text-center py-2 text-[16px] text-black hover:underline"
+                      className="block rounded-lg px-4 py-2.5 text-[15px] text-gray-800 hover:bg-surface-muted hover:text-brand transition-colors"
                     >
                       {child.label}
                     </Link>
@@ -98,50 +90,49 @@ export default function Navbar() {
               )}
             </div>
           ))}
-      
         </div>
 
-        {/* Mobile Toggle Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden ml-auto"
+          className="md:hidden ml-auto p-2 rounded-lg hover:bg-white/10 transition-colors"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="absolute -top-8 -right-6  w-full h-[1200px] bg-[#EBEBEB] flex flex-col gap-4 shadow-l">
-          <button onClick={() => setMobileMenuOpen(false)} className="self-end">
-            <FiX className="text-black mt-5 mr-9" size={24} />
-          </button>
-          {navItems.map((item, index) => (
-            <div key={index} className="w-full px-3">
-              <Link
-                href={item.link}
-                className="block text-center py-3 text-black text-lg border-b border-gray-700"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-              {item.children && (
-                <div className="pl-4 mt-2">
-                  {item.children.map((child, idx) => (
-                    <Link
-                      key={idx}
-                      href={child.link}
-                      className="block text-center py-2 text-black text-[16px] hover:underline"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+        <div className="fixed inset-0 top-[72px] z-40 md:hidden bg-surface">
+          <div className="flex flex-col h-full overflow-y-auto px-6 py-8">
+            {navItems.map((item, index) => (
+              <div key={index} className="border-b border-gray-200 last:border-0">
+                <Link
+                  href={item.link}
+                  className="block py-4 text-lg font-semibold text-brand"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+                {item.children && (
+                  <div className="pb-4 pl-4 space-y-1">
+                    {item.children.map((child, idx) => (
+                      <Link
+                        key={idx}
+                        href={child.link}
+                        className="block py-2.5 text-[15px] text-gray-600 hover:text-brand transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className="mt-8 pt-6 border-t border-gray-200">
               <LocalLanguage />
+            </div>
+          </div>
         </div>
       )}
     </nav>
