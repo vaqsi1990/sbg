@@ -27,10 +27,10 @@ const OtherFilters = () => {
     key: item.slug,
     label: item.labelKa,
     labelEn: item.labelEn,
-    href: `/feature/${item.slug}`,
+    href: item.href || `/feature/${item.slug}`,
     logo: item.image,
   }));
-  const links = [...SlugLinks, ...extraLinks];
+  const links = extraLinks.length ? extraLinks : SlugLinks;
 
   return (
     <div className="w-full relative">

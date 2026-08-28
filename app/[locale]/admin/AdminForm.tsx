@@ -157,16 +157,25 @@ function FormSection({
 function FeatureGrid({
   options,
   control,
+  catalogItems = [],
 }: {
   options: { name: keyof z.infer<typeof BooleanSchema>; label: string }[];
   control: ReturnType<typeof useForm<z.infer<typeof ProductSchema>>>["control"];
+  catalogItems?: CatalogItemDTO[];
 }) {
   const [query, setQuery] = useState("");
+  const labeled = options.map((option) => {
+    const catalog = catalogItems.find((item) => item.legacyKey === option.name);
+    return {
+      ...option,
+      label: catalog?.labelEn || option.label,
+    };
+  });
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return options;
-    return options.filter((option) => option.label.toLowerCase().includes(q));
-  }, [options, query]);
+    if (!q) return labeled;
+    return labeled.filter((option) => option.label.toLowerCase().includes(q));
+  }, [labeled, query]);
 
   return (
     <div className="space-y-3">
@@ -251,14 +260,18 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
   const featureIds = form.watch('featureIds') ?? [];
   const extraHeights = catalogItems.filter((item) => item.kind === "HEIGHT");
   const mergedHeights = [
-    ...heightOptions,
+    ...heightOptions.map((option) => {
+      const catalog = extraHeights.find((item) => item.slug === option.value);
+      return catalog ? { text: catalog.labelKa, value: option.value } : option;
+    }),
     ...extraHeights
       .filter((item) => !heightOptions.some((option) => option.value === item.slug))
-      .map((item) => ({ text: `${item.slug} სმ`, value: item.slug })),
+      .map((item) => ({ text: item.labelKa || `${item.slug} სმ`, value: item.slug })),
   ];
   const extraFeatures = catalogItems.filter(
     (item) =>
       item.kind === "FEATURE" &&
+      !item.legacyKey &&
       (productType === "PAD" ? item.forPad : item.forMattress)
   );
 
@@ -475,7 +488,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
                     )}
                   />
                 </div>
-                <FeatureGrid options={mattressCheckboxOptions} control={form.control} />
+                <FeatureGrid options={mattressCheckboxOptions} control={form.control} catalogItems={catalogItems} />
                 {extraFeatures.length > 0 ? (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">დამატებული მახასიათებლები</p>
@@ -551,7 +564,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
                     )}
                   />
                 </div>
-                <FeatureGrid options={padCheckboxOptions} control={form.control} />
+                <FeatureGrid options={padCheckboxOptions} control={form.control} catalogItems={catalogItems} />
                 {extraFeatures.length > 0 ? (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">დამატებული მახასიათებლები</p>

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { CatalogKind } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { BUILTIN_CATALOG, PAD_KEYS } from "@/lib/catalog-builtin";
 
 export type CatalogItemDTO = {
   id: string;
@@ -12,10 +13,67 @@ export type CatalogItemDTO = {
   labelKa: string;
   labelEn: string;
   image: string;
+  href: string | null;
+  legacyKey: string | null;
   forMattress: boolean;
   forPad: boolean;
   sortOrder: number;
 };
+
+async function ensureBuiltInCatalogItems() {
+  const existing = await prisma.catalogItem.findMany({
+    select: { id: true, slug: true, legacyKey: true },
+  });
+  const bySlug = new Map(existing.map((item) => [item.slug, item]));
+  const byLegacy = new Map(
+    existing
+      .filter((item) => item.legacyKey)
+      .map((item) => [item.legacyKey as string, item])
+  );
+
+  const missing: Array<{
+    kind: (typeof BUILTIN_CATALOG)[number]["kind"];
+    slug: string;
+    labelKa: string;
+    labelEn: string;
+    image: string;
+    href: string;
+    legacyKey: string | null;
+    forMattress: boolean;
+    forPad: boolean;
+    sortOrder: number;
+  }> = [];
+  for (const item of BUILTIN_CATALOG) {
+    const found =
+      (item.legacyKey ? byLegacy.get(item.legacyKey) : undefined) ||
+      bySlug.get(item.slug);
+    if (found) {
+      if (!found.legacyKey && item.legacyKey) {
+        await prisma.catalogItem.update({
+          where: { id: found.id },
+          data: { legacyKey: item.legacyKey, href: item.href },
+        });
+      }
+      continue;
+    }
+    missing.push({
+      kind: item.kind,
+      slug: item.slug,
+      labelKa: item.labelKa,
+      labelEn: item.labelEn,
+      image: item.image,
+      href: item.href,
+      legacyKey: item.legacyKey ?? null,
+      forMattress: item.forMattress,
+      forPad: item.forPad,
+      sortOrder: item.sortOrder,
+    });
+  }
+
+  if (missing.length) {
+    await prisma.catalogItem.createMany({ data: missing, skipDuplicates: true });
+  }
+}
 
 function toSlug(value: string) {
   const slug = value
@@ -27,11 +85,28 @@ function toSlug(value: string) {
 }
 
 export async function getCatalogItems(kind?: CatalogKind): Promise<CatalogItemDTO[]> {
-  const items = await prisma.catalogItem.findMany({
-    where: kind ? { kind } : undefined,
-    orderBy: [{ kind: "asc" }, { sortOrder: "asc" }, { createdAt: "asc" }],
-  });
-  return items;
+  try {
+    await ensureBuiltInCatalogItems();
+    const items = await prisma.catalogItem.findMany({
+      where: kind ? { kind } : undefined,
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+    });
+    return items.map((item) => ({
+      id: item.id,
+      kind: item.kind,
+      slug: item.slug,
+      labelKa: item.labelKa,
+      labelEn: item.labelEn,
+      image: item.image,
+      href: item.href ?? null,
+      legacyKey: item.legacyKey ?? null,
+      forMattress: item.forMattress,
+      forPad: item.forPad,
+      sortOrder: item.sortOrder,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export async function getCatalogItemBySlug(slug: string) {
@@ -79,6 +154,7 @@ export async function createCatalogItem(input: {
         forMattress: input.forMattress ?? true,
         forPad: input.forPad ?? true,
         sortOrder: count + 1,
+        href: `/feature/${slug}`,
       },
     });
     revalidatePath("/admin");
@@ -149,6 +225,7 @@ export async function updateCatalogItem(input: {
     revalidatePath("/all");
     revalidatePath(`/feature/${existing.slug}`);
     revalidatePath(`/feature/${slug}`);
+    if (existing.href) revalidatePath(existing.href);
     return { success: true, message: "განახლდა" };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not save";
@@ -183,34 +260,39 @@ export async function getProductsByCatalogSlug(slug: string) {
   const item = await prisma.catalogItem.findUnique({ where: { slug } });
   if (!item) return { item: null, products: [] };
 
+  const productSelect = {
+    id: true,
+    titleEn: true,
+    titleKa: true,
+    type: true,
+    images: true,
+    createdAt: true,
+  } as const;
+
   if (item.kind === "HEIGHT") {
     const products = await prisma.product.findMany({
       where: {
         OR: [{ mattress: { height: item.slug } }, { pad: { height: item.slug } }],
       },
-      select: {
-        id: true,
-        titleEn: true,
-        titleKa: true,
-        type: true,
-        images: true,
-        createdAt: true,
-      },
+      select: productSelect,
       orderBy: { createdAt: "desc" },
     });
     return { item, products };
   }
 
+  const legacyFilters: Array<{ mattress: Record<string, boolean> } | { pad: Record<string, boolean> }> = [];
+  if (item.legacyKey) {
+    legacyFilters.push({ mattress: { [item.legacyKey]: true } });
+    if (PAD_KEYS.has(item.legacyKey)) {
+      legacyFilters.push({ pad: { [item.legacyKey]: true } });
+    }
+  }
+
   const products = await prisma.product.findMany({
-    where: { catalogItems: { some: { itemId: item.id } } },
-    select: {
-      id: true,
-      titleEn: true,
-      titleKa: true,
-      type: true,
-      images: true,
-      createdAt: true,
+    where: {
+      OR: [{ catalogItems: { some: { itemId: item.id } } }, ...legacyFilters],
     },
+    select: productSelect,
     orderBy: { createdAt: "desc" },
   });
   return { item, products };

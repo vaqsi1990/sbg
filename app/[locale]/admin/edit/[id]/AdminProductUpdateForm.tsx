@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ProductSchema } from '@/lib/validators';
@@ -30,6 +30,7 @@ import ImageUpload from '../../ImageUpload';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Controller } from "react-hook-form";
+import { getCatalogItems, type CatalogItemDTO } from "@/lib/actions/catalog";
 const BooleanSchema = z.object({
   type: z.enum(["MATTRESS", "PILLOW", "QUILT", "PAD"]),
   titleEn: z.string(),
@@ -136,6 +137,7 @@ export default function AdminProductUpdateForm({
 }) {
   const router = useRouter();
     const { id, ...formDefaults } = initialData;
+    const [catalogItems, setCatalogItems] = useState<CatalogItemDTO[]>([]);
 
     const form = useForm<z.infer<typeof ProductSchema>>({
       resolver: zodResolver(ProductSchema),
@@ -143,6 +145,24 @@ export default function AdminProductUpdateForm({
     });
 
   const productType = form.watch('type');
+
+  useEffect(() => {
+    getCatalogItems().then(setCatalogItems).catch(() => setCatalogItems([]));
+  }, []);
+
+  const labelFor = (name: string, fallback: string) =>
+    catalogItems.find((item) => item.legacyKey === name)?.labelEn || fallback;
+
+  const extraHeights = catalogItems.filter((item) => item.kind === "HEIGHT");
+  const mergedHeights = [
+    ...heightOptions.map((option) => {
+      const catalog = extraHeights.find((item) => item.slug === option.value);
+      return catalog ? { text: catalog.labelKa, value: option.value } : option;
+    }),
+    ...extraHeights
+      .filter((item) => !heightOptions.some((option) => option.value === item.slug))
+      .map((item) => ({ text: item.labelKa || `${item.slug} სმ`, value: item.slug })),
+  ];
 
   const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
     const res = await updateProduct({ ...data, id: initialData.id });
@@ -313,7 +333,7 @@ export default function AdminProductUpdateForm({
                        </SelectTrigger>
                      </FormControl>
                      <SelectContent className="bg-black border border-gray-700 text-white">
-                       {heightOptions.map((option) => (
+                       {mergedHeights.map((option) => (
                          <SelectItem key={option.value} value={option.value}>
                            {option.text}
                          </SelectItem>
@@ -365,7 +385,7 @@ export default function AdminProductUpdateForm({
            checked={Boolean(field.value)} className='border-black shadow-2xl'
            onCheckedChange={(checked) => field.onChange(Boolean(checked))}
          />
-                 <span>{label}</span>
+                 <span>{labelFor(name, label)}</span>
                </label>
              )}
            />
@@ -420,7 +440,7 @@ className="w-full h-32 resize-none rounded-1xl border border-black focus:border-
             </SelectTrigger>
           </FormControl>
           <SelectContent className="bg-black border border-gray-700 text-white">
-            {heightOptions.map((option) => (
+            {mergedHeights.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.text}
               </SelectItem>
@@ -445,7 +465,7 @@ className="w-full h-32 resize-none rounded-1xl border border-black focus:border-
     checked={Boolean(field.value)}
     onCheckedChange={(checked) => field.onChange(Boolean(checked))}
   />
-          <span>{label}</span>
+          <span>{labelFor(name, label)}</span>
         </label>
       )}
     />

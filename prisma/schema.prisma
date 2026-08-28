@@ -62,6 +62,8 @@ model CatalogItem {
   labelKa     String
   labelEn     String
   image       String
+  href        String?
+  legacyKey   String?     @unique
   forMattress Boolean     @default(true)
   forPad      Boolean     @default(true)
   sortOrder   Int         @default(0)

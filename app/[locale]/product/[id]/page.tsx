@@ -121,14 +121,44 @@ const DetailPage = async(props: {
       ? product.pad?.height?.toString()
       : null;
 
-  const matchedHeightFeature = HEIGHT_FEATURES.find(h =>
-    h.label.includes(`${heightValue} სმ`)
+  const { data: allSameTypeProducts } = await getAllProduct(product.type);
+  const filtered = allSameTypeProducts.filter(p => p.id !== id).slice(0, 4);
+  const catalogItems = await getCatalogItems();
+  const catalogByLegacy = Object.fromEntries(
+    catalogItems
+      .filter((item) => item.legacyKey)
+      .map((item) => [item.legacyKey as string, item])
   );
+  const displayFeatures = FEATURES.filter(
+    (feature, index, list) => list.findIndex((item) => item.key === feature.key) === index
+  ).map((feature) => {
+    const catalog = catalogByLegacy[feature.key];
+    if (!catalog) return feature;
+    return {
+      ...feature,
+      label: catalog.labelKa,
+      labelEn: catalog.labelEn,
+      logo: catalog.image,
+      href: catalog.href || feature.href,
+    };
+  });
+  const catalogHeight = catalogItems.find(
+    (item) => item.kind === "HEIGHT" && item.slug === String(heightValue ?? "")
+  );
+  const matchedHeightFeature = catalogHeight
+    ? {
+        key: "height" as const,
+        label: catalogHeight.labelKa,
+        labelEn: catalogHeight.labelEn,
+        href: catalogHeight.href || `/feature/${catalogHeight.slug}`,
+        logo: catalogHeight.image,
+      }
+    : HEIGHT_FEATURES.find((h) => h.label.includes(`${heightValue} სმ`) || h.label.startsWith(`${heightValue} `));
 
   const ALL_FEATURES = matchedHeightFeature
-    ? [matchedHeightFeature, ...FEATURES]
-    : [...FEATURES];
-    const isFlexMode = product.type === 'PILLOW' || product.type === 'QUILT';
+    ? [matchedHeightFeature, ...displayFeatures]
+    : [...displayFeatures];
+  const isFlexMode = product.type === 'PILLOW' || product.type === 'QUILT';
   const getFeatureValue = (key: Feature['key']) => {
     if (key === 'height') return true;
     if (product.type === 'MATTRESS') {
@@ -153,17 +183,9 @@ const DetailPage = async(props: {
     }
     return undefined;
   };
-  const { data: allSameTypeProducts } = await getAllProduct(product.type);
-  const filtered = allSameTypeProducts.filter(p => p.id !== id).slice(0, 4);
-  const catalogItems = await getCatalogItems();
-  const assignedFeatures = (
-    (product as { catalogItems?: { item: { id: string; kind: string; slug: string; labelKa: string; labelEn: string; image: string } }[] }).catalogItems ?? []
-  )
+  const assignedFeatures = (product.catalogItems ?? [])
     .map((row) => row.item)
-    .filter((item) => item.kind === "FEATURE");
-  const catalogHeight = catalogItems.find(
-    (item) => item.kind === "HEIGHT" && item.slug === String(heightValue ?? "")
-  );
+    .filter((item) => item.kind === "FEATURE" && !item.legacyKey);
   return (
     <section className="w-full mx-auto max-w-[1440px]">
       <div className="text-black ">
@@ -308,26 +330,6 @@ const DetailPage = async(props: {
           </div>
         );
       })}
-      {catalogHeight && !matchedHeightFeature ? (
-        <div>
-          <div className="flex items-center space-x-2 p-2 rounded-lg transition">
-            <Link
-              href={`/feature/${catalogHeight.slug}`}
-              className="font-semibold flex items-center gap-2 p-2 text-[15px] text-gray-800 hover:underline"
-            >
-              <Image
-                src={catalogHeight.image}
-                alt={catalogHeight.labelEn}
-                width={42}
-                height={42}
-                className="object-contain"
-                unoptimized={catalogHeight.image.startsWith("http")}
-              />
-              {isGe ? catalogHeight.labelKa : catalogHeight.labelEn}
-            </Link>
-          </div>
-        </div>
-      ) : null}
       {assignedFeatures.map((item) => (
         <div key={item.id}>
           <div className="flex items-center space-x-2 p-2 rounded-lg transition">

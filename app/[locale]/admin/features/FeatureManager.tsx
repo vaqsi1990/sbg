@@ -101,8 +101,8 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
         </h1>
         <p className="text-sm text-gray-500">
           {editingId
-            ? "შეცვალე სახელი ან სურათი და დააჭირე შენახვას."
-            : "დაამატე სურათი და სახელი. შემდეგ ეს გამოჩნდება პროდუქტის ფორმაში და საიტზე."}
+            ? "შეცვალე სახელი ან სურათი და დააჭირე შენახვას. ძველი მახასიათებლების სახელი/სურათი საიტზეც განახლდება."
+            : "ძველი მახასიათებლებიც აქ ჩანს. დააჭირე რედაქტირებას სახელის ან სურათის შესაცვლელად, ან დაამატე ახალი."}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,6 +245,7 @@ function ItemList({
             >
               რედაქტირება
             </button>
+            {item.legacyKey ? null : (
             <button
               type="button"
               onClick={() => onDelete(item.id)}
@@ -252,6 +253,7 @@ function ItemList({
             >
               წაშლა
             </button>
+            )}
           </div>
         </div>
       ))}
