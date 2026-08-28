@@ -59,9 +59,7 @@ function Footer() {
             ))}
           </div>
 
-          <p className="text-sm text-white/50 pt-4 border-t border-white/10 w-full text-center">
-            © {new Date().getFullYear()} Sleep &amp; Bed Georgia
-          </p>
+         
         </div>
       </div>
     </footer>

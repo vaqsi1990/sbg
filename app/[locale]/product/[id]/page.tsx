@@ -8,6 +8,7 @@ import ProductCarousel from '../ProductCarousel';
 import { getAllProduct } from '@/lib/actions/actions';
 import { getCatalogItems } from '@/lib/actions/catalog';
 import QuiltSizePicker from '../QuiltSizePicker';
+import { cn } from '@/lib/utils';
 type Feature = {
   key:
     | 'height'
@@ -86,7 +87,11 @@ const DetailPage = async(props: {
   const isGe = locale === 'ge';
 
   if (!product) {
-    return <div className="text-center text-lg font-bold">Product not found</div>;
+    return (
+      <div className="container mx-auto px-4 pt-32 pb-16 text-center">
+        <p className="text-lg font-semibold text-foreground">Product not found</p>
+      </div>
+    );
   }
 
   const title = isGe ? product.titleKa : product.titleEn;
@@ -207,174 +212,186 @@ const DetailPage = async(props: {
           .filter((size): size is string => Boolean(size?.trim()))
           .map((size) => size.trim())
       : [];
+
+  const typeLabel =
+    product.type === "MATTRESS"
+      ? isGe ? "მატრასი" : "Mattress"
+      : product.type === "PILLOW"
+      ? isGe ? "ბალიში" : "Pillow"
+      : product.type === "QUILT"
+      ? isGe ? "საბნელი" : "Quilt"
+      : isGe ? "ტოპერი" : "Topper";
+
+  const specRows: { label: string; value: string }[] = [];
+
+  if (product.type === "PILLOW" && product.pillow?.size) {
+    specRows.push({ label: isGe ? "ზომა" : "Size", value: product.pillow.size });
+  }
+
+  if (product.type === "QUILT" && product.quilt) {
+    const fabric = isGe ? product.quilt.fabric : product.quilt.fabricEn;
+    const filling = isGe ? product.quilt.filling : product.quilt.fillingEn;
+    if (fabric) specRows.push({ label: isGe ? "ქსოვილი" : "Fabric", value: fabric });
+    if (filling) specRows.push({ label: isGe ? "შევსება" : "Filling", value: filling });
+    if (product.quilt.weight) specRows.push({ label: isGe ? "წონა" : "Weight", value: product.quilt.weight });
+  }
+
+  const minitext =
+    product.type === "PILLOW"
+      ? isGe ? product.pillow?.minitext : product.pillow?.minitextEn
+      : product.type === "QUILT"
+      ? isGe ? product.quilt?.minitext : product.quilt?.minitextEn
+      : product.type === "PAD"
+      ? isGe ? product.pad?.minitext : product.pad?.minitextEn
+      : isGe ? product.mattress?.minitext : product.mattress?.minitextEn;
+
+  const description =
+    product.type === "MATTRESS" && product.mattress
+      ? isGe ? product.mattress.descriptionKa : product.mattress.descriptionEn
+      : product.type === "PAD" && product.pad
+      ? isGe ? product.pad.descriptionKa : product.pad.descriptionEn
+      : null;
+
+  const activeFeatures = (product.type === "PAD" || product.type === "MATTRESS")
+    ? ALL_FEATURES.filter((feature) => getFeatureValue(feature.key))
+    : [];
+
   return (
-    <section className="w-full mx-auto max-w-[1440px] bg-background">
-      <div className="text-foreground">
-        <div className="container mx-auto flex flex-col md:flex-row gap-6 lg:gap-12 items-center">
-          <div className="w-full lg:w-1/2 flex justify-center">
+    <section className="w-full bg-background">
+      <div className="container mx-auto px-4 lg:px-6 pt-24 lg:pt-28 pb-16 lg:pb-20">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          <div className="lg:sticky lg:top-28">
             <ProductImages images={product.images} />
           </div>
-          <div className="w-full lg:w-1/2 lg:mt-28 p-4 sm:p-6 flex flex-col">
-            <h2 className="lg:mt-[80px] text-xl lg:text-[25px] text-center lg:text-start mb-5 font-semibold">
-              {title}
-            </h2>
-            <p className="text-[15px] lg:text-[17px] leading-tight mb-4 font-semibold">
-              {second}
-            </p>
+
+          <div className="flex flex-col gap-6 lg:gap-8">
+            <div className="space-y-4">
+              <span className="inline-flex items-center rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand">
+                {typeLabel}
+              </span>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground leading-tight">
+                {title}
+              </h1>
+              {second ? (
+                <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">{second}</p>
+              ) : null}
+            </div>
 
             {firmnessLevel !== null && (
-              <div className="mt-4 mb-6">
-                <h3 className="text-sm font-semibold mb-2">
-                  {isGe ? 'მატრასის სიმაგრე' : 'Mattress Firmness Level'}
+              <div className="elevated-card p-5 lg:p-6 space-y-4">
+                <h3 className="text-sm font-semibold text-foreground">
+                  {isGe ? "მატრასის სიმაგრე" : "Mattress Firmness Level"}
                 </h3>
-                <div className="relative flex items-center justify-between">
-                  <div className="absolute left-0 right-0 h-[2px] bg-gray-300 top-1/2 -translate-y-1/2" />
+                <div className="relative flex items-center justify-between px-1">
+                  <div className="absolute left-3 right-3 h-0.5 bg-border top-1/2 -translate-y-1/2" />
                   {[1, 2, 3, 4, 5].map((value) => {
                     const isActive = value === firmnessLevel;
                     return (
-                      <div key={value} className="relative z-10 flex flex-col items-center">
-                        <div
-                          className={`flex items-center justify-center w-8 h-8 rounded-full border text-xs font-medium transition-colors ${
-                            isActive
-                              ? 'bg-blue-900 text-white border-blue-900'
-                              : 'bg-white text-gray-600 border-gray-300'
-                          }`}
-                        >
-                          {value}
-                        </div>
+                      <div
+                        key={value}
+                        className={cn(
+                          "relative z-10 flex h-9 w-9 items-center justify-center rounded-full border-2 text-xs font-semibold transition-colors",
+                          isActive
+                            ? "border-brand bg-brand text-white"
+                            : "border-border bg-card text-muted-foreground"
+                        )}
+                      >
+                        {value}
                       </div>
                     );
                   })}
                 </div>
-                <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
-                  <span>{isGe ? 'რბილი' : 'Soft'}</span>
-                  <span>{isGe ? 'მაგარი' : 'Firm'}</span>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{isGe ? "რბილი" : "Soft"}</span>
+                  <span>{isGe ? "მაგარი" : "Firm"}</span>
                 </div>
-                {firmnessLabel && (
-                  <p className="mt-3 text-sm text-center">
-                    {isGe ? 'სიმაგრის დონე: ' : 'Firmness level: '}
-                    <span className="font-semibold">
-                      {firmnessLabel}
-                    </span>
+                {firmnessLabel ? (
+                  <p className="text-sm text-center text-muted-foreground">
+                    {isGe ? "სიმაგრის დონე: " : "Firmness level: "}
+                    <span className="font-semibold text-foreground">{firmnessLabel}</span>
                   </p>
-                )}
+                ) : null}
               </div>
             )}
 
-<div className="">
-{product.type === 'PILLOW' && product.pillow?.minitext && (
-  <p className="mt-4 text-[15px] w-full">
-    {isGe ? product.pillow.minitext : product.pillow.minitextEn}
-  </p>
-)}
+            {minitext ? (
+              <p className="text-[15px] lg:text-base text-muted-foreground leading-relaxed">{minitext}</p>
+            ) : null}
 
-{product.type === 'QUILT' && product.quilt?.minitext && (
-  <p className="mt-4 text-[15px] w-full">
-    {isGe ? product.quilt.minitext : product.quilt.minitextEn}
-  </p>
-)}
+            {product.type === "QUILT" && quiltSizes.length > 0 ? (
+              <QuiltSizePicker sizes={quiltSizes} isGe={isGe} />
+            ) : null}
 
-{product.type === 'QUILT' && quiltSizes.length > 0 && (
-  <QuiltSizePicker sizes={quiltSizes} isGe={isGe} />
-)}
+            {specRows.length > 0 ? (
+              <div className="elevated-card divide-y divide-border overflow-hidden">
+                {specRows.map(({ label, value }) => (
+                  <div key={label} className="flex items-center justify-between gap-4 px-4 py-3.5">
+                    <span className="text-sm text-muted-foreground">{label}</span>
+                    <span className="text-sm font-medium text-foreground text-right">{value}</span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
 
-{product.type === 'PAD' && product.pad?.minitext && (
-  <p className="mt-4 text-[15px] w-full">
-    {isGe ? product.pad.minitext : product.pad.minitextEn}
-  </p>
-)}
-
-{product.type === 'MATTRESS' && product.mattress?.minitext && (
-  <p className="mt-4 text-[15px] w-full">
-    {isGe ? product.mattress.minitext : product.mattress.minitextEn}
-  </p>
-)}
-</div>
-
-<div className={`mt-4 ${isFlexMode ? 'flex flex-col gap-y-2' : 'grid grid-cols-1 sm:grid-cols-2 gap-4'}`}>
-  {product.type === 'PILLOW' && product.pillow && (
-    <>
-      {product.pillow.size && (
-        <p><strong>{isGe ? 'ზომა' : 'Size'}:</strong> {product.pillow.size}</p>
-      )}
-    </>
-  )}
-
-  {product.type === 'QUILT' && product.quilt && (
-    <>
-      {(isGe ? product.quilt.fabric : product.quilt.fabricEn) && (
-        <p><strong>{isGe ? 'ქსოვილი' : 'Fabric'}:</strong> {isGe ? product.quilt.fabric : product.quilt.fabricEn}</p>
-      )}
-      {(isGe ? product.quilt.filling : product.quilt.fillingEn) && (
-        <p><strong>{isGe ? 'შევსება' : 'Filling'}:</strong> {isGe ? product.quilt.filling : product.quilt.fillingEn}</p>
-      )}
-      {product.quilt.weight && (
-        <p><strong>{isGe ? 'წონა' : 'Weight'}:</strong> {product.quilt.weight}</p>
-      )}
-    </>
-  )}
-
-  {(product.type === 'PAD' || product.type === 'MATTRESS') && (
-    <>
-      {ALL_FEATURES.map((feature, index) => {
-        const value = getFeatureValue(feature.key);
-        if (!value) return null;
-
-        return (
-          <div key={index}>
-            <div className="flex items-center space-x-2 p-2 rounded-lg transition">
-              <Link
-                href={feature.href}
-                className="font-semibold flex items-center gap-2 p-2 text-[15px] text-foreground hover:underline"
-              >
-                <Image
-                  src={feature.logo}
-                  alt="logo"
-                  width={42}
-                  height={42}
-                  className="object-contain"
-                />
-                {isGe ? feature.label : feature.labelEn}
-              </Link>
-            </div>
+            {(activeFeatures.length > 0 || assignedFeatures.length > 0) && (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-foreground">
+                  {isGe ? "მახასიათებლები" : "Features"}
+                </h3>
+                <div className={cn("grid gap-2", isFlexMode ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2")}>
+                  {activeFeatures.map((feature, index) => (
+                    <Link
+                      key={`${feature.key}-${index}`}
+                      href={feature.href}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                    >
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                        <Image
+                          src={feature.logo}
+                          alt=""
+                          width={36}
+                          height={36}
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-foreground leading-snug">
+                        {isGe ? feature.label : feature.labelEn}
+                      </span>
+                    </Link>
+                  ))}
+                  {assignedFeatures.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={`/feature/${item.slug}`}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                    >
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                        <Image
+                          src={item.image}
+                          alt={item.labelEn}
+                          width={36}
+                          height={36}
+                          className="h-full w-full object-contain"
+                          unoptimized={item.image.startsWith("http")}
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-foreground leading-snug">
+                        {isGe ? item.labelKa : item.labelEn}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        );
-      })}
-      {assignedFeatures.map((item) => (
-        <div key={item.id}>
-          <div className="flex items-center space-x-2 p-2 rounded-lg transition">
-            <Link
-              href={`/feature/${item.slug}`}
-              className="font-semibold flex items-center gap-2 p-2 text-[15px] text-gray-800 hover:underline"
-            >
-              <Image
-                src={item.image}
-                alt={item.labelEn}
-                width={42}
-                height={42}
-                className="object-contain"
-                unoptimized={item.image.startsWith("http")}
-              />
-              {isGe ? item.labelKa : item.labelEn}
-            </Link>
-          </div>
-        </div>
-      ))}
-    </>
-  )}
-</div>
-
-
-          </div>
-          
         </div>
 
         {pillowBadges.length > 0 ? (
-          <div className="container mx-auto mt-8 mb-4 px-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="mt-10 lg:mt-14 grid grid-cols-2 lg:grid-cols-4 gap-3">
             {pillowBadges.map((badge) => (
               <div
                 key={badge}
-                className="min-h-[56px] px-4 py-3 rounded-xl border border-brand bg-muted text-foreground text-base lg:text-lg font-medium text-center flex items-center justify-center"
+                className="elevated-card min-h-[56px] px-4 py-3 text-sm lg:text-base font-medium text-foreground text-center flex items-center justify-center"
               >
                 {badge}
               </div>
@@ -382,25 +399,16 @@ const DetailPage = async(props: {
           </div>
         ) : null}
 
-        
-        {(product.type === 'MATTRESS' && product.mattress && (isGe ? product.mattress.descriptionKa : product.mattress.descriptionEn)) ||
- (product.type === 'PAD' && product.pad && (isGe ? product.pad.descriptionKa : product.pad.descriptionEn)) ? (
-  <div className="container mt-10 text-center mx-auto gap-6 lg:gap-12">
-    <h1 className="text-xl lg:text-[25px] font-semibold">{isGe ? 'აღწერა' : 'Description'}:</h1>
-    <p className="mt-4 text-[16px]">
-      {product.type === 'MATTRESS' && product.mattress && (
-        isGe ? product.mattress.descriptionKa : product.mattress.descriptionEn
-      )}
-      {product.type === 'PAD' && product.pad && (
-        isGe ? product.pad.descriptionKa : product.pad.descriptionEn
-      )}
-    </p>
-  </div>
-) : null}
-<div className="container mb-8">
+        {description ? (
+          <div className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center">
+            <h2 className="section-heading-center">{isGe ? "აღწერა" : "Description"}</h2>
+            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">{description}</p>
+          </div>
+        ) : null}
 
-      <ProductCarousel products={filtered} locale={locale} />
-</div>
+        <div className="mt-12 lg:mt-16 border-t border-border pt-12 lg:pt-16">
+          <ProductCarousel products={filtered} locale={locale} />
+        </div>
       </div>
     </section>
   );

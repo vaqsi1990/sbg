@@ -18,12 +18,12 @@ function Contact() {
         <h2 className="section-heading-center">{t("contacts")}</h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6">
-          <div className="elevated-card p-6 lg:p-8 space-y-6">
+          <div className="rounded-2xl bg-brand-chrome p-6 lg:p-8 space-y-6 text-white shadow-lg">
             <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
                 <FaMapMarkerAlt className="text-lg" />
               </div>
-              <div className="text-sm lg:text-base leading-relaxed text-muted-foreground">
+              <div className="text-sm lg:text-base leading-relaxed text-white/85">
                 {t("address")
                   .split("\n")
                   .map((line, index) => (
@@ -36,32 +36,32 @@ function Contact() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
                 <FaPhone className="text-lg" />
               </div>
-              <div className="text-sm lg:text-base leading-relaxed text-muted-foreground">
+              <div className="text-sm lg:text-base leading-relaxed text-white/85">
                 {t("batumi")}: <br /> +995557394374, <br /> +995568613022 <br />
                 {t("kutaisi")}: <br /> +995514079898
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
                 <FaEnvelope className="text-lg" />
               </div>
               <a
                 href="mailto:Sleepandbedgeorgia@gmail.com"
-                className="text-sm lg:text-base leading-relaxed text-brand hover:underline"
+                className="text-sm lg:text-base leading-relaxed text-white/90 hover:text-white hover:underline"
               >
                 Sleepandbedgeorgia@gmail.com
               </a>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
                 <FaClock className="text-lg" />
               </div>
-              <div className="text-sm lg:text-base leading-relaxed text-muted-foreground">
+              <div className="text-sm lg:text-base leading-relaxed text-white/85">
                 <p>{t("mondayToFriday")}</p>
                 <p>10:00 - 19:00</p>
               </div>

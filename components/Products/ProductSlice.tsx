@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { ArrowUpRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import Cards from "../Cards/Cards";
@@ -17,10 +17,10 @@ export default function ProductSlice({ products }: { products: ProductType[] }) 
           <h2 className="section-heading">{t("ourProducts")}</h2>
           <Link
             href="/all"
-            className="inline-flex items-center gap-2 text-sm lg:text-base font-medium text-brand hover:text-brand-dark transition-colors group shrink-0"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-chrome px-5 py-2.5 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition-all hover:bg-brand-chrome/90 hover:shadow-lg shrink-0"
           >
             <span>{t("viewAll")}</span>
-            <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
           </Link>
         </div>
         <Cards products={products} />
