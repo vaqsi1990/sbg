@@ -14,6 +14,8 @@ import {
   Pad,
   Product,
   ProductType,
+  CatalogItem,
+  ProductCatalogItem,
 } from "@prisma/client";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { syncProductCatalog } from "@/lib/actions/catalog";
@@ -179,11 +181,13 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
   }
 }
 
+type CatalogAssignment = ProductCatalogItem & { item: CatalogItem };
+
 type SingleProduct =
-  | (Product & { type: "MATTRESS"; mattress: Mattress })
-  | (Product & { type: "PILLOW"; pillow: Pillow })
-  | (Product & { type: "QUILT"; quilt: Quilt })
-  | (Product & { type: "PAD"; pad: Pad });
+  | (Product & { type: "MATTRESS"; mattress: Mattress; catalogItems: CatalogAssignment[] })
+  | (Product & { type: "PILLOW"; pillow: Pillow; catalogItems: CatalogAssignment[] })
+  | (Product & { type: "QUILT"; quilt: Quilt; catalogItems: CatalogAssignment[] })
+  | (Product & { type: "PAD"; pad: Pad; catalogItems: CatalogAssignment[] });
 
 export async function getSingleProduct(
   id: string
