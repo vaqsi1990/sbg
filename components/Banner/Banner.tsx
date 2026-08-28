@@ -1,7 +1,7 @@
 import React from 'react';
 import './banner.css';
 import { Link } from "@/i18n/navigation";
-console.log("Banner");
+
 function Banner() {
   return (
     <>
