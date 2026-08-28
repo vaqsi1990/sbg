@@ -11,7 +11,7 @@ export default function ProductSlice({ products }: { products: ProductType[] }) 
   const t = useTranslations("slice");
 
   return (
-    <section className="page-section bg-muted/50">
+    <section className="page-section bg-muted/50 dark:bg-transparent">
       <div className="container px-4 lg:px-6 mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
           <h2 className="section-heading">{t("ourProducts")}</h2>
