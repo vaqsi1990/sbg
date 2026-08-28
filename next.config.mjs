@@ -10,7 +10,15 @@ const nextConfig = {
         {
           protocol: "https",
           hostname: "utfs.io",
-          pathname: "/f/**", // ეს ხაზს უსვამს რომ სურათები ამ path-ზეა
+          pathname: "/f/**",
+        },
+        {
+          protocol: "https",
+          hostname: "ufs.sh",
+        },
+        {
+          protocol: "https",
+          hostname: "*.ufs.sh",
         },
       ],
     },

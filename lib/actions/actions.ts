@@ -16,6 +16,7 @@ import {
   ProductType,
 } from "@prisma/client";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { syncProductCatalog } from "@/lib/actions/catalog";
 
 function formatError(error: any) {
   if (error.name === "ZodError") {
@@ -167,6 +168,8 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
         break;
     }
 
+    await syncProductCatalog(createdProduct.id, parsed.featureIds ?? []);
+
     revalidatePath("/admin");
 
     return { success: true, message: "Product created successfully" };
@@ -198,8 +201,14 @@ export async function getSingleProduct(
       ? await prisma.quilt.findUnique({ where: { id } })
       : await prisma.pad.findUnique({ where: { id } });
 
+  const catalogItems = await prisma.productCatalogItem.findMany({
+    where: { productId: id },
+    include: { item: true },
+  });
+
   return {
     ...product,
+    catalogItems,
     ...(product.type === "MATTRESS"
       ? { mattress: extra as Mattress }
       : product.type === "PILLOW"
@@ -469,6 +478,10 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           minitextEn:product.minitextEn,
         },
       });
+    }
+
+    if (Array.isArray(product.featureIds)) {
+      await syncProductCatalog(product.id, product.featureIds);
     }
 
     revalidatePath("/admin");

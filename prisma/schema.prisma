@@ -45,8 +45,37 @@ model Product {
   mattress    Mattress?
   pillow      Pillow?
   quilt       Quilt?
+  catalogItems ProductCatalogItem[]
     createdAt   DateTime @default(now()) @db.Timestamp(6)
   updatedAt   DateTime @updatedAt
+}
+
+enum CatalogKind {
+  FEATURE
+  HEIGHT
+}
+
+model CatalogItem {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kind        CatalogKind
+  slug        String      @unique
+  labelKa     String
+  labelEn     String
+  image       String
+  forMattress Boolean     @default(true)
+  forPad      Boolean     @default(true)
+  sortOrder   Int         @default(0)
+  products    ProductCatalogItem[]
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+}
+
+model ProductCatalogItem {
+  productId String @db.Uuid
+  itemId    String @db.Uuid
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  item      CatalogItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@id([productId, itemId])
 }
 
 

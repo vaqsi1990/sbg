@@ -3,10 +3,18 @@
 import { useState } from 'react';
 import All from './All';
 import AdminForm from './AdminForm';
+import FeatureManager from './features/FeatureManager';
 import { ProductType } from '@/lib/ProductType';
+import type { CatalogItemDTO } from '@/lib/actions/catalog';
 
-export default function AdminSwitch({ products }: { products: ProductType[] }) {
-  const [activeComponent, setActiveComponent] = useState<"all" | "form">("all");
+export default function AdminSwitch({
+  products,
+  catalogItems = [],
+}: {
+  products: ProductType[];
+  catalogItems?: CatalogItemDTO[];
+}) {
+  const [activeComponent, setActiveComponent] = useState<"all" | "form" | "features">("all");
  
   return (
     <>
@@ -62,12 +70,24 @@ export default function AdminSwitch({ products }: { products: ProductType[] }) {
       </svg>
       დაამატე პროდუქტის
     </button>
+
+    <button
+      onClick={() => setActiveComponent("features")}
+      className={`inline-flex cursor-pointer px-5 py-3 rounded-md border border-[#203e72] ${
+        activeComponent === "features"
+          ? "bg-[#203e72] text-white"
+          : "text-black hover:bg-[#203e72] hover:text-white"
+      }`}
+    >
+      + ზომა და მახასიათებლები
+    </button>
   </div>
 
   {/* Section */}
   <section className=" mt-6">
     {activeComponent === "all" && <All products={products} />}
-    {activeComponent === "form" && <AdminForm />}
+    {activeComponent === "form" && <AdminForm catalogItems={catalogItems} />}
+    {activeComponent === "features" && <FeatureManager items={catalogItems} />}
   </section>
     </>
   );

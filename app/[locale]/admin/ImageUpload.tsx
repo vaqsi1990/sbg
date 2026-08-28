@@ -7,17 +7,18 @@ import Image from "next/image";
 type ImageUploadProps = {
   onChange: (urls: string[]) => void;
   value: string[];
+  maxFiles?: number;
 };
 
-const ImageUpload = ({ onChange, value }: ImageUploadProps) => {
+const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
   const [imageUrls, setImageUrls] = useState<string[]>(value || []);
 
   const handleUploadComplete = (res: any[]) => {
     const urls = res.map((file) => file.url);
-    const newUrls = [...imageUrls, ...urls];
+    const merged = maxFiles === 1 ? urls.slice(0, 1) : [...imageUrls, ...urls];
+    const newUrls = maxFiles ? merged.slice(0, maxFiles) : merged;
     setImageUrls(newUrls);
-    onChange(newUrls); // ეს ატვირთული URL-ები გადავა form-ში
-    alert("Files uploaded successfully!");
+    onChange(newUrls);
   };
 
   return (

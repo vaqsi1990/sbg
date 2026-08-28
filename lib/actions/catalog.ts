@@ -1,0 +1,153 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { CatalogKind } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
+
+export type CatalogItemDTO = {
+  id: string;
+  kind: CatalogKind;
+  slug: string;
+  labelKa: string;
+  labelEn: string;
+  image: string;
+  forMattress: boolean;
+  forPad: boolean;
+  sortOrder: number;
+};
+
+function toSlug(value: string) {
+  const slug = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || `item-${Date.now()}`;
+}
+
+export async function getCatalogItems(kind?: CatalogKind): Promise<CatalogItemDTO[]> {
+  const items = await prisma.catalogItem.findMany({
+    where: kind ? { kind } : undefined,
+    orderBy: [{ kind: "asc" }, { sortOrder: "asc" }, { createdAt: "asc" }],
+  });
+  return items;
+}
+
+export async function getCatalogItemBySlug(slug: string) {
+  return prisma.catalogItem.findUnique({ where: { slug } });
+}
+
+export async function createCatalogItem(input: {
+  kind: CatalogKind;
+  labelKa: string;
+  labelEn: string;
+  image: string;
+  slug?: string;
+  forMattress?: boolean;
+  forPad?: boolean;
+}) {
+  if (!(await isAdminAuthenticated())) {
+    return { success: false, message: "Unauthorized" };
+  }
+
+  const labelKa = input.labelKa.trim();
+  const labelEn = input.labelEn.trim();
+  const image = input.image.trim();
+  if (!labelKa || !labelEn || !image) {
+    return { success: false, message: "შეავსე სახელები და ატვირთე სურათი" };
+  }
+
+  const slug =
+    input.kind === "HEIGHT"
+      ? toSlug(input.slug || labelEn)
+      : toSlug(input.slug || input.labelEn);
+
+  if (input.kind === "HEIGHT" && !/^\d+$/.test(slug)) {
+    return { success: false, message: "სიმაღლე უნდა იყოს რიცხვი, მაგ. 35" };
+  }
+
+  try {
+    const count = await prisma.catalogItem.count({ where: { kind: input.kind } });
+    await prisma.catalogItem.create({
+      data: {
+        kind: input.kind,
+        slug,
+        labelKa,
+        labelEn,
+        image,
+        forMattress: input.forMattress ?? true,
+        forPad: input.forPad ?? true,
+        sortOrder: count + 1,
+      },
+    });
+    revalidatePath("/admin");
+    revalidatePath("/admin/features");
+    revalidatePath("/all");
+    revalidatePath(`/feature/${slug}`);
+    return { success: true, message: "დაემატა" };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Could not save";
+    if (message.includes("Unique") || message.includes("slug")) {
+      return { success: false, message: "ეს ზომა/მახასიათებელი უკვე არსებობს" };
+    }
+    return { success: false, message };
+  }
+}
+
+export async function deleteCatalogItem(id: string) {
+  if (!(await isAdminAuthenticated())) {
+    return { success: false, message: "Unauthorized" };
+  }
+  await prisma.catalogItem.delete({ where: { id } });
+  revalidatePath("/admin");
+  revalidatePath("/admin/features");
+  revalidatePath("/all");
+  return { success: true, message: "წაიშალა" };
+}
+
+export async function syncProductCatalog(productId: string, featureIds: string[] = []) {
+  await prisma.productCatalogItem.deleteMany({ where: { productId } });
+  const uniqueIds = [...new Set(featureIds.filter(Boolean))];
+  if (!uniqueIds.length) return;
+  await prisma.productCatalogItem.createMany({
+    data: uniqueIds.map((itemId) => ({ productId, itemId })),
+  });
+}
+
+export async function getProductsByCatalogSlug(slug: string) {
+  const item = await prisma.catalogItem.findUnique({ where: { slug } });
+  if (!item) return { item: null, products: [] };
+
+  if (item.kind === "HEIGHT") {
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [{ mattress: { height: item.slug } }, { pad: { height: item.slug } }],
+      },
+      select: {
+        id: true,
+        titleEn: true,
+        titleKa: true,
+        type: true,
+        images: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return { item, products };
+  }
+
+  const products = await prisma.product.findMany({
+    where: { catalogItems: { some: { itemId: item.id } } },
+    select: {
+      id: true,
+      titleEn: true,
+      titleKa: true,
+      type: true,
+      images: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  return { item, products };
+}

@@ -9,6 +9,7 @@ export const BaseProductSchema = z.object({
   secondtextEn: z.string(),
   images: z.array(z.string()),
   type: z.enum(['MATTRESS', 'PILLOW', 'QUILT', 'PAD']),
+  featureIds: z.array(z.string()).optional(),
 });
 
 // Mattress-specific schema

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "@/i18n/navigation";
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
@@ -11,10 +11,26 @@ import 'swiper/css/grid';
 import SlugLinks from './Sluglinks';
 import { Button } from "@/components/ui/button";
 import {FaArrowLeft, FaArrowRight} from 'react-icons/fa'
+import { getCatalogItems, type CatalogItemDTO } from '@/lib/actions/catalog';
+
 const OtherFilters = () => {
   const params = useParams();
   const locale = params?.locale as string;
   const isGe = locale === 'ge';
+  const [catalogItems, setCatalogItems] = useState<CatalogItemDTO[]>([]);
+
+  useEffect(() => {
+    getCatalogItems().then(setCatalogItems).catch(() => setCatalogItems([]));
+  }, []);
+
+  const extraLinks = catalogItems.map((item) => ({
+    key: item.slug,
+    label: item.labelKa,
+    labelEn: item.labelEn,
+    href: `/feature/${item.slug}`,
+    logo: item.image,
+  }));
+  const links = [...SlugLinks, ...extraLinks];
 
   return (
     <div className="w-full relative">
@@ -41,7 +57,7 @@ const OtherFilters = () => {
             nextEl: '.swiper-button-next',
           }}
         >
-          {SlugLinks.map((item, index) => (
+          {links.map((item, index) => (
             <SwiperSlide key={index}>
               <Link
                 href={item.href}
@@ -53,6 +69,7 @@ const OtherFilters = () => {
                     alt={isGe ? item.label : item.labelEn}
                     fill
                     className="object-contain"
+                    unoptimized={item.logo.startsWith("http")}
                   />
                 </div>
                 <span className="text-sm text-center font-medium text-gray-800 group-hover:text-black transition">
@@ -85,7 +102,7 @@ const OtherFilters = () => {
   
     {/* დიდ ეკრანზე grid */}
     <div className="hidden lg:grid grid-cols-4 xl:grid-cols-5 gap-6">
-      {SlugLinks.map((item, index) => (
+      {links.map((item, index) => (
         <Link
           key={index}
           href={item.href}
@@ -97,6 +114,7 @@ const OtherFilters = () => {
               alt={isGe ? item.label : item.labelEn}
               fill
               className="object-contain"
+              unoptimized={item.logo.startsWith("http")}
             />
           </div>
           <span className="text-sm text-center font-medium text-gray-800 group-hover:text-black transition">

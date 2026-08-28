@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Mattress, Pad } from '@prisma/client';
 import ProductCarousel from '../ProductCarousel';
 import { getAllProduct } from '@/lib/actions/actions';
+import { getCatalogItems } from '@/lib/actions/catalog';
 type Feature = {
   key:
     | 'height'
@@ -154,6 +155,15 @@ const DetailPage = async(props: {
   };
   const { data: allSameTypeProducts } = await getAllProduct(product.type);
   const filtered = allSameTypeProducts.filter(p => p.id !== id).slice(0, 4);
+  const catalogItems = await getCatalogItems();
+  const assignedFeatures = (
+    (product as { catalogItems?: { item: { id: string; kind: string; slug: string; labelKa: string; labelEn: string; image: string } }[] }).catalogItems ?? []
+  )
+    .map((row) => row.item)
+    .filter((item) => item.kind === "FEATURE");
+  const catalogHeight = catalogItems.find(
+    (item) => item.kind === "HEIGHT" && item.slug === String(heightValue ?? "")
+  );
   return (
     <section className="w-full mx-auto max-w-[1440px]">
       <div className="text-black ">
@@ -298,6 +308,46 @@ const DetailPage = async(props: {
           </div>
         );
       })}
+      {catalogHeight && !matchedHeightFeature ? (
+        <div>
+          <div className="flex items-center space-x-2 p-2 rounded-lg transition">
+            <Link
+              href={`/feature/${catalogHeight.slug}`}
+              className="font-semibold flex items-center gap-2 p-2 text-[15px] text-gray-800 hover:underline"
+            >
+              <Image
+                src={catalogHeight.image}
+                alt={catalogHeight.labelEn}
+                width={42}
+                height={42}
+                className="object-contain"
+                unoptimized={catalogHeight.image.startsWith("http")}
+              />
+              {isGe ? catalogHeight.labelKa : catalogHeight.labelEn}
+            </Link>
+          </div>
+        </div>
+      ) : null}
+      {assignedFeatures.map((item) => (
+        <div key={item.id}>
+          <div className="flex items-center space-x-2 p-2 rounded-lg transition">
+            <Link
+              href={`/feature/${item.slug}`}
+              className="font-semibold flex items-center gap-2 p-2 text-[15px] text-gray-800 hover:underline"
+            >
+              <Image
+                src={item.image}
+                alt={item.labelEn}
+                width={42}
+                height={42}
+                className="object-contain"
+                unoptimized={item.image.startsWith("http")}
+              />
+              {isGe ? item.labelKa : item.labelEn}
+            </Link>
+          </div>
+        </div>
+      ))}
     </>
   )}
 </div>

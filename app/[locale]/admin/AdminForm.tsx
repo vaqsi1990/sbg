@@ -21,6 +21,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import ImageUpload from './ImageUpload';
 import { Controller } from "react-hook-form";
+import type { CatalogItemDTO } from "@/lib/actions/catalog";
+import { Link } from "@/i18n/navigation";
 
 const BooleanSchema = z.object({
   type: z.enum(["MATTRESS", "PILLOW", "QUILT", "PAD"]),
@@ -198,7 +200,7 @@ function FeatureGrid({
   );
 }
 
-export default function AdminForm() {
+export default function AdminForm({ catalogItems = [] }: { catalogItems?: CatalogItemDTO[] }) {
   const [pending, setPending] = useState(false);
   const [status, setStatus] = useState("");
 
@@ -241,10 +243,29 @@ export default function AdminForm() {
       latex: false,
       washable: false,
       coconutLayer: false,
+      featureIds: [],
     },
   });
 
   const productType = form.watch('type');
+  const featureIds = form.watch('featureIds') ?? [];
+  const extraHeights = catalogItems.filter((item) => item.kind === "HEIGHT");
+  const mergedHeights = [
+    ...heightOptions,
+    ...extraHeights
+      .filter((item) => !heightOptions.some((option) => option.value === item.slug))
+      .map((item) => ({ text: `${item.slug} სმ`, value: item.slug })),
+  ];
+  const extraFeatures = catalogItems.filter(
+    (item) =>
+      item.kind === "FEATURE" &&
+      (productType === "PAD" ? item.forPad : item.forMattress)
+  );
+
+  const toggleFeature = (id: string, checked: boolean) => {
+    const next = checked ? [...featureIds, id] : featureIds.filter((itemId) => itemId !== id);
+    form.setValue("featureIds", next, { shouldDirty: true });
+  };
 
   const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
     setPending(true);
@@ -394,6 +415,12 @@ export default function AdminForm() {
               </FormSection>
 
               <FormSection step={5} title="ზომა და მახასიათებლები">
+                <Link
+                  href="/admin/features"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-md bg-[#203e72] px-4 py-3 text-sm font-medium text-white hover:bg-[#203e72]/90"
+                >
+                  + დაამატე ახალი ზომა ან მახასიათებელი
+                </Link>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -408,7 +435,7 @@ export default function AdminForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-black border border-gray-700 text-white">
-                            {heightOptions.map((option) => (
+                            {mergedHeights.map((option) => (
                               <SelectItem key={option.value} value={option.value}>
                                 {option.text}
                               </SelectItem>
@@ -449,6 +476,23 @@ export default function AdminForm() {
                   />
                 </div>
                 <FeatureGrid options={mattressCheckboxOptions} control={form.control} />
+                {extraFeatures.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">დამატებული მახასიათებლები</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {extraFeatures.map((item) => (
+                        <label key={item.id} className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm hover:border-[#203e72]">
+                          <Checkbox
+                            checked={featureIds.includes(item.id)}
+                            className="border-black"
+                            onCheckedChange={(checked) => toggleFeature(item.id, Boolean(checked))}
+                          />
+                          <span>{item.labelEn}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </FormSection>
             </>
           )}
@@ -473,6 +517,12 @@ export default function AdminForm() {
           {productType === "PAD" && (
             <>
               <FormSection step={4} title="ტოპერის მახასიათებლები">
+                <Link
+                  href="/admin/features"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-md bg-[#203e72] px-4 py-3 text-sm font-medium text-white hover:bg-[#203e72]/90"
+                >
+                  + დაამატე ახალი ზომა ან მახასიათებელი
+                </Link>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input {...form.register("firmness")} placeholder="სიმაგრე (KA)" className={inputClass} />
                   <Input {...form.register("firmnessEn")} placeholder="Firmness (EN)" className={inputClass} />
@@ -489,7 +539,7 @@ export default function AdminForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="bg-black border rounded-2xl border-gray-700 text-white">
-                            {heightOptions.map((option) => (
+                            {mergedHeights.map((option) => (
                               <SelectItem key={option.value} className="rounded-2xl" value={option.value}>
                                 {option.text}
                               </SelectItem>
@@ -502,6 +552,23 @@ export default function AdminForm() {
                   />
                 </div>
                 <FeatureGrid options={padCheckboxOptions} control={form.control} />
+                {extraFeatures.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">დამატებული მახასიათებლები</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {extraFeatures.map((item) => (
+                        <label key={item.id} className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm hover:border-[#203e72]">
+                          <Checkbox
+                            checked={featureIds.includes(item.id)}
+                            className="border-black"
+                            onCheckedChange={(checked) => toggleFeature(item.id, Boolean(checked))}
+                          />
+                          <span>{item.labelEn}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </FormSection>
               <FormSection step={5} title="აღწერები">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
