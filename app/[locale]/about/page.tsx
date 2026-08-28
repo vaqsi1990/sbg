@@ -21,7 +21,7 @@ function Page() {
     const t = useTranslations("about");
   return (
     <>
-      <section className="w-full mx-auto ">
+      <section className="w-full mx-auto bg-background">
         <div className="">
           <div className="flex h-[50vh] items-center flex-wrap bg-overlay sm:p-6 before:bg-title before:bg-opacity-70 aboutbg">
             <div className="text-center z-50 w-full">
@@ -46,13 +46,13 @@ function Page() {
                     alt="About Us"
                     className="w-[250px] lg:max-w-[350px] h-auto object-cover rounded-lg"
                   />
-                  <p className="mt-5 text-xl lg:text-[25px] leading-tight text-center mb-4 font-semibold">
+                  <p className="mt-5 text-xl lg:text-[25px] leading-tight text-center mb-4 font-semibold text-foreground">
                   {t('sleep')}
                   </p>
                 </div>
 
                 <div className="w-full md:w-1/2">
-                  <p className="text-lg text-center leading-relaxed ">
+                  <p className="text-lg text-center leading-relaxed text-foreground">
                   {t('our')}
                   </p>
                 </div>

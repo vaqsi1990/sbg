@@ -44,7 +44,7 @@ export default function CatalogCardsWrapper({ products, title }: Props) {
         <div className="container pt-12 lg:pt-16 lg:!pb-16 mx-auto">
           {products.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-xl text-gray-500">{t("wait")}</p>
+              <p className="text-xl text-muted-foreground">{t("wait")}</p>
             </div>
           ) : (
             <>

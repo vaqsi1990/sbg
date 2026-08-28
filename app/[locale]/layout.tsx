@@ -7,6 +7,7 @@ import Footer from "@/components/Footer/Footer";
 import {NextIntlClientProvider, hasLocale} from 'next-intl';
 import {notFound} from 'next/navigation';
 import SIdeLogo from "@/components/SideLogo/SideLogo";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import { getMessages } from "next-intl/server";
 
@@ -32,13 +33,14 @@ export default async function RootLayout({
   }
   const messages = await getMessages();
   return (
-    <html lang={locale} >
+    <html lang={locale} suppressHydrationWarning>
        <head>
        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </head>
       <body
-        className={`${quicksand.variable}  antialiased`}
+        className={`${quicksand.variable} bg-background text-foreground antialiased`}
       >
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
         <NextIntlClientProvider locale={locale} messages={messages}>
 
 
@@ -47,6 +49,7 @@ export default async function RootLayout({
         {children}
       <Footer />
         </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
  

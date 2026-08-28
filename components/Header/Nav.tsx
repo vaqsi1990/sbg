@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FiMenu, FiX, FiChevronDown } from "react-icons/fi";
 import LocalLanguage from "./language";
+import { ThemeToggle } from "../theme-toggle";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -73,7 +74,7 @@ export default function Navbar() {
 
               {hovered === index && item.children && (
                 <div
-                  className="absolute left-0 top-full mt-3 w-52 rounded-xl bg-white p-2 shadow-xl ring-1 ring-black/5"
+                  className="absolute left-0 top-full mt-3 w-52 rounded-xl bg-popover p-2 shadow-xl ring-1 ring-border"
                   onMouseEnter={() => handleMouseEnter(index)}
                   onMouseLeave={handleMouseLeave}
                 >
@@ -81,7 +82,7 @@ export default function Navbar() {
                     <Link
                       key={idx}
                       href={child.link}
-                      className="block rounded-lg px-4 py-2.5 text-[15px] text-gray-800 hover:bg-surface-muted hover:text-brand transition-colors"
+                      className="block rounded-lg px-4 py-2.5 text-[15px] text-popover-foreground hover:bg-surface-muted hover:text-brand transition-colors"
                     >
                       {child.label}
                     </Link>
@@ -105,7 +106,7 @@ export default function Navbar() {
         <div className="fixed inset-0 top-[72px] z-40 md:hidden bg-surface">
           <div className="flex flex-col h-full overflow-y-auto px-6 py-8">
             {navItems.map((item, index) => (
-              <div key={index} className="border-b border-gray-200 last:border-0">
+              <div key={index} className="border-b border-border last:border-0">
                 <Link
                   href={item.link}
                   className="block py-4 text-lg font-semibold text-brand"
@@ -119,7 +120,7 @@ export default function Navbar() {
                       <Link
                         key={idx}
                         href={child.link}
-                        className="block py-2.5 text-[15px] text-gray-600 hover:text-brand transition-colors"
+                        className="block py-2.5 text-[15px] text-muted-foreground hover:text-brand transition-colors"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {child.label}
@@ -129,7 +130,8 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-            <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="mt-8 pt-6 border-t border-border flex items-center justify-between gap-4">
+              <ThemeToggle variant="menu" />
               <LocalLanguage />
             </div>
           </div>

@@ -208,8 +208,8 @@ const DetailPage = async(props: {
           .map((size) => size.trim())
       : [];
   return (
-    <section className="w-full mx-auto max-w-[1440px]">
-      <div className="text-black ">
+    <section className="w-full mx-auto max-w-[1440px] bg-background">
+      <div className="text-foreground">
         <div className="container mx-auto flex flex-col md:flex-row gap-6 lg:gap-12 items-center">
           <div className="w-full lg:w-1/2 flex justify-center">
             <ProductImages images={product.images} />
@@ -325,7 +325,7 @@ const DetailPage = async(props: {
             <div className="flex items-center space-x-2 p-2 rounded-lg transition">
               <Link
                 href={feature.href}
-                className="font-semibold flex items-center gap-2 p-2 text-[15px] text-gray-800 hover:underline"
+                className="font-semibold flex items-center gap-2 p-2 text-[15px] text-foreground hover:underline"
               >
                 <Image
                   src={feature.logo}
@@ -374,7 +374,7 @@ const DetailPage = async(props: {
             {pillowBadges.map((badge) => (
               <div
                 key={badge}
-                className="min-h-[56px] px-4 py-3 rounded-xl border border-[#1e3a6e] bg-[#ececec] text-black text-base lg:text-lg font-medium text-center flex items-center justify-center"
+                className="min-h-[56px] px-4 py-3 rounded-xl border border-brand bg-muted text-foreground text-base lg:text-lg font-medium text-center flex items-center justify-center"
               >
                 {badge}
               </div>

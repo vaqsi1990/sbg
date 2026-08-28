@@ -5,9 +5,9 @@ import { Link } from "@/i18n/navigation";
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+
 import { Grid, Navigation } from 'swiper/modules';
-import 'swiper/css/grid';
+
 import SlugLinks from './Sluglinks';
 import { Button } from "@/components/ui/button";
 import {FaArrowLeft, FaArrowRight} from 'react-icons/fa'
@@ -72,7 +72,7 @@ const OtherFilters = () => {
                     unoptimized={item.logo.startsWith("http")}
                   />
                 </div>
-                <span className="text-sm text-center font-medium text-gray-800 group-hover:text-black transition">
+                <span className="text-[16px] md:text-[18px] text-center font-medium text-foreground  transition">
                   {isGe ? item.label : item.labelEn}
                 </span>
               </Link>
@@ -82,14 +82,14 @@ const OtherFilters = () => {
   
   
         <Button
-  className="swiper-button-prev absolute left-[0.5px] top-1/2 transform -translate-y-12 bg-gray-100 text-2xl text-gray-500 cursor-pointer z-10"
+  className="swiper-button-prev absolute left-[0.5px] top-1/2 transform -translate-y-12 bg-muted text-2xl text-muted-foreground cursor-pointer z-10"
   aria-label="Previous"
 >
   <FaArrowLeft />
 </Button>
 
 <Button
-  className="swiper-button-next absolute right-[0.5px] top-1/2 transform -translate-y-12 bg-gray-100 text-2xl text-gray-500 cursor-pointer z-10"
+  className="swiper-button-next absolute right-[0.5px] top-1/2 transform -translate-y-12 bg-muted text-2xl text-muted-foreground cursor-pointer z-10"
   aria-label="Next"
 >
   <FaArrowRight />
@@ -117,7 +117,7 @@ const OtherFilters = () => {
               unoptimized={item.logo.startsWith("http")}
             />
           </div>
-          <span className="text-sm text-center font-medium text-gray-800 group-hover:text-black transition">
+          <span className="text-sm text-center font-medium text-foreground transition">
             {isGe ? item.label : item.labelEn}
           </span>
         </Link>

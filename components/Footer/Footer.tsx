@@ -27,10 +27,10 @@ function Footer() {
   ];
 
   return (
-    <footer className="relative bg-[#203e72] text-white pt-8 pb-6">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="relative bg-brand-chrome/95 backdrop-blur-md border-t border-white/10 text-white">
+      <div className="container mx-auto px-4 py-14 lg:py-16">
         <div className="flex flex-col items-center gap-8">
-          <p className="text-xl font-semibold tracking-tight">Sleep &amp; Bed Georgia</p>
+          <p className="text-2xl font-bold tracking-tight">Sleep &amp; Bed Georgia</p>
 
           <nav className="flex flex-wrap justify-center gap-x-8 gap-y-3">
             {links.map(({ href, label }) => (

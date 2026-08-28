@@ -65,7 +65,7 @@ const Text = () => {
 
   return (
     <>
-<div className="relative h-[40vh] w-full flex items-center justify-center mt-10  py-10 text-white">
+<div className="relative h-[40vh] w-full flex items-center justify-center mx-4 lg:mx-auto max-w-[calc(100%-2rem)] lg:max-w-6xl rounded-3xl overflow-hidden mb-10 text-white">
   {/* Background Image */}
   <Image
     src={bg}
@@ -86,7 +86,7 @@ const Text = () => {
   initial="hidden"
   animate={hide ? "hidden" : "visible"}
 >
-  <div className="text-2xl md:text-4xl font-semibold leading-snug">
+  <div className="text-2xl md:text-4xl font-bold leading-snug tracking-tight">
     {currentWord.map((letter, idx) => (
       <motion.span
         key={idx}

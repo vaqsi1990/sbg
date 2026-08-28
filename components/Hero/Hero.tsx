@@ -20,13 +20,13 @@ function Hero() {
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/60 z-10" />
       <div className="container mx-auto flex flex-col relative z-10 items-center justify-center h-full px-4 py-24 text-center">
-        <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4">
+        <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-5">
           Sleep &amp; Bed Georgia
         </h1>
-        <p className="max-w-2xl mb-8 text-white/90 text-base md:text-xl leading-relaxed">
+        <p className="max-w-2xl mb-10 text-white/85 text-base md:text-xl leading-relaxed">
           {t("heroheader")}
         </p>
-        <Link href="/all" className="btn-primary text-sm sm:text-base px-8 py-3">
+        <Link href="/all" className="btn-primary text-sm sm:text-base px-10 py-3.5">
           {t("herolink")}
         </Link>
       </div>

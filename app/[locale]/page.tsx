@@ -10,24 +10,29 @@ import NewProduct from "@/components/New/newProduct";
 
 export default function Home() {
   return (
-    <>
-      #203e72
-      <div className="w-full   bg-[#EBEBEB]">
-        <Hero />
-        <div className="mt-10 lg:mt-14">
-          <NewProduct />
-        </div>
-        <div className="flex rounded-lg text-white container bg-[#203e72] mt-10 lg:mt-14   py-10">
+    <div className="w-full bg-background">
+      <Hero />
+
+      <section className="page-section pt-12 lg:pt-16 pb-8 lg:pb-12">
+        <NewProduct />
+      </section>
+
+      <section className="container mx-auto px-4 lg:px-6">
+        <div className="brand-panel">
           <Info />
         </div>
-        <Products />
-        <div className="flex rounded-lg container bg-[#203e72] mt-14   py-10">
+      </section>
+
+      <Products />
+
+      <section className="container mx-auto px-4 lg:px-6 mt-14 lg:mt-20">
+        <div className="brand-panel">
           <Video />
         </div>
-        <Contact />
+      </section>
 
-        <Text />
-      </div>
-    </>
+      <Contact />
+      <Text />
+    </div>
   );
 }

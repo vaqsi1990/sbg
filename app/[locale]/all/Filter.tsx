@@ -1,55 +1,37 @@
 "use client";
 import { ProductType } from "@prisma/client";
 import React from "react";
-import { useTranslations } from "next-intl"; 
+import { useTranslations } from "next-intl";
+
+const filterBtn =
+  "outline-none rounded-full cursor-pointer transition-all duration-200 px-5 py-2.5 sm:px-7 sm:py-3 text-xs sm:text-sm font-semibold uppercase tracking-wide focus:outline-none border";
 
 function Filter({ selectedCategory, setSelectedCategory }: FilterProps) {
-  const t = useTranslations("products"); 
+  const t = useTranslations("products");
   const categories: ProductType[] = ["MATTRESS", "PILLOW", "QUILT", "PAD"];
-  
-  const handleCategoryChange = (category: ProductType) => {
-    setSelectedCategory(category);
-  };
 
-  const handleReset = () => {
-    setSelectedCategory(undefined); 
-  };
+  const btnClass = (active: boolean) =>
+    `${filterBtn} ${
+      active
+        ? "bg-brand text-white border-brand shadow-md shadow-brand/20"
+        : "border-border text-foreground hover:bg-brand hover:text-white hover:border-brand"
+    }`;
 
   return (
-    <div className="pt-[70px] pb-[70px]">
-      <div className="text-center">
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
-
-          {/* All button */}
+    <div className="pt-[70px] pb-12">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+        <button className={btnClass(selectedCategory === undefined)} onClick={() => setSelectedCategory(undefined)}>
+          {t("all")}
+        </button>
+        {categories.map((category) => (
           <button
-            className={`outline-none rounded-lg cursor-pointer transition-all duration-150 ease-in-out 
-            border border-solid border-black px-4 py-2 sm:px-6 sm:py-3 
-            text-[14px] sm:text-[18px] uppercase focus:outline-none 
-            hover:bg-[#203e72] hover:text-white
-            ${selectedCategory === undefined ? " bg-[#203e72] text-white" : "text-black"}`}  
-            onClick={handleReset}
+            key={category}
+            className={btnClass(selectedCategory === category)}
+            onClick={() => setSelectedCategory(category)}
           >
-            {t("all")} 
+            {t(category)}
           </button>
-
-          {/* Categories */}
-          {categories.map((category, i) => (
-            <div key={i}>
-              <button
-                onClick={() => handleCategoryChange(category)}
-                className={`outline-none rounded-lg cursor-pointer transition-all duration-150 ease-in-out 
-                border border-solid border-black px-4 py-2 sm:px-6 sm:py-3 
-                text-[14px] sm:text-[18px] uppercase focus:outline-none 
-                hover:bg-[#203e72] hover:text-white
-                ${selectedCategory === category ? " bg-[#203e72] text-white" : "text-black"}
-              `}
-              >
-                {t(category)} {/* Translate category text */}
-              </button>
-            </div>
-          ))}
-
-        </div>
+        ))}
       </div>
     </div>
   );

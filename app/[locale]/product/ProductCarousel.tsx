@@ -23,7 +23,7 @@ const ProductCarousel = ({ products, locale }: Props) => {
 
   return (
     <div className="w-full overflow-y-hidden mt-10">
-      <h2 className="text-xl lg:text-[25px]  font-semibold mb-[50px] text-center">
+      <h2 className="text-xl lg:text-[25px] font-semibold mb-[50px] text-center text-foreground">
         {isGe ? 'მსგავსი პროდუქტები' : 'Similar Products'}
       </h2>
       <Swiper
@@ -51,10 +51,10 @@ const ProductCarousel = ({ products, locale }: Props) => {
             </div>
 
  
-            <div className="border border-gray-100 bg-white rounded-b-2xl flex flex-col justify-between leading-normal">
+            <div className="border border-border bg-card rounded-b-2xl flex flex-col justify-between leading-normal">
               <div className="p-4">
                 <Link href={`/product/${product.id}`}>
-                  <h2 className="relative text-gray-800 font-bold text-xl after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-black after:transition-all after:duration-300 hover:after:w-full">
+                  <h2 className="relative text-foreground font-bold text-xl after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-foreground after:transition-all after:duration-300 hover:after:w-full">
                   {isGe ? product.titleKa : product.titleEn}
                   </h2>
                 </Link>

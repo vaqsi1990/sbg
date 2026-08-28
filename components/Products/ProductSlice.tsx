@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -11,18 +11,16 @@ export default function ProductSlice({ products }: { products: ProductType[] }) 
   const t = useTranslations("slice");
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container px-6 mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-          <h2 className="section-heading text-center md:text-left">
-            {t("ourProducts")}
-          </h2>
+    <section className="page-section bg-muted/50">
+      <div className="container px-4 lg:px-6 mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
+          <h2 className="section-heading">{t("ourProducts")}</h2>
           <Link
             href="/all"
-            className="flex items-center gap-2 text-[15px] lg:text-base font-medium text-brand hover:text-brand-dark transition-colors group"
+            className="inline-flex items-center gap-2 text-sm lg:text-base font-medium text-brand hover:text-brand-dark transition-colors group shrink-0"
           >
             <span>{t("viewAll")}</span>
-            <FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+            <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
         <Cards products={products} />

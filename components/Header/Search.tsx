@@ -49,9 +49,9 @@ export default function SearchComponent() {
           setQuery(e.target.value);
           handleSearch(e.target.value);
         }}
-        className="h-9 pl-9 pr-3 text-sm bg-white/95 border-white/20 rounded-xl"
+        className="h-9 pl-9 pr-3 text-sm bg-white/10 border-white/20 text-white placeholder:text-white/50 rounded-full backdrop-blur-sm focus-visible:ring-white/30"
       />
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
         <SearchIcon className="w-4 h-4" />
       </span>
     </div>

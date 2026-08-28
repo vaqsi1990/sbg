@@ -13,7 +13,7 @@ function Cards({ products }: CardsProps) {
   const isGe = locale === "ge";
 
   return (
-    <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-4">
+    <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 lg:gap-6 py-2">
       {products.map((product) => {
         const title = isGe ? product.titleKa : product.titleEn;
         const category = isGe ? product.categoryKa : product.categoryEn;
@@ -23,10 +23,10 @@ function Cards({ products }: CardsProps) {
         return (
           <article
             key={product.id}
-            className="group relative w-full overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+            className="group elevated-card overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
             <Link href={`/product/${product.id}`} className="block">
-              <div className="aspect-[3/4] overflow-hidden relative">
+              <div className="aspect-[3/4] overflow-hidden relative bg-neutral-50 dark:bg-[#ececec]">
                 <Image
                   height={480}
                   width={384}
@@ -34,7 +34,7 @@ function Cards({ products }: CardsProps) {
                   loading="lazy"
                   src={primaryImage}
                   alt={title}
-                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-0"
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.03] group-hover:opacity-0"
                 />
                 <Image
                   height={480}
@@ -43,14 +43,14 @@ function Cards({ products }: CardsProps) {
                   loading="lazy"
                   src={secondaryImage}
                   alt={title}
-                  className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-[1.03]"
                 />
               </div>
-              <div className="p-4">
-                <p className="text-xs font-medium uppercase tracking-wide text-brand mb-1.5">
+              <div className="p-4 lg:p-5">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-brand mb-2">
                   {category}
                 </p>
-                <h2 className="text-gray-900 font-semibold text-lg leading-snug group-hover:text-brand transition-colors">
+                <h2 className="text-foreground font-semibold text-base lg:text-lg leading-snug line-clamp-2">
                   {title}
                 </h2>
               </div>

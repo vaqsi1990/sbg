@@ -23,7 +23,7 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
     return (
       <Button
         onClick={onClick}
-        className="bg-gray-100 cursor-pointer text-gray-500 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-muted cursor-pointer text-muted-foreground hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
         aria-label={isLeft ? "Previous page" : "Next page"}
         disabled={isDisabled}
       >
@@ -68,7 +68,7 @@ const PaginationComponent: FC<PaginationProps> = ({ pageCount }) => {
         onClick={() => goToPage(currentPage - 1)}
         isDisabled={currentPage <= 1}
       />
-      <span className="p-2 font-semibold text-gray-500">
+      <span className="p-2 font-semibold text-muted-foreground">
       {t("page")}{currentPage}
       </span>
       <PaginationArrow
