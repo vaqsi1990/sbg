@@ -11,7 +11,7 @@ export default function SearchComponent() {
   const searchParams = useSearchParams();
   const { replace, push } = useRouter();
   const pathname = usePathname();
-  const locale = useLocale(); // მოაქვს მიმდინარე ენა: "ge" ან "en"
+  const locale = useLocale();
 
   const [query, setQuery] = useState(searchParams.get("query") || "");
 
@@ -29,7 +29,6 @@ export default function SearchComponent() {
       params.delete("query");
     }
 
-    // ვამოწმებთ არის თუ არა უკვე /[locale]/all
     const path = pathname.includes("/all") ? pathname : `/${locale}/all`;
 
     if (pathname !== path) {
@@ -40,7 +39,7 @@ export default function SearchComponent() {
   }, 300);
 
   return (
-    <div className="relative w-full bg-white rounded-md mb-8">
+    <div className="relative w-full max-w-xl mx-auto mb-8">
       <Input
         type="text"
         placeholder="Search"
@@ -49,10 +48,10 @@ export default function SearchComponent() {
           setQuery(e.target.value);
           handleSearch(e.target.value);
         }}
-        className="pl-10 pr-4"
+        className="h-11 pl-10 pr-4 rounded-full border-border bg-card text-foreground placeholder:text-muted-foreground"
       />
-      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-        <SearchIcon className="w-5 h-5" />
+      <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+        <SearchIcon className="w-4 h-4" />
       </span>
     </div>
   );

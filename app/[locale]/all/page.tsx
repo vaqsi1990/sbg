@@ -2,12 +2,12 @@
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import "./product.css";
 import SearchComponent from "./SearchComponent";
 import PaginationComponent from "./PaginationComponent";
 import Filter from "./Filter";
 import Cards from "@/components/Cards/Cards";
 import OtherFilters from "@/components/OtherFilters/OtherFilters";
+import PageHeader from "@/components/PageHeader";
 import { getAllProduct } from "@/lib/actions/actions";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
@@ -26,7 +26,7 @@ type Product = {
 };
 
 async function fetchProducts(type?: ProductType) {
-  const { data } = await getAllProduct(type); 
+  const { data } = await getAllProduct(type);
   return data.map((product: any) => ({
     ...product,
   }));
@@ -40,6 +40,7 @@ function PageContentWrapper() {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<ProductType | undefined>(undefined);
   const t = useTranslations("about");
+  const tProducts = useTranslations("products");
   const query = searchParams.get("query") || "";
   const currentPage = Number(searchParams.get("page")) || 1;
 
@@ -59,7 +60,7 @@ function PageContentWrapper() {
     }
 
     if (selectedCategory) {
-      updated = updated.filter((product) => product.type === selectedCategory); // Filter by ProductType
+      updated = updated.filter((product) => product.type === selectedCategory);
     }
 
     setFilteredProducts(updated);
@@ -72,41 +73,27 @@ function PageContentWrapper() {
   );
 
   return (
-    <section className="w-full mx-auto">
-      <div className="flex h-[50vh] items-center flex-wrap bg-overlay sm:p-6 before:bg-title before:bg-opacity-70"
-           style={{ backgroundImage: "url('/prod/breadcumb.jpg')" }}>
-        <div className="text-center z-50 w-full">
-          <h2 className="text-white sm:pt-10 pt-[50px] lg:mt-0 text-[25px] md:text-[50px] font-normal text-center">
-            {t("products")}
-          </h2>
-          <p className="max-w-[672px] text-white mx-auto lg:text-xl">
-            {t("sleep")}
-          </p>
-        </div>
-      </div>
+    <section className="w-full bg-background">
+      <PageHeader title={t("products")} subtitle={t("sleep")} />
 
-      <div className="allcontainer">
-        <div className="container pt-12 lg:pt-16 lg:!pb-16 mx-auto">
-        <Filter
-  selectedCategory={selectedCategory}
-  setSelectedCategory={setSelectedCategory}
-/>
-          <SearchComponent />
-          {products.length === 0 ? (
-            <div className="flex justify-center items-center h-96">
-              <Loader />
-            </div>
-          ) : (
-            <Cards products={currentPageProducts} />
-          )}
+      <div className="container mx-auto px-4 lg:px-6 py-10 lg:py-14">
+        <Filter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+        <SearchComponent />
 
-          <div className="col-span-full mb-6 flex justify-center items-center ">
-            <PaginationComponent pageCount={pageCount} />
+        {products.length === 0 ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader />
           </div>
+        ) : filteredProducts.length === 0 ? (
+          <p className="text-center text-muted-foreground py-16">{tProducts("noProducts")}</p>
+        ) : (
+          <Cards products={currentPageProducts} />
+        )}
 
-          <div className="container items-center lg:ml-[170px] mt-[80px] text-center">
-            <OtherFilters />
-          </div>
+        <PaginationComponent pageCount={pageCount} />
+
+        <div className="mt-16 lg:mt-20 border-t border-border pt-12 lg:pt-16">
+          <OtherFilters />
         </div>
       </div>
     </section>
@@ -115,7 +102,13 @@ function PageContentWrapper() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-[50vh] items-center justify-center pt-24 text-muted-foreground">
+          Loading...
+        </div>
+      }
+    >
       <PageContentWrapper />
     </Suspense>
   );

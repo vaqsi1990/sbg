@@ -1,180 +1,119 @@
-import { useTranslations } from 'next-intl';
-import Video from './Video';
-import './why.css'
+import { useTranslations } from "next-intl";
+import PageHeader from "@/components/PageHeader";
+import Video from "./Video";
+
 export default function FranchiseSection() {
   const t = useTranslations();
 
   return (
-    <section className="w-full mx-auto bg-background">
-      <div>
-        <div
-          className="flex h-[50vh] items-center flex-wrap bg-overlay sm:p-6 before:bg-title before:bg-opacity-70"
-          style={{ backgroundImage: "url('/prod/why.jpg')" }}
-        >
-          <div className="text-center z-50 w-full">
-            <h2 className="text-white mt-10 sm:pt-10 pt-[50px] lg:mt-0 text-[25px] md:text-[50px] font-normal text-center">
-              {t('whyUsTitle')}
-            </h2>
-            <p className="max-w-[672px] text-white mx-auto lg:text-xl">
-              {t('bestSleepForEveryone')}
-            </p>
-          </div>
+    <section className="w-full bg-background">
+      <PageHeader title={t("whyUsTitle")} subtitle={t("bestSleepForEveryone")} />
+
+      <div className="container mx-auto px-4 lg:px-6 py-12 lg:py-16">
+        <div className="brand-panel mb-12 lg:mb-16">
+          <Video />
         </div>
-      </div>
-     
-      <div className="mt-[70px] flex rounded-lg container  bg-[#203e72] py-10">
-        <Video />
-      </div>
 
-      <div className="allcontainer">
-        <div className="container pt-12 lg:pt-12 lg:!pb-12 mx-auto">
-          <section className="mb-12">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('whyFranchise')}
-            </h2>
-            <p className="text-lg text-center leading-relaxed md:text-left">
-              {t('franchiseDescription1')}
-            </p>
-
-            <p className="text-lg mt-5 text-center leading-relaxed md:text-left">
-              {t('franchiseDescription2')}
-            </p>
-
-            <p className="text-lg mt-5 text-center leading-relaxed md:text-left">
-              {t('franchiseDescription3')}
-            </p>
-
-            <p className="text-lg mt-5 text-center leading-relaxed md:text-left">
-              {t('franchiseDescription4')}
-            </p>
+        <div className="max-w-4xl mx-auto space-y-12 lg:space-y-16">
+          <section>
+            <h2 className="section-heading mb-5">{t("whyFranchise")}</h2>
+            <div className="space-y-4 text-base lg:text-lg text-muted-foreground leading-relaxed">
+              <p>{t("franchiseDescription1")}</p>
+              <p>{t("franchiseDescription2")}</p>
+              <p>{t("franchiseDescription3")}</p>
+              <p>{t("franchiseDescription4")}</p>
+            </div>
           </section>
 
-          <section className="mb-12 border-t border-border">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('targetMarketPosition')}
-            </h2>
-            <p className="text-lg text-center leading-relaxed md:text-left">
-              {t('marketDescription')}
+          <section className="border-t border-border pt-10">
+            <h2 className="section-heading mb-5">{t("targetMarketPosition")}</h2>
+            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed mb-6">
+              {t("marketDescription")}
             </p>
-
-            <h2 className="mb-2 text-left mt-5 text-lg font-semibold text-foreground">
-              {t('ourProductPortfolio')}
-            </h2>
-            <ul className="max-w-md text-left space-y-1 text-foreground list-disc list-inside">
-              <li>{t('mattressesPillows')}</li>
-              <li>{t('mattressProtectors')}</li>
-              <li>{t('bedFramesBases')}</li>
-              <li>{t('roomAromatizers')}</li>
-              <li>{t('hotelCollection')}</li>
-              <li>{t('kidsCollection')}</li>
-              <li>{t('petCollection')}</li>
+            <h3 className="text-lg font-semibold text-foreground mb-3">{t("ourProductPortfolio")}</h3>
+            <ul className="max-w-md space-y-1.5 text-foreground list-disc list-inside mb-6">
+              <li>{t("mattressesPillows")}</li>
+              <li>{t("mattressProtectors")}</li>
+              <li>{t("bedFramesBases")}</li>
+              <li>{t("roomAromatizers")}</li>
+              <li>{t("hotelCollection")}</li>
+              <li>{t("kidsCollection")}</li>
+              <li>{t("petCollection")}</li>
             </ul>
-
-            <p className="text-lg mt-5 text-center leading-relaxed md:text-left">
-              {t('productPortfolioDescription')}
+            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">
+              {t("productPortfolioDescription")}
             </p>
           </section>
 
-          <section className="mb-5 border-t border-border py-6">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('franchiseBenefits')}
-            </h2>
-            <p className="text-lg text-center leading-relaxed md:text-left px-4">
-              {t('franchiseSupport')}
+          <section className="border-t border-border pt-10">
+            <h2 className="section-heading mb-5">{t("franchiseBenefits")}</h2>
+            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed mb-6">
+              {t("franchiseSupport")}
             </p>
-
-            <h2 className="mb-2 lg:text-left mt-5 text-center text-lg font-semibold text-foreground">
-              {t('comprehensiveSupport')}
-            </h2>
-            <ul className="max-w-4xl text-left space-y-1 text-foreground list-disc list-inside px-4">
-              <li>{t('marketingSupport')}</li>
-              <li>{t('storeSupport')}</li>
-              <li>{t('salesTraining')}</li>
-              <li>{t('digitalInfrastructure')}</li>
-              <li>{t('customerSatisfaction')}</li>
+            <h3 className="text-lg font-semibold text-foreground mb-3">{t("comprehensiveSupport")}</h3>
+            <ul className="space-y-1.5 text-foreground list-disc list-inside">
+              <li>{t("marketingSupport")}</li>
+              <li>{t("storeSupport")}</li>
+              <li>{t("salesTraining")}</li>
+              <li>{t("digitalInfrastructure")}</li>
+              <li>{t("customerSatisfaction")}</li>
             </ul>
           </section>
 
-          <section className="mb-5 border-t border-border py-6">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('advertisingSupport')}
-            </h2>
-
-            <ul className="max-w-4xl text-left space-y-1 text-foreground list-disc list-inside px-4">
-              <li>{t('socialMediaCampaigns')}</li>
-              <li>{t('promoPackages')}</li>
-              <li>{t('emailMarketingStrategies')}</li>
-              <li>{t('regionalAdPlanning')}</li>
+          <section className="border-t border-border pt-10">
+            <h2 className="section-heading mb-5">{t("advertisingSupport")}</h2>
+            <ul className="space-y-1.5 text-foreground list-disc list-inside">
+              <li>{t("socialMediaCampaigns")}</li>
+              <li>{t("promoPackages")}</li>
+              <li>{t("emailMarketingStrategies")}</li>
+              <li>{t("regionalAdPlanning")}</li>
             </ul>
           </section>
 
-          <section className="mb-5 border-t border-border py-6">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('franchiseApplicationProcess')}
-            </h2>
-            <p className="text-lg text-center leading-relaxed md:text-left px-4">
-              {t('franchiseSteps')}
+          <section className="border-t border-border pt-10">
+            <h2 className="section-heading mb-5">{t("franchiseApplicationProcess")}</h2>
+            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed mb-6">
+              {t("franchiseSteps")}
             </p>
-
-            <h2 className="mb-2 lg:text-left mt-5 text-center text-lg font-semibold text-foreground">
-              {t('franchiseApplication')}
-            </h2>
-            <ol className="max-w-4xl text-left space-y-1 text-foreground list-decimal list-inside px-4">
-              <li>{t('applicationForm')}</li>
-              <li>{t('approval')}</li>
-              <li>{t('storeLocation')}</li>
-              <li>{t('competitorAnalysis')}</li>
-              <li>{t('productSelection')}</li>
-              <li>{t('architecturalDesign')}</li>
-              <li>{t('agreementSigning')}</li>
-              <li>{t('openingPlan')}</li>
-              <li>{t('productionProcess')}</li>
-              <li>{t('storeSetup')}</li>
-              <li>{t('productDelivery')}</li>
-              <li>{t('storeOpening')}</li>
-              <li>{t('annualPlanning')}</li>
+            <h3 className="text-lg font-semibold text-foreground mb-3">{t("franchiseApplication")}</h3>
+            <ol className="space-y-1.5 text-foreground list-decimal list-inside">
+              <li>{t("applicationForm")}</li>
+              <li>{t("approval")}</li>
+              <li>{t("storeLocation")}</li>
+              <li>{t("competitorAnalysis")}</li>
+              <li>{t("productSelection")}</li>
+              <li>{t("architecturalDesign")}</li>
+              <li>{t("agreementSigning")}</li>
+              <li>{t("openingPlan")}</li>
+              <li>{t("productionProcess")}</li>
+              <li>{t("storeSetup")}</li>
+              <li>{t("productDelivery")}</li>
+              <li>{t("storeOpening")}</li>
+              <li>{t("annualPlanning")}</li>
             </ol>
           </section>
 
-          <section className="border-t border-border py-6">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('buildBetterSleep')}
-            </h2>
-
-            <h2 className="mb-2 lg:text-left mt-5 text-center text-lg font-semibold text-foreground">
-              {t('visionAndPhilosophy')}
-            </h2>
-
-            <p className="text-lg py-4 text-center leading-relaxed md:text-left">
-              {t('sleepIsIntegrity')}
-            </p>
-
-            <p className="text-lg py-4 text-center leading-relaxed md:text-left">
-              {t('sleepExperience')}
-            </p>
+          <section className="border-t border-border pt-10">
+            <h2 className="section-heading mb-5">{t("buildBetterSleep")}</h2>
+            <h3 className="text-lg font-semibold text-foreground mb-3">{t("visionAndPhilosophy")}</h3>
+            <div className="space-y-4 text-base lg:text-lg text-muted-foreground leading-relaxed">
+              <p>{t("sleepIsIntegrity")}</p>
+              <p>{t("sleepExperience")}</p>
+            </div>
           </section>
 
-          <section className="border-t border-border py-6">
-            <h2 className="mt-5 text-xl lg:text-[30px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('strongFranchiseChain')}
-            </h2>
-
-            <p className="text-lg py-4 text-center leading-relaxed md:text-left">
-              {t('franchiseChainGrowth')}
-            </p>
-
-            <p className="text-lg py-4 text-center leading-relaxed md:text-left">
-              {t('global')}
-            </p>
+          <section className="border-t border-border pt-10">
+            <h2 className="section-heading mb-5">{t("strongFranchiseChain")}</h2>
+            <div className="space-y-4 text-base lg:text-lg text-muted-foreground leading-relaxed">
+              <p>{t("franchiseChainGrowth")}</p>
+              <p>{t("global")}</p>
+            </div>
           </section>
 
-          <section className="border-t border-border py-6">
-            <h2 className="mt-5 text-xl lg:text-[25px] leading-tight lg:text-start text-center mb-5 font-semibold">
-              {t('joinUs')}
-            </h2>
-
-            <p className="text-lg py-4 text-center leading-relaxed md:text-left">
-              {t('becomePartOfFamily')}
+          <section className="border-t border-border pt-10 pb-4">
+            <h2 className="section-heading mb-5">{t("joinUs")}</h2>
+            <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">
+              {t("becomePartOfFamily")}
             </p>
           </section>
         </div>

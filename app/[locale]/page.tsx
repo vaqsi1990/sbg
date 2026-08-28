@@ -17,7 +17,7 @@ export default function Home() {
         <NewProduct />
       </section>
 
-      <section className="container mx-auto px-4 lg:px-6">
+      <section className="container mx-auto px-4 lg:px-6 mt-10 lg:mt-14">
         <div className="brand-panel">
           <Info />
         </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "@/i18n/navigation";
+import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 function Hero() {
@@ -26,8 +27,12 @@ function Hero() {
         <p className="max-w-2xl mb-10 text-white/85 text-base md:text-xl leading-relaxed">
           {t("heroheader")}
         </p>
-        <Link href="/all" className="btn-primary text-sm sm:text-base px-10 py-3.5">
-          {t("herolink")}
+        <Link
+          href="/all"
+          className="inline-flex items-center gap-2 rounded-full bg-brand-chrome px-8 py-3.5 text-sm sm:text-base font-semibold uppercase tracking-wide text-white shadow-lg transition-all hover:bg-brand-chrome/90 hover:shadow-xl"
+        >
+          <span>{t("herolink")}</span>
+          <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
         </Link>
       </div>
     </section>

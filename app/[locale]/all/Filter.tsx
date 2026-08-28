@@ -13,12 +13,12 @@ function Filter({ selectedCategory, setSelectedCategory }: FilterProps) {
   const btnClass = (active: boolean) =>
     `${filterBtn} ${
       active
-        ? "bg-brand text-white border-brand shadow-md shadow-brand/20"
-        : "border-border text-foreground hover:bg-brand hover:text-white hover:border-brand"
+        ? "bg-brand-chrome text-white border-brand-chrome shadow-md"
+        : "border-border text-foreground hover:bg-brand-chrome hover:text-white hover:border-brand-chrome"
     }`;
 
   return (
-    <div className="pt-[70px] pb-12">
+    <div className="pb-8">
       <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
         <button className={btnClass(selectedCategory === undefined)} onClick={() => setSelectedCategory(undefined)}>
           {t("all")}

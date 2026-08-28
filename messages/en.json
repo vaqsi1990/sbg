@@ -47,7 +47,7 @@
 },
 "slice":{
 "ourProducts":"Our products",
-"viewAll":"Exolore"
+"viewAll":"Explore"
 },
 "text":{
 "first":"The Best of Sleep for Everyone",
@@ -83,8 +83,8 @@
   "OEKOTEX": "OEKO-TEX ensures our textiles are free from harmful chemicals and meet high safety and eco standards."
   },
   "new":{
-    "ourProducts":"New Products"
-    
+    "ourProducts":"New Products",
+    "viewAll":"Explore"
   },
   "whyUsTitle": "Why Us?",
     "bestSleepForEveryone": "The Best Sleep for Everyone",
