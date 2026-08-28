@@ -15,19 +15,7 @@ async function AdminHelper() {
 
   return (
     <main className="mt-24 space-y-6 items-center">
-        <div className="ml-10 flex items-center justify-between pr-10">
-          <Link className="w-[200px] cursor-pointer" href="/">
-            <div className="border w-[70px] border-gray-500 rounded-full">
-              <Image src={logo} height={70}  width={70} alt="logo" className="rounded-full" />
-            </div>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin/features"
-              className="cursor-pointer rounded-md border border-[#203e72] px-4 py-2 text-sm text-black hover:bg-[#203e72] hover:text-white"
-            >
-              ზომა და მახასიათებლები
-            </Link>
+        <div className="ml-10 pt-10 flex justify-center mt-10 justify-between pr-10">
             <form action={logoutAdmin}>
             <button
               type="submit"
@@ -36,7 +24,7 @@ async function AdminHelper() {
               გასვლა
             </button>
           </form>
-          </div>
+          
       
         </div>
       <div className="flex flex-col   justify-center ">

@@ -230,6 +230,8 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
       descriptionKa: "",
       minitext: "",
       minitextEn: "",
+      care: "",
+      careEn: "",
       springTech:false,
       orthopaedic: false,
       superSoftFoam: false,
@@ -367,7 +369,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
                   <FormItem>
                     <FormLabel className="text-black">მოკლე ტექსტი (KA)</FormLabel>
                     <FormControl>
-                      <Input placeholder="მოკლე აღწერა ქართულად" {...field} className={inputClass} />
+                      <textarea placeholder="მოკლე აღწერა ქართულად" {...field} className={textareaClass} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -380,7 +382,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
                   <FormItem>
                     <FormLabel className="text-black">მოკლე ტექსტი (EN)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Short text in English" {...field} className={inputClass} />
+                      <textarea placeholder="Short text in English" {...field} className={textareaClass} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -389,7 +391,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
             </div>
           </FormSection>
 
-          <FormSection step={3} title="სურათები" hint="შეგიძლია რამდენიმე სურათის ატვირთვა">
+          <FormSection step={3} title="სურათები" hint="დააჭირე ლურჯ ზონაზე ან გადაიტანე სურათები — შეგიძლია რამდენიმეს ატვირთვა">
             <FormField
               control={form.control}
               name="images"
@@ -521,6 +523,8 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
                 <Input {...form.register("fillingEn")} placeholder="Filling (EN)" className={inputClass} />
                 <Input {...form.register("packaging")} placeholder="შეფუთვა (KA)" className={inputClass} />
                 <Input {...form.register("packagingEn")} placeholder="Packaging (EN)" className={inputClass} />
+                <Input {...form.register("care")} placeholder="მოვლა (KA)" className={inputClass} />
+                <Input {...form.register("careEn")} placeholder="Care (EN)" className={inputClass} />
                 <textarea {...form.register("minitext")} placeholder="დამატებითი ტექსტი (KA)" className={textareaClass} />
                 <textarea {...form.register("minitextEn")} placeholder="Extra text (EN)" className={textareaClass} />
               </div>

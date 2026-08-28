@@ -66,16 +66,26 @@ export const PadSchema = z.object({
   minitextEn: z.string(),
 });
 
+const optionalNumber = z.preprocess(
+  (value) =>
+    value === "" || value === null || value === undefined || Number.isNaN(Number(value))
+      ? undefined
+      : Number(value),
+  z.number().optional()
+);
+
 // Pillow-specific schema
 export const PillowSchema = z.object({
   size: z.string(),
-  weight: z.number(),
+  weight: optionalNumber,
   outerFabric: z.string(),
   filling: z.string(),
   packaging: z.string(),
+  care: z.string(),
   outerFabricEn: z.string(),
   fillingEn: z.string(),
   packagingEn: z.string(),
+  careEn: z.string(),
   minitext: z.string(),
   minitextEn: z.string(),
 });

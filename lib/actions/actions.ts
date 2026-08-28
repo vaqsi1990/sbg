@@ -108,17 +108,21 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       case "PILLOW":
         await prisma.pillow.create({
           data: {
-            id: createdProduct.id,
             size: parsed.size,
-            weight: parsed.weight,
+            weight: parsed.weight ?? null,
             outerFabric: parsed.outerFabric,
             filling: parsed.filling,
             packaging: parsed.packaging,
+            care: parsed.care ?? "",
             outerFabricEn: parsed.outerFabricEn,
             fillingEn: parsed.fillingEn,
             packagingEn: parsed.packagingEn,
+            careEn: parsed.careEn ?? "",
             minitext: parsed.minitext,
             minitextEn: parsed.minitextEn,
+            product: {
+              connect: { id: createdProduct.id },
+            },
           },
         });
 
@@ -457,13 +461,15 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         where: { id: product.id },
         data: {
           size: product.size,
-          weight: product.weight,
+          weight: product.weight ?? null,
           outerFabric: product.outerFabric,
           outerFabricEn: product.outerFabricEn,
           filling: product.filling,
           fillingEn: product.fillingEn,
           packaging: product.packaging,
           packagingEn: product.packagingEn,
+          care: product.care,
+          careEn: product.careEn,
           minitext:product.minitext,
           minitextEn:product.minitextEn,
         },

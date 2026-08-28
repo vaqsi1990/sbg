@@ -195,6 +195,7 @@ const DetailPage = async(props: {
           (isGe ? product.pillow.outerFabric : product.pillow.outerFabricEn) ?? "",
           (isGe ? product.pillow.filling : product.pillow.fillingEn) ?? "",
           (isGe ? product.pillow.packaging : product.pillow.packagingEn) ?? "",
+          (isGe ? product.pillow.care : product.pillow.careEn) ?? "",
         ]
           .map((value) => value.trim())
           .filter(Boolean)

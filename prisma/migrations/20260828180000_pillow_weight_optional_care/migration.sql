@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Pillow" ALTER COLUMN "weight" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Pillow" ADD COLUMN "care" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "Pillow" ADD COLUMN "careEn" TEXT NOT NULL DEFAULT '';

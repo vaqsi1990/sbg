@@ -251,7 +251,7 @@ export default function AdminProductUpdateForm({
               <FormItem>
                 <FormLabel>პატარა ტექსტი (GE)</FormLabel>
                 <FormControl>
-                  <Input {...field} className={inputClass} />
+                  <textarea placeholder="მოკლე აღწერა ქართულად" {...field} className="w-full min-h-28 resize-y rounded-xl border border-gray-300 focus:border-[#203e72] focus:ring-2 focus:ring-[#203e72]/20 bg-white p-3 text-sm placeholder-gray-400 text-black" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -265,7 +265,7 @@ export default function AdminProductUpdateForm({
               <FormItem>
                 <FormLabel>პატარა ინგლისურად (EN)</FormLabel>
                 <FormControl>
-                  <Input {...field} className={inputClass} />
+                  <textarea placeholder="Short text in English" {...field} className="w-full min-h-28 resize-y rounded-xl border border-gray-300 focus:border-[#203e72] focus:ring-2 focus:ring-[#203e72]/20 bg-white p-3 text-sm placeholder-gray-400 text-black" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -412,7 +412,9 @@ className="w-full h-32 resize-none rounded-2xl border border-gray-300 focus:bord
     <Input {...form.register("fillingEn")} placeholder="შევსება (EN)" className={inputClass} />
     <Input {...form.register("packaging")} placeholder="შეფუთვა (KA)" className={inputClass} />
     <Input {...form.register("packagingEn")} placeholder="შეფუთვა (EN)" className={inputClass} />
-    
+    <Input {...form.register("care")} placeholder="მოვლა (KA)" className={inputClass} />
+    <Input {...form.register("careEn")} placeholder="Care (EN)" className={inputClass} />
+
     <div className="flex gap-y-5 flex-col">
 
 <textarea {...form.register("minitext")} placeholder="აღწერის ტექსტი ქართულად " 
