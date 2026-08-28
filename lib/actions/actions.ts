@@ -15,6 +15,7 @@ import {
   Product,
   ProductType,
 } from "@prisma/client";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 function formatError(error: any) {
   if (error.name === "ZodError") {
@@ -41,6 +42,10 @@ function formatError(error: any) {
 
 export async function createProduct(data: z.infer<typeof ProductSchema>) {
   try {
+    if (!(await isAdminAuthenticated())) {
+      return { success: false, message: "Unauthorized" };
+    }
+
     const parsed = ProductSchema.parse(data);
 
     const { type } = parsed;
@@ -301,6 +306,10 @@ export async function getFilteredProducts(filters: any) {
 
 export async function deleteProduct(id: string) {
   try {
+    if (!(await isAdminAuthenticated())) {
+      return { success: false, message: "Unauthorized" };
+    }
+
     const product = await prisma.product.findUnique({
       where: { id },
     });
@@ -338,6 +347,10 @@ export async function deleteProduct(id: string) {
 }
 export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
+    if (!(await isAdminAuthenticated())) {
+      return { success: false, message: "Unauthorized" };
+    }
+
     const product = updateProductSchema.parse(data);
 
     const productExists = await prisma.product.findUnique({

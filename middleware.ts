@@ -7,41 +7,15 @@ const intlMiddleware = createMiddleware(routing);
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-
-  const isAdminPath = /^\/(ge|en)\/admin(\/.*)?$|^\/admin(\/.*)?$/.test(pathname);
-
-  if (pathname === '/' ) {
+  if (pathname === "/") {
     const url = request.nextUrl.clone();
-    url.pathname = '/ge';
+    url.pathname = "/ge";
     return NextResponse.redirect(url);
   }
-
-  if (isAdminPath) {
-    const basicAuth = request.headers.get("authorization");
-
-    if (basicAuth) {
-      const [user, pwd] = atob(basicAuth.split(" ")[1] || "").split(":");
-
-      const validUser = process.env.BASIC_AUTH_USER;
-      const validPassword = process.env.BASIC_AUTH_PASSWORD;
-
-      if (user === validUser && pwd === validPassword) {
-        return intlMiddleware(request); 
-      }
-    }
-    return new NextResponse("Authentication Required!", {
-      status: 401,
-      headers: {
-        "WWW-Authenticate": 'Basic realm="private_pages"',
-      },
-    });
-  }
-
 
   return intlMiddleware(request);
 }
 
-
 export const config = {
-  matcher: ['/((?!api|trpc|_next|_vercel|.*\\..*).*)'],
+  matcher: ["/((?!api|trpc|_next|_vercel|.*\\..*).*)"],
 };

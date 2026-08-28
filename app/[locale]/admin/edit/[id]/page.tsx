@@ -2,15 +2,21 @@
 import { getSingleProduct } from "@/lib/actions/actions";
 import AdminProductUpdateForm from "./AdminProductUpdateForm";
 import { notFound } from "next/navigation";
-import { Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { z } from "zod";
 import { ProductSchema } from "@/lib/validators";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 
 const DetailPage = async(props: {
-  params:Promise< {id:string} >
+  params:Promise< {id:string; locale: string} >
 }) =>  {
-  const { id} = await props.params;
+  const { id, locale } = await props.params;
+  const isAdmin = await isAdminAuthenticated();
+  if (!isAdmin) {
+    redirect({ href: "/admin", locale });
+  }
+
   const product = await getSingleProduct(id);
 
   if (!product) return notFound();

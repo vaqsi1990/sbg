@@ -1,15 +1,13 @@
+import AdminHelper from "./AdminHelper";
+import AdminLogin from "./AdminLogin";
+import { isAdminAuthenticated } from "@/lib/admin-auth";
 
-
-import AdminHelper from './AdminHelper'
 export default async function Page() {
+  const isAdmin = await isAdminAuthenticated();
 
+  if (!isAdmin) {
+    return <AdminLogin />;
+  }
 
-  return (
-<>
-
-    <AdminHelper />
-      
-        </>
-
-  );
+  return <AdminHelper />;
 }
