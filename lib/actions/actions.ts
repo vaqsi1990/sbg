@@ -108,7 +108,7 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       case "PILLOW":
         await prisma.pillow.create({
           data: {
-            size: parsed.size,
+            size: parsed.size?.trim() || null,
             weight: parsed.weight ?? null,
             outerFabric: parsed.outerFabric,
             filling: parsed.filling,
@@ -339,20 +339,19 @@ export async function deleteProduct(id: string) {
 
     if (!product) throw new Error("Product not found");
 
-    // წაშლა ტიპის მიხედვით
-    if (product.type === "MATTRESS") {
-      await prisma.mattress.delete({ where: { id: id } });
-    } else if (product.type === "PILLOW") {
-      await prisma.pillow.delete({ where: { id: id } });
-    } else if (product.type === "PAD") {
-      await prisma.pad.delete({ where: { id: id } });
-    } else if (product.type === "QUILT") {
-      await prisma.quilt.delete({ where: { id: id } });
-    }
+    await prisma.$transaction(async (tx) => {
+      // deleteMany: child row may be missing if a prior create failed partway
+      if (product.type === "MATTRESS") {
+        await tx.mattress.deleteMany({ where: { id } });
+      } else if (product.type === "PILLOW") {
+        await tx.pillow.deleteMany({ where: { id } });
+      } else if (product.type === "PAD") {
+        await tx.pad.deleteMany({ where: { id } });
+      } else if (product.type === "QUILT") {
+        await tx.quilt.deleteMany({ where: { id } });
+      }
 
-    // ბოლოს ვშლით მთავარ პროდუქტს
-    await prisma.product.delete({
-      where: { id },
+      await tx.product.delete({ where: { id } });
     });
 
     revalidatePath("/admin");
@@ -460,7 +459,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       await prisma.pillow.update({
         where: { id: product.id },
         data: {
-          size: product.size,
+          size: product.size?.trim() || null,
           weight: product.weight ?? null,
           outerFabric: product.outerFabric,
           outerFabricEn: product.outerFabricEn,

@@ -68,7 +68,7 @@ export const PadSchema = z.object({
 
 // Pillow-specific schema
 export const PillowSchema = z.object({
-  size: z.string(),
+  size: z.string().optional(),
   weight: z.number().optional(),
   outerFabric: z.string(),
   filling: z.string(),

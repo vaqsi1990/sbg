@@ -83,7 +83,7 @@ model ProductCatalogItem {
 
 model Mattress {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  product         Product  @relation(fields: [id], references: [id])
+  product         Product  @relation(fields: [id], references: [id], onDelete: Cascade)
   height          String
   firmnessLevel   Int      @default(0)
   descriptionEn String
@@ -116,7 +116,7 @@ model Mattress {
 
 model Pad {
   id       String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  product  Product  @relation(fields: [id], references: [id])
+  product  Product  @relation(fields: [id], references: [id], onDelete: Cascade)
   firmness String
   firmnessEn String
   height   String
@@ -140,8 +140,8 @@ model Pad {
 
 model Pillow {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  product     Product  @relation(fields: [id], references: [id])
-  size        String
+  product     Product  @relation(fields: [id], references: [id], onDelete: Cascade)
+  size        String?
   weight      Int?
   minitext    String
   minitextEn  String
@@ -157,7 +157,7 @@ model Pillow {
 
 model Quilt {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  product       Product  @relation(fields: [id], references: [id])
+  product       Product  @relation(fields: [id], references: [id], onDelete: Cascade)
   dimensions    String
   fabric        String
   filling       String
