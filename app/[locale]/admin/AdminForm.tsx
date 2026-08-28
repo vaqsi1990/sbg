@@ -24,6 +24,9 @@ import { Controller } from "react-hook-form";
 import type { CatalogItemDTO } from "@/lib/actions/catalog";
 import { Link } from "@/i18n/navigation";
 
+type ProductFormValues = z.input<typeof ProductSchema>;
+type ProductFormData = z.output<typeof ProductSchema>;
+
 const BooleanSchema = z.object({
   type: z.enum(["MATTRESS", "PILLOW", "QUILT", "PAD"]),
   titleEn: z.string(),
@@ -160,7 +163,7 @@ function FeatureGrid({
   catalogItems = [],
 }: {
   options: { name: keyof z.infer<typeof BooleanSchema>; label: string }[];
-  control: ReturnType<typeof useForm<z.infer<typeof ProductSchema>>>["control"];
+  control: ReturnType<typeof useForm<ProductFormValues, unknown, ProductFormData>>["control"];
   catalogItems?: CatalogItemDTO[];
 }) {
   const [query, setQuery] = useState("");
@@ -213,7 +216,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
   const [pending, setPending] = useState(false);
   const [status, setStatus] = useState("");
 
-  const form = useForm<z.infer<typeof ProductSchema>>({
+  const form = useForm<ProductFormValues, unknown, ProductFormData>({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       titleEn: "",
@@ -230,8 +233,6 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
       descriptionKa: "",
       minitext: "",
       minitextEn: "",
-      care: "",
-      careEn: "",
       springTech:false,
       orthopaedic: false,
       superSoftFoam: false,
@@ -282,7 +283,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
     form.setValue("featureIds", next, { shouldDirty: true });
   };
 
-  const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
+  const onSubmit = async (data: ProductFormData) => {
     setPending(true);
     setStatus("");
     const res = await createProduct(data);
@@ -516,7 +517,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
             <FormSection step={4} title="ბალიშის დეტალები">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input {...form.register("size")} placeholder="ზომა" className={inputClass} />
-                <Input type="number" {...form.register("weight", { valueAsNumber: true })} placeholder="წონა" className={inputClass} />
+                <Input type="number" {...form.register("weight", { valueAsNumber: true, setValueAs: (v) => (v === "" || Number.isNaN(Number(v)) ? undefined : Number(v)) })} placeholder="წონა" className={inputClass} />
                 <Input {...form.register("outerFabric")} placeholder="გარე ქსოვილი (KA)" className={inputClass} />
                 <Input {...form.register("outerFabricEn")} placeholder="Outer fabric (EN)" className={inputClass} />
                 <Input {...form.register("filling")} placeholder="შევსება (KA)" className={inputClass} />

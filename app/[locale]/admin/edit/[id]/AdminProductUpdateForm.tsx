@@ -31,6 +31,9 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Controller } from "react-hook-form";
 import { getCatalogItems, type CatalogItemDTO } from "@/lib/actions/catalog";
+
+type ProductFormValues = z.input<typeof ProductSchema>;
+type ProductFormData = z.output<typeof ProductSchema>;
 const BooleanSchema = z.object({
   type: z.enum(["MATTRESS", "PILLOW", "QUILT", "PAD"]),
   titleEn: z.string(),
@@ -133,13 +136,13 @@ const inputClass =
 export default function AdminProductUpdateForm({
   initialData,
 }: {
-  initialData: z.infer<typeof ProductSchema> & { id: string };
+  initialData: ProductFormData & { id: string };
 }) {
   const router = useRouter();
     const { id, ...formDefaults } = initialData;
     const [catalogItems, setCatalogItems] = useState<CatalogItemDTO[]>([]);
 
-    const form = useForm<z.infer<typeof ProductSchema>>({
+    const form = useForm<ProductFormValues, unknown, ProductFormData>({
       resolver: zodResolver(ProductSchema),
       defaultValues: formDefaults, // აქიდან id ამოღებულია
     });
@@ -164,7 +167,7 @@ export default function AdminProductUpdateForm({
       .map((item) => ({ text: item.labelKa || `${item.slug} სმ`, value: item.slug })),
   ];
 
-  const onSubmit = async (data: z.infer<typeof ProductSchema>) => {
+  const onSubmit = async (data: ProductFormData) => {
     const res = await updateProduct({ ...data, id: initialData.id });
     alert(res.message);
     router.push('/');
@@ -405,7 +408,7 @@ className="w-full h-32 resize-none rounded-2xl border border-gray-300 focus:bord
   <>
     <Input {...form.register("size")} placeholder="ზომა" className={inputClass} />
 
-    <Input type="number" {...form.register("weight", { valueAsNumber: true })} placeholder="წონა" className={inputClass} />
+    <Input type="number" {...form.register("weight", { valueAsNumber: true, setValueAs: (v) => (v === "" || Number.isNaN(Number(v)) ? undefined : Number(v)) })} placeholder="წონა" className={inputClass} />
     <Input {...form.register("outerFabric")} placeholder="გარე ქსოვილი (KA)" className={inputClass} />
     <Input {...form.register("outerFabricEn")} placeholder="გარე ქსოვილი (EN)" className={inputClass} />
     <Input {...form.register("filling")} placeholder="შევსება (KA)" className={inputClass} />
