@@ -212,6 +212,13 @@ const DetailPage = async(props: {
           .filter((size): size is string => Boolean(size?.trim()))
           .map((size) => size.trim())
       : [];
+  const mattressSizes =
+    product.type === "MATTRESS" && product.mattress
+      ? [product.mattress.size1, product.mattress.size2]
+          .filter((size): size is string => Boolean(size?.trim()))
+          .map((size) => size.trim())
+      : [];
+  const sizeOptions = product.type === "QUILT" ? quiltSizes : mattressSizes;
 
   const typeLabel =
     product.type === "MATTRESS"
@@ -318,8 +325,8 @@ const DetailPage = async(props: {
               <p className="text-[15px] lg:text-base text-muted-foreground leading-relaxed">{minitext}</p>
             ) : null}
 
-            {product.type === "QUILT" && quiltSizes.length > 0 ? (
-              <QuiltSizePicker sizes={quiltSizes} isGe={isGe} />
+            {sizeOptions.length > 0 ? (
+              <QuiltSizePicker sizes={sizeOptions} isGe={isGe} />
             ) : null}
 
             {specRows.length > 0 ? (

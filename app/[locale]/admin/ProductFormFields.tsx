@@ -395,6 +395,16 @@ export default function ProductFormFields({
               + დაამატე ახალი ზომა ან მახასიათებელი
             </Link>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                {...form.register("size1")}
+                placeholder="ზომა 1 (მაგ. 160X200)"
+                className={inputClass}
+              />
+              <Input
+                {...form.register("size2")}
+                placeholder="ზომა 2 (არასავალდებულო)"
+                className={inputClass}
+              />
               <FormField
                 control={form.control}
                 name="height"

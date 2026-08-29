@@ -72,6 +72,8 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
           data: {
             id: createdProduct.id,
             height: parsed.height,
+            size1: parsed.size1?.trim() || null,
+            size2: parsed.size2?.trim() || null,
             firmnessLevel: parsed.firmnessLevel,
             descriptionEn: parsed.descriptionEn,
             descriptionKa: parsed.descriptionKa,
@@ -403,6 +405,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         where: { id: product.id },
         data: {
           height: product.height,
+          size1: product.size1?.trim() || null,
+          size2: product.size2?.trim() || null,
           firmnessLevel: product.firmnessLevel,
           descriptionEn: product.descriptionEn,
           descriptionKa: product.descriptionKa,

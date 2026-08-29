@@ -32,6 +32,8 @@ export const BaseProductSchema = z.object({
 // Mattress-specific schema
 export const MattressSchema = z.object({
   height: z.string(),
+  size1: optionalTrimmedString,
+  size2: optionalTrimmedString,
   firmnessLevel: z.coerce.number().int().min(0).max(5),
   descriptionEn: z.string(),
   descriptionKa: z.string(),

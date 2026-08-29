@@ -28,6 +28,8 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
       images: [],
       type: "MATTRESS",
       height: "",
+      size1: "",
+      size2: "",
       firmnessLevel: 0,
       secondtextEn: "",
       secondtext: "",
