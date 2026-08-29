@@ -20,7 +20,7 @@ function Hero() {
         </video>
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/60 z-10" />
-      <div className="container mx-auto flex flex-col relative z-10 items-center justify-center h-full px-4 py-24 text-center">
+      <div className="container mx-auto flex flex-col relative z-10 items-center justify-center h-full px-4 pt-40 pb-24 lg:pt-48 text-center">
         <h1 className="text-white text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-5">
           Sleep &amp; Bed Georgia
         </h1>

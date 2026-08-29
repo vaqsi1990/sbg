@@ -34,7 +34,7 @@ export default function GalleryPage() {
   return (
     <section className="w-full mx-auto">
       {/* Header */}
-      <div className="relative h-[50vh] flex items-center justify-center overflow-hidden">
+      <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-40 lg:pt-48 pb-12">
    <Image
      src={bg}
      alt="Background"
@@ -45,7 +45,7 @@ export default function GalleryPage() {
    />
    <div className="absolute inset-0 bg-black/60 z-10" />
    <div className="text-center z-20 px-4">
-     <h2 className="text-white text-[25px] sm:pt-10 pt-[50px] md:text-[50px] font-normal">
+     <h2 className="text-white text-[25px] md:text-[50px] font-normal">
        {t("gallery")}
      </h2>
   

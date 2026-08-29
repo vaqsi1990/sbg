@@ -51,7 +51,7 @@ const DetailPage = async (props: {
   delete (flattenedProduct as any).updatedAt;
 
   return (
-    <main className="mt-32">
+    <main className="mt-40 lg:mt-48">
       <AdminProductUpdateForm
         initialData={flattenedProduct as ProductFormData & { id: string }}
         catalogItems={catalogItems}

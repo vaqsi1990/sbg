@@ -17,7 +17,7 @@ export default async function Page({
   const items = await getCatalogItems();
 
   return (
-    <main className="mt-32 pb-16">
+    <main className="mt-40 lg:mt-48 pb-16">
       <div className="mx-auto max-w-5xl px-4">
         <Link href="/admin" className="text-base text-brand hover:underline">
           ← უკან ადმინ პანელზე

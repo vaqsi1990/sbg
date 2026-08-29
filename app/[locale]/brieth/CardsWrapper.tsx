@@ -38,7 +38,7 @@ export default function CardsWrapper({ products }: Props) {
 
   return (
     <section className="w-full mx-auto">
-      <div className="flex h-[50vh] items-center flex-wrap bg-overlay sm:p-6 before:bg-title before:bg-opacity-70">
+      <div className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-40 lg:pt-48 pb-12">
         <Image
           src="/prod/breadcumb.jpg"
           alt="Background"
@@ -48,7 +48,7 @@ export default function CardsWrapper({ products }: Props) {
           className="absolute inset-0 w-full h-full object-cover z-0"
         />
       <div className="text-center z-20 px-4">
-    <h2 className="text-white text-[25px] sm:pt-10 pt-[50px] md:text-[50px] font-normal">
+    <h2 className="text-white text-[25px] md:text-[50px] font-normal">
       {t("products")}
     </h2>
     <p className="max-w-[672px] text-white mx-auto lg:text-xl">
