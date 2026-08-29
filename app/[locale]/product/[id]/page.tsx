@@ -195,7 +195,13 @@ const DetailPage = async(props: {
   };
   const assignedFeatures = (product.catalogItems ?? [])
     .map((row) => row.item)
-    .filter((item) => item.kind === "FEATURE" && !item.legacyKey);
+    .filter((item) => {
+      if (item.kind !== "FEATURE") return false;
+      if (product.type === "MATTRESS" || product.type === "PAD") {
+        return !item.legacyKey;
+      }
+      return true;
+    });
   const pillowBadges =
     product.type === "PILLOW" && product.pillow
       ? [
@@ -262,12 +268,7 @@ const DetailPage = async(props: {
   const quiltSpecCards =
     product.type === "QUILT" && product.quilt
       ? (() => {
-          const quilt = product.quilt as typeof product.quilt & {
-            packaging?: string;
-            packagingEn?: string;
-            care?: string;
-            careEn?: string;
-          };
+          const quilt = product.quilt;
           const pick = (ka?: string | null, en?: string | null) =>
             ((isGe ? ka : en) || ka || en || "").trim();
           return [
@@ -402,82 +403,56 @@ const DetailPage = async(props: {
               </div>
             ) : null}
 
-            {(activeFeatures.length > 0 || assignedFeatures.length > 0 || quiltSpecCards.length > 0) && (
+            {product.type !== "QUILT" && (activeFeatures.length > 0 || assignedFeatures.length > 0) ? (
               <div className="space-y-3">
                 <h3 className="md:text-[18px] text-[16px] font-semibold text-foreground">
                   {isGe ? "მახასიათებლები" : "Features"}
                 </h3>
-                {product.type === "QUILT" ? (
-                  <QuiltSpecs items={quiltSpecCards}>
-                    {assignedFeatures.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/feature/${item.slug}`}
-                        className="flex min-h-[88px] items-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-muted/50"
-                      >
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
-                          <Image
-                            src={item.image}
-                            alt={item.labelEn}
-                            width={36}
-                            height={36}
-                            className="h-full w-full object-contain"
-                            unoptimized={item.image.startsWith("http")}
-                          />
-                        </div>
-                        <span className="text-sm sm:text-base font-semibold text-foreground leading-snug">
-                          {isGe ? item.labelKa : item.labelEn}
-                        </span>
-                      </Link>
-                    ))}
-                  </QuiltSpecs>
-                ) : (
-                  <div className={cn("grid gap-3", isFlexMode ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2")}>
-                    {activeFeatures.map((feature, index) => (
-                      <Link
-                        key={`${feature.key}-${index}`}
-                        href={feature.href}
-                        className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
-                      >
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
-                          <Image
-                            src={feature.logo}
-                            alt=""
-                            width={36}
-                            height={36}
-                            className="h-full w-full object-contain"
-                          />
-                        </div>
-                        <span className="text-sm font-medium text-foreground leading-snug">
-                          {isGe ? feature.label : feature.labelEn}
-                        </span>
-                      </Link>
-                    ))}
-                    {assignedFeatures.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/feature/${item.slug}`}
-                        className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
-                      >
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
-                          <Image
-                            src={item.image}
-                            alt={item.labelEn}
-                            width={36}
-                            height={36}
-                            className="h-full w-full object-contain"
-                            unoptimized={item.image.startsWith("http")}
-                          />
-                        </div>
-                        <span className="text-sm font-medium text-foreground leading-snug">
-                          {isGe ? item.labelKa : item.labelEn}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                <div className={cn("grid gap-3", isFlexMode ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2")}>
+                  {activeFeatures.map((feature, index) => (
+                    <Link
+                      key={`${feature.key}-${index}`}
+                      href={feature.href}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                    >
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                        <Image
+                          src={feature.logo}
+                          alt=""
+                          width={36}
+                          height={36}
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-foreground leading-snug">
+                        {isGe ? feature.label : feature.labelEn}
+                      </span>
+                    </Link>
+                  ))}
+                  {assignedFeatures.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={`/feature/${item.slug}`}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                    >
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                        <Image
+                          src={item.image}
+                          alt={item.labelEn}
+                          width={36}
+                          height={36}
+                          className="h-full w-full object-contain"
+                          unoptimized={item.image.startsWith("http")}
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-foreground leading-snug">
+                        {isGe ? item.labelKa : item.labelEn}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -498,6 +473,35 @@ const DetailPage = async(props: {
           <div className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center">
             <h2 className="section-heading-center">{isGe ? "აღწერა" : "Description"}</h2>
             <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">{description}</p>
+          </div>
+        ) : null}
+
+        {product.type === "QUILT" && (quiltSpecCards.length > 0 || assignedFeatures.length > 0) ? (
+          <div className="mt-12 lg:mt-16">
+            <h2 className="section-heading-center">{isGe ? "მახასიათებლები" : "Features"}</h2>
+            <QuiltSpecs items={quiltSpecCards}>
+              {assignedFeatures.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/feature/${item.slug}`}
+                  className="flex min-h-[88px] items-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-muted/50"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                    <Image
+                      src={item.image}
+                      alt={item.labelEn}
+                      width={36}
+                      height={36}
+                      className="h-full w-full object-contain"
+                      unoptimized={item.image.startsWith("http")}
+                    />
+                  </div>
+                  <span className="text-sm sm:text-base font-semibold text-foreground leading-snug">
+                    {isGe ? item.labelKa : item.labelEn}
+                  </span>
+                </Link>
+              ))}
+            </QuiltSpecs>
           </div>
         ) : null}
 
