@@ -17,6 +17,19 @@ const optionalInt = z.preprocess(
   z.number().int().optional()
 );
 
+export const FurnitureInfoRowSchema = z.object({
+  labelKa: optionalTrimmedString,
+  labelEn: optionalTrimmedString,
+  valueKa: optionalTrimmedString,
+  valueEn: optionalTrimmedString,
+});
+
+export const FurnitureInfoSectionSchema = z.object({
+  titleKa: optionalTrimmedString,
+  titleEn: optionalTrimmedString,
+  rows: z.array(FurnitureInfoRowSchema).optional(),
+});
+
 export const BaseProductSchema = z.object({
   titleEn: z.string(),
   titleKa: z.string(),
@@ -27,6 +40,7 @@ export const BaseProductSchema = z.object({
   images: z.array(z.string()),
   type: z.enum(['MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'FURNITURE']),
   featureIds: z.array(z.string()).optional(),
+  infoSections: z.array(FurnitureInfoSectionSchema).optional(),
 });
 
 // Mattress-specific schema
@@ -116,25 +130,11 @@ export const QuiltSchema = z.object({
   descriptionEn: z.string(),
 });
 
-export const FurnitureInfoRowSchema = z.object({
-  labelKa: optionalTrimmedString,
-  labelEn: optionalTrimmedString,
-  valueKa: optionalTrimmedString,
-  valueEn: optionalTrimmedString,
-});
-
-export const FurnitureInfoSectionSchema = z.object({
-  titleKa: optionalTrimmedString,
-  titleEn: optionalTrimmedString,
-  rows: z.array(FurnitureInfoRowSchema).optional(),
-});
-
 export const FurnitureSchema = z.object({
   descriptionKa: optionalTrimmedString,
   descriptionEn: optionalTrimmedString,
   size1: optionalTrimmedString,
   size2: optionalTrimmedString,
-  infoSections: z.array(FurnitureInfoSectionSchema).optional(),
 });
 
 export const ProductSchema = z.discriminatedUnion("type", [
@@ -147,8 +147,8 @@ export const ProductSchema = z.discriminatedUnion("type", [
     titleEn: z.string().min(1),
     titleKa: z.string().min(1),
     images: z.array(z.string()).min(1),
-    secondtext: optionalTrimmedString,
-    secondtextEn: optionalTrimmedString,
+    secondtext: z.string().optional(),
+    secondtextEn: z.string().optional(),
   }),
 ]);
 
@@ -180,8 +180,8 @@ export const updateProductSchema = z.discriminatedUnion("type", [
       titleEn: z.string().min(1),
       titleKa: z.string().min(1),
       images: z.array(z.string()).min(1),
-      secondtext: optionalTrimmedString,
-      secondtextEn: optionalTrimmedString,
+      secondtext: z.string().optional(),
+      secondtextEn: z.string().optional(),
     })
     .extend(withId),
 ]);
