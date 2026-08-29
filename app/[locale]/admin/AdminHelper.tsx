@@ -19,7 +19,7 @@ async function AdminHelper() {
             <form action={logoutAdmin}>
             <button
               type="submit"
-              className="cursor-pointer rounded-md border border-[#203e72] px-4 py-2 text-sm text-black hover:bg-[#203e72] hover:text-white"
+              className="cursor-pointer rounded-md border border-border bg-card px-4 py-2 text-sm text-foreground transition hover:border-brand-chrome hover:bg-brand-chrome hover:text-white"
             >
               გასვლა
             </button>

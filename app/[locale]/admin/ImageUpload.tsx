@@ -45,18 +45,18 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
           onUploadError={(error: Error) => {
             alert(`შეცდომა: ${error.message}`);
           }}
-          className="min-h-[200px] w-full cursor-pointer rounded-xl border-2 border-dashed border-[#203e72]/50 bg-[#203e72]/5 px-6 py-10 transition-colors hover:border-[#203e72] hover:bg-[#203e72]/10"
+          className="min-h-[200px] w-full cursor-pointer rounded-xl border-2 border-dashed border-brand-chrome/40 bg-brand-chrome/5 px-6 py-10 transition-colors hover:border-brand-chrome hover:bg-brand-chrome/10 dark:border-brand/40 dark:bg-brand/10 dark:hover:border-brand dark:hover:bg-brand/15"
           appearance={{
             container: "w-full border-none bg-transparent p-0 shadow-none",
-            uploadIcon: "h-14 w-14 text-[#203e72]",
-            label: "mt-3 text-base font-semibold text-[#203e72] cursor-pointer hover:text-[#203e72]/80",
-            allowedContent: "mt-1 text-sm text-gray-500",
+            uploadIcon: "h-14 w-14 text-brand-chrome dark:text-brand",
+            label: "mt-3 text-base font-semibold text-brand-chrome cursor-pointer hover:text-brand-chrome/80 dark:text-brand dark:hover:text-brand/80",
+            allowedContent: "mt-1 text-sm text-muted-foreground",
             button: "hidden",
           }}
           content={{
             uploadIcon: () => (
-              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#203e72]/10">
-                <ImagePlus className="h-8 w-8 text-[#203e72]" strokeWidth={1.75} />
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-chrome/10 dark:bg-brand/15">
+                <ImagePlus className="h-8 w-8 text-brand-chrome dark:text-brand" strokeWidth={1.75} />
               </span>
             ),
             label: ({ isUploading, uploadProgress }) =>
@@ -70,13 +70,13 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
 
       {imageUrls.length > 0 ? (
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-black">
+          <h2 className="text-sm font-semibold text-foreground">
             ატვირთული სურათები ({imageUrls.length}
             {maxFiles ? ` / ${maxFiles}` : ""})
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {imageUrls.map((url, index) => (
-              <div key={`${url}-${index}`} className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white">
+              <div key={`${url}-${index}`} className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted">
                 <Image
                   src={url}
                   alt={`Uploaded ${index + 1}`}
@@ -97,7 +97,7 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
           </div>
         </div>
       ) : !canUploadMore ? (
-        <p className="text-center text-sm text-gray-400">სურათი ჯერ არ არის ატვირთული</p>
+        <p className="text-center text-sm text-muted-foreground">სურათი ჯერ არ არის ატვირთული</p>
       ) : null}
     </div>
   );

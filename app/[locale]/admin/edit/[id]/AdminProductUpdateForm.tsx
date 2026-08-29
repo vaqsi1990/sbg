@@ -49,8 +49,8 @@ export default function AdminProductUpdateForm({
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-6 pb-28">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold text-black">პროდუქტის რედაქტირება</h1>
-        <Link href="/admin" className="text-sm text-[#203e72] hover:underline">
+        <h1 className="text-2xl font-semibold text-foreground">პროდუქტის რედაქტირება</h1>
+        <Link href="/admin" className="text-sm text-brand hover:underline">
           ← უკან დაბრუნება
         </Link>
       </div>
@@ -59,13 +59,13 @@ export default function AdminProductUpdateForm({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <ProductFormFields form={form} catalogItems={catalogItems} lockType />
 
-          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white/95 px-4 py-3 backdrop-blur">
+          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/90 px-4 py-3 backdrop-blur">
             <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-              <p className="text-sm text-gray-500 truncate">{status || "შეინახე ცვლილებები"}</p>
+              <p className="truncate text-sm text-muted-foreground">{status || "შეინახე ცვლილებები"}</p>
               <Button
                 type="submit"
                 disabled={pending}
-                className="cursor-pointer bg-[#203e72] px-6 text-white hover:bg-[#203e72]/90"
+                className="cursor-pointer bg-brand-chrome px-6 text-white hover:bg-brand-chrome/90"
               >
                 {pending ? "ინახება..." : "განაახლე პროდუქტი"}
               </Button>

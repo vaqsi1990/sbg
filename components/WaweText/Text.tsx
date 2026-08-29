@@ -64,8 +64,8 @@ const Text = () => {
   }, [currentWordIndex]);
 
   return (
-    <>
-<div className="relative h-[40vh] w-full flex items-center justify-center mx-4 lg:mx-auto max-w-[calc(100%-2rem)] lg:max-w-6xl rounded-3xl overflow-hidden mb-10 text-white">
+    <section className="container mx-auto px-4 lg:px-6 mb-10">
+<div className="relative h-[40vh] w-full flex items-center justify-center rounded-3xl overflow-hidden text-white">
   {/* Background Image */}
   <Image
     src={bg}
@@ -100,9 +100,7 @@ const Text = () => {
 </motion.div>
 
 </div>
-    
- 
-    </>
+    </section>
   );
 };
 

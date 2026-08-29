@@ -15,17 +15,20 @@ export default function AdminSwitch({
   catalogItems?: CatalogItemDTO[];
 }) {
   const [activeComponent, setActiveComponent] = useState<"all" | "form" | "features">("all");
+
+  const tabClass = (isActive: boolean) =>
+    `inline-flex cursor-pointer items-center rounded-md border px-5 py-3 transition ${
+      isActive
+        ? "border-brand-chrome bg-brand-chrome text-white"
+        : "border-border bg-card text-foreground hover:border-brand-chrome hover:bg-brand-chrome hover:text-white"
+    }`;
  
   return (
     <>
   <div className="flex flex-wrap justify-center gap-6 ">
     <button
       onClick={() => setActiveComponent("all")}
-      className={`inline-flex cursor-pointer px-5 py-3 rounded-md border border-[#203e72] ${
-        activeComponent === "all"
-          ? "bg-[#203e72] text-white"
-          : "text-black hover:bg-[#203e72] hover:text-white"
-      }`}
+      className={tabClass(activeComponent === "all")}
     >
       <svg
         aria-hidden="true"
@@ -46,11 +49,7 @@ export default function AdminSwitch({
 
     <button
       onClick={() => setActiveComponent("form")}
-      className={`inline-flex cursor-pointer px-5 py-3 rounded-md border border-[#203e72] ${
-        activeComponent === "form"
-          ? "bg-[#203e72] text-white"
-          : "text-black hover:bg-[#203e72] hover:text-white"
-      }`}
+      className={tabClass(activeComponent === "form")}
     >
       <svg
         aria-hidden="true"
@@ -73,11 +72,7 @@ export default function AdminSwitch({
 
     <button
       onClick={() => setActiveComponent("features")}
-      className={`inline-flex cursor-pointer px-5 py-3 rounded-md border border-[#203e72] ${
-        activeComponent === "features"
-          ? "bg-[#203e72] text-white"
-          : "text-black hover:bg-[#203e72] hover:text-white"
-      }`}
+      className={tabClass(activeComponent === "features")}
     >
       + ზომა და მახასიათებლები
     </button>

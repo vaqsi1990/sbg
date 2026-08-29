@@ -19,7 +19,7 @@ export default async function Page({
   return (
     <main className="mt-24 pb-16">
       <div className="mx-auto max-w-5xl px-4">
-        <Link href="/admin" className="text-sm text-[#203e72] hover:underline">
+        <Link href="/admin" className="text-sm text-brand hover:underline">
           ← უკან ადმინ პანელზე
         </Link>
       </div>

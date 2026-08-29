@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaEdit, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
 import { deleteProduct } from "@/lib/actions/actions";
 import { ProductType } from "@/lib/ProductType";
 
@@ -26,6 +25,9 @@ function getPageNumbers(current: number, total: number): (number | "ellipsis")[]
 
   return pages;
 }
+
+const pagerBtn =
+  "inline-flex h-9 items-center gap-2 rounded-md border border-border bg-card px-3 text-sm text-foreground transition hover:border-brand-chrome hover:bg-brand-chrome hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-card disabled:hover:text-foreground";
 
 export default function All({ products }: { products: ProductType[] }) {
   const [productList, setProductList] = useState(products);
@@ -64,18 +66,18 @@ export default function All({ products }: { products: ProductType[] }) {
   };
 
   return (
-    <div className="p-8">
+    <div className="px-4 py-6 lg:px-8">
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <h1 className="text-2xl font-bold">ყველა პროდუქტი</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-foreground">ყველა პროდუქტი</h1>
+        <p className="text-sm text-muted-foreground">
           {from}–{to} / {productList.length}
         </p>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-xl shadow">
+      <div className="overflow-x-auto rounded-2xl border border-border bg-card text-card-foreground shadow-sm dark:bg-muted/50 dark:shadow-none">
+        <table className="min-w-full">
           <thead>
-            <tr className="text-left border-b">
+            <tr className="border-b border-border bg-muted/60 text-left text-sm font-semibold text-muted-foreground">
               <th className="p-4">სურათი</th>
               <th className="p-4">სახელი</th>
               <th className="p-4">ტიპი</th>
@@ -85,15 +87,18 @@ export default function All({ products }: { products: ProductType[] }) {
           <tbody>
             {pageProducts.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-gray-500">
+                <td colSpan={4} className="p-8 text-center text-muted-foreground">
                   პროდუქტი არ მოიძებნა.
                 </td>
               </tr>
             ) : (
               pageProducts.map((product) => (
-                <tr key={product.id} className="border-b hover:bg-gray-50 transition">
+                <tr
+                  key={product.id}
+                  className="border-b border-border last:border-0 transition hover:bg-muted/40"
+                >
                   <td className="p-4">
-                    <div className="w-12 h-12 relative rounded-full overflow-hidden">
+                    <div className="relative h-12 w-12 overflow-hidden rounded-full ring-1 ring-border">
                       <Image
                         src={product.images?.[0] ?? "/placeholder.jpg"}
                         alt={product.titleKa}
@@ -104,16 +109,36 @@ export default function All({ products }: { products: ProductType[] }) {
                     </div>
                   </td>
                   <td className="p-4 font-medium">
-                    <Link href={`/product/${product.id}`}>{product.titleKa}</Link>
-                  </td>
-                  <td className="p-4 text-gray-600">{product.type}</td>
-                  <td className="p-4 flex justify-center gap-4">
-                    <Link href={`/admin/edit/${product.id}`}>
-                      <FaEdit className="text-blue-600 hover:text-blue-800 cursor-pointer" size={18} />
+                    <Link
+                      href={`/product/${product.id}`}
+                      className="text-foreground transition hover:text-brand"
+                    >
+                      {product.titleKa}
                     </Link>
-                    <Button className="cursor-pointer" onClick={() => handleDelete(product.id)}>
-                      <FaTrash className="cursor-pointer" size={18} />
-                    </Button>
+                  </td>
+                  <td className="p-4">
+                    <span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                      {product.type}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex justify-center gap-2">
+                      <Link
+                        href={`/admin/edit/${product.id}`}
+                        aria-label="რედაქტირება"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-chrome/10 text-brand-chrome transition hover:bg-brand-chrome hover:text-white dark:bg-brand/15 dark:text-brand dark:hover:bg-brand dark:hover:text-background"
+                      >
+                        <FaEdit size={16} />
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(product.id)}
+                        aria-label="წაშლა"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-destructive/10 text-destructive transition hover:bg-destructive hover:text-white"
+                      >
+                        <FaTrash size={15} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -132,7 +157,7 @@ export default function All({ products }: { products: ProductType[] }) {
             onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
             disabled={currentPage <= 1}
             aria-label="წინა გვერდი"
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-[#203e72] px-3 text-sm text-[#203e72] transition hover:bg-[#203e72] hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#203e72]"
+            className={pagerBtn}
           >
             <FaArrowLeft className="h-3 w-3" />
             <span className="hidden sm:inline">წინა</span>
@@ -140,7 +165,7 @@ export default function All({ products }: { products: ProductType[] }) {
 
           {getPageNumbers(currentPage, pageCount).map((item, index) =>
             item === "ellipsis" ? (
-              <span key={`ellipsis-${index}`} className="px-1 text-gray-400">
+              <span key={`ellipsis-${index}`} className="px-1 text-muted-foreground">
                 …
               </span>
             ) : (
@@ -151,8 +176,8 @@ export default function All({ products }: { products: ProductType[] }) {
                 aria-current={item === currentPage ? "page" : undefined}
                 className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-3 text-sm transition ${
                   item === currentPage
-                    ? "border-[#203e72] bg-[#203e72] text-white"
-                    : "border-[#203e72]/30 text-[#203e72] hover:border-[#203e72] hover:bg-[#203e72] hover:text-white"
+                    ? "border-brand-chrome bg-brand-chrome text-white"
+                    : "border-border bg-card text-foreground hover:border-brand-chrome hover:bg-brand-chrome hover:text-white"
                 }`}
               >
                 {item}
@@ -165,7 +190,7 @@ export default function All({ products }: { products: ProductType[] }) {
             onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
             disabled={currentPage >= pageCount}
             aria-label="შემდეგი გვერდი"
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-[#203e72] px-3 text-sm text-[#203e72] transition hover:bg-[#203e72] hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#203e72]"
+            className={pagerBtn}
           >
             <span className="hidden sm:inline">შემდეგი</span>
             <FaArrowRight className="h-3 w-3" />

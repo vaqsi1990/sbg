@@ -79,13 +79,13 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <ProductFormFields form={form} catalogItems={catalogItems} />
 
-          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white/95 px-4 py-3 backdrop-blur">
+          <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/90 px-4 py-3 backdrop-blur">
             <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-              <p className="text-sm text-gray-500 truncate">{status || "შეავსე სექციები და დააჭირე შექმნას"}</p>
+              <p className="truncate text-sm text-muted-foreground">{status || "შეავსე სექციები და დააჭირე შექმნას"}</p>
               <Button
                 type="submit"
                 disabled={pending}
-                className="cursor-pointer bg-[#203e72] px-6 text-white hover:bg-[#203e72]/90"
+                className="cursor-pointer bg-brand-chrome px-6 text-white hover:bg-brand-chrome/90"
               >
                 {pending ? "ინახება..." : "შექმენი პროდუქტი"}
               </Button>
