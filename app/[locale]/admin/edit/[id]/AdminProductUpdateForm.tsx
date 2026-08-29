@@ -30,6 +30,7 @@ export default function AdminProductUpdateForm({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       featureIds: [],
+      infoSections: [],
       ...formDefaults,
     },
   });

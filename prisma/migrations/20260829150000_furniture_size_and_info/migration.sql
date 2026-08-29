@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Furniture" ADD COLUMN IF NOT EXISTS "size1" TEXT;
+ALTER TABLE "Furniture" ADD COLUMN IF NOT EXISTS "size2" TEXT;
+ALTER TABLE "Furniture" ADD COLUMN IF NOT EXISTS "infoSections" JSONB;

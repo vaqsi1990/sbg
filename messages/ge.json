@@ -58,6 +58,7 @@
   "PILLOW": "ბალიში",
   "QUILT": "საბანი",
   "PAD": "ტოპერი",
+  "FURNITURE": "ავეჯი",
    "noProducts": "ამ კატეგორიაში პროდუქტი არ მოიძებნა."
 },
   "infopage":{
@@ -94,8 +95,11 @@
     "blanket": "საბანი",
     "matrass": "მატრასი",
     "toper": "ტოპერი",
+    "textile": "საბანი",
+    "furniture": "ავეჯი",
     "catalogue": "კატალოგი",
     "aboutUs": "ჩვენს შესახებ",
+    "why": "რატომ ჩვენ",
     "whySleepAndBed": "რატომ sleep&bad?",
     "gallery": "გალერია",
     "menu": "მენიუ"

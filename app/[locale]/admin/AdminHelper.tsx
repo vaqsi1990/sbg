@@ -14,7 +14,7 @@ async function AdminHelper() {
   const catalogItems = await getCatalogItems();
 
   return (
-    <main className="mt-24 space-y-6 items-center">
+    <main className="mt-32 space-y-6 items-center">
         <div className="ml-10 pt-10 flex justify-center mt-10 justify-between pr-10">
             <form action={logoutAdmin}>
             <button

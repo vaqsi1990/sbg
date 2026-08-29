@@ -104,7 +104,7 @@ export default function Page() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-[50vh] items-center justify-center pt-24 text-muted-foreground">
+        <div className="flex min-h-[50vh] items-center justify-center pt-32 text-muted-foreground">
           Loading...
         </div>
       }

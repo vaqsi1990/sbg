@@ -36,7 +36,7 @@ export default function LocaleSwitcher() {
     <div className="relative inline-block h-[40px] text-left">
       <button
         onClick={() => setOpen(prev => !prev)}
-        className="inline-flex items-center gap-2 h-[40px] px-3 w-[140px] py-2 border border-white/20 rounded-full bg-white/10 text-white text-sm backdrop-blur-sm hover:bg-white/20 transition-colors"
+        className="inline-flex items-center gap-2 h-[40px] px-3 w-[140px] py-2 border border-white/20 rounded-full bg-white/10 text-white md:text-[18px] text-[16px] backdrop-blur-sm hover:bg-white/20 transition-colors"
       >
         <Image src={currentLocale?.flag || Am} alt="flag" width={20} height={20} className="rounded-full" />
         {currentLocale?.label}

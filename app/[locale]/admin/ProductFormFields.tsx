@@ -22,13 +22,14 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "@/i18n/navigation";
 import ImageUpload from "./ImageUpload";
+import FurnitureInfoFields from "./FurnitureInfoFields";
 import type { CatalogItemDTO } from "@/lib/actions/catalog";
 
 export type ProductFormValues = z.input<typeof ProductSchema>;
 export type ProductFormData = z.output<typeof ProductSchema>;
 
 const BooleanSchema = z.object({
-  type: z.enum(["MATTRESS", "PILLOW", "QUILT", "PAD"]),
+  type: z.enum(["MATTRESS", "PILLOW", "QUILT", "PAD", "FURNITURE"]),
   titleEn: z.string(),
   titleKa: z.string(),
   categoryEn: z.string(),
@@ -125,6 +126,7 @@ export const typeToCategory = {
   PILLOW: { en: "Pillow", ka: "ბალიში" },
   QUILT: { en: "Quilt", ka: "საბანი" },
   PAD: { en: "Pad  ", ka: " პადი" },
+  FURNITURE: { en: "Furniture", ka: "ავეჯი" },
 } as const;
 
 export const inputClass =
@@ -245,7 +247,11 @@ export default function ProductFormFields({
     (item) =>
       item.kind === "FEATURE" &&
       !item.legacyKey &&
-      (productType === "PAD" ? item.forPad : item.forMattress)
+      (productType === "PAD"
+        ? item.forPad
+        : productType === "QUILT" || productType === "FURNITURE"
+        ? true
+        : item.forMattress)
   );
 
   const toggleFeature = (id: string, checked: boolean) => {
@@ -284,6 +290,7 @@ export default function ProductFormFields({
                   <SelectItem className="text-base" value="PILLOW">ბალიში</SelectItem>
                   <SelectItem className="text-base" value="PAD">ტოპერი</SelectItem>
                   <SelectItem className="text-base" value="QUILT">საბანი</SelectItem>
+                  <SelectItem className="text-base" value="FURNITURE">ავეჯი</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -292,7 +299,11 @@ export default function ProductFormFields({
         />
       </FormSection>
 
-      <FormSection step={2} title="სახელი და მოკლე ტექსტი" hint="ქართული და ინგლისური გვერდიგვერდ">
+      <FormSection
+        step={2}
+        title={productType === "FURNITURE" ? "სახელი" : "სახელი და მოკლე ტექსტი"}
+        hint="ქართული და ინგლისური გვერდიგვერდ"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -320,32 +331,36 @@ export default function ProductFormFields({
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="secondtext"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">მოკლე ტექსტი (KA)</FormLabel>
-                <FormControl>
-                  <textarea placeholder="მოკლე აღწერა ქართულად" {...field} className={textareaClass} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="secondtextEn"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">მოკლე ტექსტი (EN)</FormLabel>
-                <FormControl>
-                  <textarea placeholder="Short text in English" {...field} className={textareaClass} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {productType !== "FURNITURE" && (
+            <>
+              <FormField
+                control={form.control}
+                name="secondtext"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base">მოკლე ტექსტი (KA)</FormLabel>
+                    <FormControl>
+                      <textarea placeholder="მოკლე აღწერა ქართულად" {...field} className={textareaClass} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="secondtextEn"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base">მოკლე ტექსტი (EN)</FormLabel>
+                    <FormControl>
+                      <textarea placeholder="Short text in English" {...field} className={textareaClass} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
         </div>
       </FormSection>
 
@@ -363,6 +378,52 @@ export default function ProductFormFields({
           )}
         />
       </FormSection>
+
+      {productType === "FURNITURE" && (
+        <>
+          <FormSection step={4} title="ზომა" hint="არასავალდებულო — როგორც მატრასზე">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                {...form.register("size1")}
+                placeholder="ზომა 1 (მაგ. 160X200)"
+                className={inputClass}
+              />
+              <Input
+                {...form.register("size2")}
+                placeholder="ზომა 2 (არასავალდებულო)"
+                className={inputClass}
+              />
+            </div>
+          </FormSection>
+          <FormSection step={5} title="აღწერა" hint="არასავალდებულო — მარცხნივ ქართული, მარჯვნივ ინგლისური">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label className="space-y-2 text-base font-medium text-foreground">
+                აღწერა (KA)
+                <textarea
+                  {...form.register("descriptionKa")}
+                  placeholder="აღწერა ქართულად (არასავალდებულო)"
+                  className={textareaClass}
+                />
+              </label>
+              <label className="space-y-2 text-base font-medium text-foreground">
+                აღწერა (EN)
+                <textarea
+                  {...form.register("descriptionEn")}
+                  placeholder="Description in English (optional)"
+                  className={textareaClass}
+                />
+              </label>
+            </div>
+          </FormSection>
+          <FormSection
+            step={6}
+            title="ინფორმაცია"
+            hint="არასავალდებულო — სექციები იხსნება/იხურება პროდუქტის გვერდზე"
+          >
+            <FurnitureInfoFields form={form} />
+          </FormSection>
+        </>
+      )}
 
       {productType === "MATTRESS" && (
         <>
@@ -579,19 +640,70 @@ export default function ProductFormFields({
       )}
 
       {productType === "QUILT" && (
-        <FormSection step={4} title="საბნის დეტალები">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input type="text" {...form.register("weight")} placeholder="წონა" className={inputClass} />
-            <Input {...form.register("fabric")} placeholder="ქსოვილი (KA)" className={inputClass} />
-            <Input {...form.register("fabricEn")} placeholder="Fabric (EN)" className={inputClass} />
-            <Input {...form.register("filling")} placeholder="შევსება (KA)" className={inputClass} />
-            <Input {...form.register("fillingEn")} placeholder="Filling (EN)" className={inputClass} />
-            <textarea {...form.register("minitext")} placeholder="მოკლე ტექსტი (KA)" className={textareaClass} />
-            <textarea {...form.register("minitextEn")} placeholder="Short text (EN)" className={textareaClass} />
-            <Input {...form.register("size1")} placeholder="ზომა 1 (არასავალდებულო)" className={inputClass} />
-            <Input {...form.register("size2")} placeholder="ზომა 2 (არასავალდებულო)" className={inputClass} />
-          </div>
-        </FormSection>
+        <>
+          <FormSection step={4} title="აღწერები" hint="მარცხნივ ქართული, მარჯვნივ ინგლისური">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label className="space-y-2 text-base font-medium text-foreground">
+                სრული აღწერა (KA)
+                <textarea {...form.register("descriptionKa")} placeholder="აღწერა ქართულად" className={textareaClass} />
+              </label>
+              <label className="space-y-2 text-base font-medium text-foreground">
+                სრული აღწერა (EN)
+                <textarea {...form.register("descriptionEn")} placeholder="Description in English" className={textareaClass} />
+              </label>
+              <label className="space-y-2 text-base font-medium text-foreground">
+                დამატებითი ტექსტი (KA)
+                <textarea {...form.register("minitext")} placeholder="დამატებითი ტექსტი ქართულად" className={textareaClass} />
+              </label>
+              <label className="space-y-2 text-base font-medium text-foreground">
+                დამატებითი ტექსტი (EN)
+                <textarea {...form.register("minitextEn")} placeholder="Extra text in English" className={textareaClass} />
+              </label>
+            </div>
+          </FormSection>
+
+          <FormSection step={5} title="ზომა და მახასიათებლები">
+            <Link
+              href="/admin/features"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-chrome px-4 py-3 text-base font-medium text-white transition hover:bg-brand-chrome/90 sm:w-auto"
+            >
+              + დაამატე ახალი ზომა ან მახასიათებელი
+            </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                {...form.register("size1")}
+                placeholder="ზომა 1 (მაგ. 160X200)"
+                className={inputClass}
+              />
+              <Input
+                {...form.register("size2")}
+                placeholder="ზომა 2 (არასავალდებულო)"
+                className={inputClass}
+              />
+              <Input {...form.register("weight")} placeholder="წონა (არასავალდებულო)" className={inputClass} />
+              <Input {...form.register("fabric")} placeholder="ქსოვილი (KA)" className={inputClass} />
+              <Input {...form.register("fabricEn")} placeholder="Fabric (EN)" className={inputClass} />
+              <Input {...form.register("filling")} placeholder="შევსება (KA)" className={inputClass} />
+              <Input {...form.register("fillingEn")} placeholder="Filling (EN)" className={inputClass} />
+            </div>
+            {extraFeatures.length > 0 ? (
+              <div className="space-y-2">
+                <p className="text-base font-medium text-foreground">დამატებული მახასიათებლები</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {extraFeatures.map((item) => (
+                    <label key={item.id} className={featureChipClass}>
+                      <Checkbox
+                        checked={featureIds.includes(item.id)}
+                        onCheckedChange={(checked) => toggleFeature(item.id, Boolean(checked))}
+                      />
+                      <span>{item.labelEn}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </FormSection>
+        </>
       )}
     </>
   );

@@ -1,7 +1,7 @@
 export interface ProductType {
   id: string;
 
-  type: "MATTRESS" | "PILLOW" | "QUILT" | "PAD";
+  type: "MATTRESS" | "PILLOW" | "QUILT" | "PAD" | "FURNITURE";
   images?: string[];
   titleEn: string;
   titleKa: string;
@@ -48,7 +48,7 @@ export interface ProductTypes {
   id: string;
   createdAt: Date;
   updatedAt?: Date;
-  type: "MATTRESS" | "PILLOW" | "QUILT" | "PAD";
+  type: "MATTRESS" | "PILLOW" | "QUILT" | "PAD" | "FURNITURE";
   images?: string[];
   titleEn: string;
   titleKa: string;

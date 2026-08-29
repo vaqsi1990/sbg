@@ -25,7 +25,7 @@ export const BaseProductSchema = z.object({
   secondtext: z.string(),
   secondtextEn: z.string(),
   images: z.array(z.string()),
-  type: z.enum(['MATTRESS', 'PILLOW', 'QUILT', 'PAD']),
+  type: z.enum(['MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'FURNITURE']),
   featureIds: z.array(z.string()).optional(),
 });
 
@@ -105,21 +105,51 @@ export const PillowSchema = z.object({
 export const QuiltSchema = z.object({
   size1: optionalTrimmedString,
   size2: optionalTrimmedString,
-  fabric: z.string(),
-  fabricEn: z.string(),
-  filling: z.string(),
-  fillingEn: z.string(),
-  weight: z.string(),
+  fabric: optionalTrimmedString,
+  fabricEn: optionalTrimmedString,
+  filling: optionalTrimmedString,
+  fillingEn: optionalTrimmedString,
+  weight: optionalTrimmedString,
   minitext: z.string(),
   minitextEn: z.string(),
+  descriptionKa: z.string(),
+  descriptionEn: z.string(),
 });
 
+export const FurnitureInfoRowSchema = z.object({
+  labelKa: optionalTrimmedString,
+  labelEn: optionalTrimmedString,
+  valueKa: optionalTrimmedString,
+  valueEn: optionalTrimmedString,
+});
+
+export const FurnitureInfoSectionSchema = z.object({
+  titleKa: optionalTrimmedString,
+  titleEn: optionalTrimmedString,
+  rows: z.array(FurnitureInfoRowSchema).optional(),
+});
+
+export const FurnitureSchema = z.object({
+  descriptionKa: optionalTrimmedString,
+  descriptionEn: optionalTrimmedString,
+  size1: optionalTrimmedString,
+  size2: optionalTrimmedString,
+  infoSections: z.array(FurnitureInfoSectionSchema).optional(),
+});
 
 export const ProductSchema = z.discriminatedUnion("type", [
   BaseProductSchema.extend(MattressSchema.shape).extend({ type: z.literal("MATTRESS") }),
   BaseProductSchema.extend(PillowSchema.shape).extend({ type: z.literal("PILLOW") }),
   BaseProductSchema.extend(QuiltSchema.shape).extend({ type: z.literal("QUILT") }),
   BaseProductSchema.extend(PadSchema.shape).extend({ type: z.literal("PAD") }),
+  BaseProductSchema.extend(FurnitureSchema.shape).extend({
+    type: z.literal("FURNITURE"),
+    titleEn: z.string().min(1),
+    titleKa: z.string().min(1),
+    images: z.array(z.string()).min(1),
+    secondtext: optionalTrimmedString,
+    secondtextEn: optionalTrimmedString,
+  }),
 ]);
 
 
@@ -142,5 +172,16 @@ export const updateProductSchema = z.discriminatedUnion("type", [
 
   BaseProductSchema.extend(PadSchema.shape)
     .extend({ type: z.literal("PAD") })
+    .extend(withId),
+
+  BaseProductSchema.extend(FurnitureSchema.shape)
+    .extend({
+      type: z.literal("FURNITURE"),
+      titleEn: z.string().min(1),
+      titleKa: z.string().min(1),
+      images: z.array(z.string()).min(1),
+      secondtext: optionalTrimmedString,
+      secondtextEn: optionalTrimmedString,
+    })
     .extend(withId),
 ]);

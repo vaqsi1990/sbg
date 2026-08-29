@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { redirect } from "@/i18n/navigation";
 import { getCatalogItems } from "@/lib/actions/catalog";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { parseFurnitureInfo } from "@/lib/furniture-info";
 import type { ProductFormData } from "../../ProductFormFields";
 
 const DetailPage = async (props: {
@@ -29,6 +30,14 @@ const DetailPage = async (props: {
     ...(product.type === "PAD" && product.pad ? product.pad : {}),
     ...(product.type === "PILLOW" && product.pillow ? product.pillow : {}),
     ...(product.type === "QUILT" && product.quilt ? product.quilt : {}),
+    ...(product.type === "FURNITURE" && product.furniture
+      ? {
+          ...product.furniture,
+          infoSections: parseFurnitureInfo(
+            (product.furniture as { infoSections?: unknown }).infoSections
+          ),
+        }
+      : {}),
     featureIds: product.catalogItems?.map((row) => row.itemId) ?? [],
   };
 
@@ -36,12 +45,13 @@ const DetailPage = async (props: {
   delete (flattenedProduct as any).pad;
   delete (flattenedProduct as any).pillow;
   delete (flattenedProduct as any).quilt;
+  delete (flattenedProduct as any).furniture;
   delete (flattenedProduct as any).catalogItems;
   delete (flattenedProduct as any).createdAt;
   delete (flattenedProduct as any).updatedAt;
 
   return (
-    <main className="mt-24">
+    <main className="mt-32">
       <AdminProductUpdateForm
         initialData={flattenedProduct as ProductFormData & { id: string }}
         catalogItems={catalogItems}

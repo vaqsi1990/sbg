@@ -5,7 +5,7 @@ type PageHeaderProps = {
 
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
-    <div className="bg-brand-chrome text-white pt-28 lg:pt-32 pb-10 lg:pb-14">
+    <div className="bg-brand-chrome text-white pt-32 lg:pt-36 pb-10 lg:pb-14">
       <div className="container mx-auto px-4 lg:px-6 text-center">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{title}</h1>
         {subtitle ? (

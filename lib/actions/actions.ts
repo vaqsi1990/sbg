@@ -12,6 +12,7 @@ import {
   Pillow,
   Quilt,
   Pad,
+  Furniture,
   Product,
   ProductType,
   CatalogItem,
@@ -19,6 +20,7 @@ import {
 } from "@prisma/client";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { syncProductCatalog } from "@/lib/actions/catalog";
+import { normalizeFurnitureInfo } from "@/lib/furniture-info";
 
 function formatError(error: any) {
   if (error.name === "ZodError") {
@@ -61,8 +63,8 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
         titleKa: parsed.titleKa,
         categoryEn: parsed.categoryEn,
         categoryKa: parsed.categoryKa,
-        secondtext: parsed.secondtext,
-        secondtextEn: parsed.secondtextEn,
+        secondtext: parsed.secondtext ?? "",
+        secondtextEn: parsed.secondtextEn ?? "",
       },
     });
 
@@ -136,14 +138,16 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             id: createdProduct.id,
             size1: parsed.size1?.trim() || null,
             size2: parsed.size2?.trim() || null,
-            fabric: parsed.fabric,
-            filling: parsed.filling,
-            fabricEn: parsed.fabricEn,
-            fillingEn: parsed.fillingEn,
-            weight: parsed.weight,
+            fabric: parsed.fabric ?? "",
+            filling: parsed.filling ?? "",
+            fabricEn: parsed.fabricEn ?? "",
+            fillingEn: parsed.fillingEn ?? "",
+            weight: parsed.weight ?? "",
             minitext: parsed.minitext,
             minitextEn: parsed.minitextEn,
-          },
+            descriptionKa: parsed.descriptionKa,
+            descriptionEn: parsed.descriptionEn,
+          } as never,
         });
 
         break;
@@ -175,6 +179,19 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
         });
 
         break;
+
+      case "FURNITURE":
+        await prisma.furniture.create({
+          data: {
+            id: createdProduct.id,
+            descriptionKa: parsed.descriptionKa?.trim() || null,
+            descriptionEn: parsed.descriptionEn?.trim() || null,
+            size1: parsed.size1?.trim() || null,
+            size2: parsed.size2?.trim() || null,
+            infoSections: normalizeFurnitureInfo(parsed.infoSections),
+          } as never,
+        });
+        break;
     }
 
     await syncProductCatalog(createdProduct.id, parsed.featureIds ?? []);
@@ -194,7 +211,8 @@ type SingleProduct =
   | (Product & { type: "MATTRESS"; mattress: Mattress; catalogItems: CatalogAssignment[] })
   | (Product & { type: "PILLOW"; pillow: Pillow; catalogItems: CatalogAssignment[] })
   | (Product & { type: "QUILT"; quilt: Quilt; catalogItems: CatalogAssignment[] })
-  | (Product & { type: "PAD"; pad: Pad; catalogItems: CatalogAssignment[] });
+  | (Product & { type: "PAD"; pad: Pad; catalogItems: CatalogAssignment[] })
+  | (Product & { type: "FURNITURE"; furniture: Furniture; catalogItems: CatalogAssignment[] });
 
 export async function getSingleProduct(
   id: string
@@ -210,6 +228,8 @@ export async function getSingleProduct(
       ? await prisma.pillow.findUnique({ where: { id } })
       : product.type === "QUILT"
       ? await prisma.quilt.findUnique({ where: { id } })
+      : product.type === "FURNITURE"
+      ? await prisma.furniture.findUnique({ where: { id } })
       : await prisma.pad.findUnique({ where: { id } });
 
   const catalogItems = await prisma.productCatalogItem.findMany({
@@ -226,6 +246,8 @@ export async function getSingleProduct(
       ? { pillow: extra as Pillow }
       : product.type === "QUILT"
       ? { quilt: extra as Quilt }
+      : product.type === "FURNITURE"
+      ? { furniture: extra as Furniture }
       : { pad: extra as Pad }),
   } as SingleProduct;
 }
@@ -352,6 +374,8 @@ export async function deleteProduct(id: string) {
         await tx.pad.deleteMany({ where: { id } });
       } else if (product.type === "QUILT") {
         await tx.quilt.deleteMany({ where: { id } });
+      } else if (product.type === "FURNITURE") {
+        await tx.furniture.deleteMany({ where: { id } });
       }
 
       await tx.product.delete({ where: { id } });
@@ -392,8 +416,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         titleKa: product.titleKa,
         categoryEn: product.categoryEn,
         categoryKa: product.categoryKa,
-        secondtext: product.secondtext,
-        secondtextEn: product.secondtextEn,
+        secondtext: product.secondtext ?? "",
+        secondtextEn: product.secondtextEn ?? "",
         images: product.images,
         type: product.type,
       },
@@ -484,14 +508,35 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         data: {
           size1: product.size1?.trim() || null,
           size2: product.size2?.trim() || null,
-          fabric: product.fabric,
-          fabricEn: product.fabricEn,
-          filling: product.filling,
-          fillingEn: product.fillingEn,
-          weight: product.weight,
+          fabric: product.fabric ?? "",
+          fabricEn: product.fabricEn ?? "",
+          filling: product.filling ?? "",
+          fillingEn: product.fillingEn ?? "",
+          weight: product.weight ?? "",
           minitext:product.minitext,
           minitextEn:product.minitextEn,
-        },
+          descriptionKa: product.descriptionKa ?? "",
+          descriptionEn: product.descriptionEn ?? "",
+        } as never,
+      });
+    } else if (product.type === "FURNITURE") {
+      await prisma.furniture.upsert({
+        where: { id: product.id },
+        create: {
+          id: product.id,
+          descriptionKa: product.descriptionKa?.trim() || null,
+          descriptionEn: product.descriptionEn?.trim() || null,
+          size1: product.size1?.trim() || null,
+          size2: product.size2?.trim() || null,
+          infoSections: normalizeFurnitureInfo(product.infoSections),
+        } as never,
+        update: {
+          descriptionKa: product.descriptionKa?.trim() || null,
+          descriptionEn: product.descriptionEn?.trim() || null,
+          size1: product.size1?.trim() || null,
+          size2: product.size2?.trim() || null,
+          infoSections: normalizeFurnitureInfo(product.infoSections),
+        } as never,
       });
     }
 

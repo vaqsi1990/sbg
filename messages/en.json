@@ -41,9 +41,12 @@
     "pillows": "Pillows",
     "blanket": "Blanket",
     "matrass": "Matress",
-    "toper": "Toper",
+    "toper": "Topper",
+    "textile": "Textile",
+    "furniture": "Furniture",
     "catalogue": "Catalogue",
     "aboutUs": "About Us",
+    "why": "Why",
     "whySleepAndBed": "Why Sleep & Bed?",
     "gallery": "Gallery",
     "menu": "Menu"
@@ -54,6 +57,7 @@
   "PILLOW": "PILLOW",
   "QUILT": "QUILT",
   "PAD": "TOPPER",
+  "FURNITURE": "FURNITURE",
   "noProducts": "There are no products in this category."
 },
 "slice":{

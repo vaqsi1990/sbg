@@ -60,6 +60,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
       washable: false,
       coconutLayer: false,
       featureIds: [],
+      infoSections: [],
     },
   });
 

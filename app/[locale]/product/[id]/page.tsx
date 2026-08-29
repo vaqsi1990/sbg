@@ -8,6 +8,8 @@ import ProductCarousel from '../ProductCarousel';
 import { getAllProduct } from '@/lib/actions/actions';
 import { getCatalogItems } from '@/lib/actions/catalog';
 import QuiltSizePicker from '../QuiltSizePicker';
+import FurnitureInfoAccordion from '../FurnitureInfoAccordion';
+import { parseFurnitureInfo, toFurnitureInfoDisplay } from '@/lib/furniture-info';
 import { cn } from '@/lib/utils';
 type Feature = {
   key:
@@ -164,7 +166,7 @@ const DetailPage = async(props: {
   const ALL_FEATURES = matchedHeightFeature
     ? [matchedHeightFeature, ...displayFeatures]
     : [...displayFeatures];
-  const isFlexMode = product.type === 'PILLOW' || product.type === 'QUILT';
+  const isFlexMode = product.type === 'PILLOW';
   const getFeatureValue = (key: Feature['key']) => {
     if (key === 'height') return true;
     if (product.type === 'MATTRESS') {
@@ -218,7 +220,25 @@ const DetailPage = async(props: {
           .filter((size): size is string => Boolean(size?.trim()))
           .map((size) => size.trim())
       : [];
-  const sizeOptions = product.type === "QUILT" ? quiltSizes : mattressSizes;
+  const furniture =
+    product.type === "FURNITURE" && product.furniture
+      ? (product.furniture as typeof product.furniture & {
+          size1?: string | null;
+          size2?: string | null;
+          infoSections?: unknown;
+        })
+      : null;
+  const furnitureSizes = furniture
+      ? [furniture.size1, furniture.size2]
+          .filter((size): size is string => Boolean(size?.trim()))
+          .map((size) => size.trim())
+      : [];
+  const sizeOptions =
+    product.type === "QUILT"
+      ? quiltSizes
+      : product.type === "FURNITURE"
+      ? furnitureSizes
+      : mattressSizes;
 
   const typeLabel =
     product.type === "MATTRESS"
@@ -227,6 +247,8 @@ const DetailPage = async(props: {
       ? isGe ? "ბალიში" : "Pillow"
       : product.type === "QUILT"
       ? isGe ? "საბნელი" : "Quilt"
+      : product.type === "FURNITURE"
+      ? isGe ? "ავეჯი" : "Furniture"
       : isGe ? "ტოპერი" : "Topper";
 
   const specRows: { label: string; value: string }[] = [];
@@ -235,13 +257,23 @@ const DetailPage = async(props: {
     specRows.push({ label: isGe ? "ზომა" : "Size", value: product.pillow.size });
   }
 
-  if (product.type === "QUILT" && product.quilt) {
-    const fabric = isGe ? product.quilt.fabric : product.quilt.fabricEn;
-    const filling = isGe ? product.quilt.filling : product.quilt.fillingEn;
-    if (fabric) specRows.push({ label: isGe ? "ქსოვილი" : "Fabric", value: fabric });
-    if (filling) specRows.push({ label: isGe ? "შევსება" : "Filling", value: filling });
-    if (product.quilt.weight) specRows.push({ label: isGe ? "წონა" : "Weight", value: product.quilt.weight });
-  }
+  const quiltSpecCards =
+    product.type === "QUILT" && product.quilt
+      ? [
+          {
+            label: isGe ? "ქსოვილი" : "Fabric",
+            value: (isGe ? product.quilt.fabric : product.quilt.fabricEn) || product.quilt.fabric || product.quilt.fabricEn,
+          },
+          {
+            label: isGe ? "შევსება" : "Filling",
+            value: (isGe ? product.quilt.filling : product.quilt.fillingEn) || product.quilt.filling || product.quilt.fillingEn,
+          },
+          {
+            label: isGe ? "წონა" : "Weight",
+            value: product.quilt.weight,
+          },
+        ].filter((item) => Boolean(item.value?.trim()))
+      : [];
 
   const minitext =
     product.type === "PILLOW"
@@ -250,6 +282,8 @@ const DetailPage = async(props: {
       ? isGe ? product.quilt?.minitext : product.quilt?.minitextEn
       : product.type === "PAD"
       ? isGe ? product.pad?.minitext : product.pad?.minitextEn
+      : product.type === "FURNITURE"
+      ? null
       : isGe ? product.mattress?.minitext : product.mattress?.minitextEn;
 
   const description =
@@ -257,7 +291,22 @@ const DetailPage = async(props: {
       ? isGe ? product.mattress.descriptionKa : product.mattress.descriptionEn
       : product.type === "PAD" && product.pad
       ? isGe ? product.pad.descriptionKa : product.pad.descriptionEn
+      : product.type === "QUILT" && product.quilt
+      ? isGe
+        ? (product.quilt as { descriptionKa?: string }).descriptionKa
+        : (product.quilt as { descriptionEn?: string }).descriptionEn
+      : product.type === "FURNITURE" && furniture
+      ? isGe ? furniture.descriptionKa : furniture.descriptionEn
       : null;
+
+  const furnitureInfo = furniture
+      ? [
+          ...(description
+            ? [{ title: isGe ? "აღწერა" : "Description", rows: [{ label: "", value: description }] }]
+            : []),
+          ...toFurnitureInfoDisplay(parseFurnitureInfo(furniture.infoSections), isGe),
+        ]
+      : [];
 
   const activeFeatures = (product.type === "PAD" || product.type === "MATTRESS")
     ? ALL_FEATURES.filter((feature) => getFeatureValue(feature.key))
@@ -265,7 +314,7 @@ const DetailPage = async(props: {
 
   return (
     <section className="w-full bg-background">
-      <div className="container mx-auto px-4 lg:px-6 pt-24 lg:pt-28 pb-16 lg:pb-20">
+      <div className="container mx-auto px-4 lg:px-6 pt-32 lg:pt-36 pb-16 lg:pb-20">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           <div className="lg:sticky lg:top-28">
             <ProductImages images={product.images} />
@@ -329,6 +378,10 @@ const DetailPage = async(props: {
               <QuiltSizePicker sizes={sizeOptions} isGe={isGe} />
             ) : null}
 
+            {furnitureInfo.length > 0 ? (
+              <FurnitureInfoAccordion sections={furnitureInfo} isGe={isGe} />
+            ) : null}
+
             {specRows.length > 0 ? (
               <div className="elevated-card divide-y divide-border overflow-hidden">
                 {specRows.map(({ label, value }) => (
@@ -340,12 +393,23 @@ const DetailPage = async(props: {
               </div>
             ) : null}
 
-            {(activeFeatures.length > 0 || assignedFeatures.length > 0) && (
+            {(activeFeatures.length > 0 || assignedFeatures.length > 0 || quiltSpecCards.length > 0) && (
               <div className="space-y-3">
                 <h3 className="text-sm font-semibold text-foreground">
                   {isGe ? "მახასიათებლები" : "Features"}
                 </h3>
                 <div className={cn("grid gap-2", isFlexMode ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2")}>
+                  {quiltSpecCards.map((item) => (
+                    <div
+                      key={item.label}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+                    >
+                      <div className="flex min-w-0 flex-col">
+                        <span className="text-xs text-muted-foreground">{item.label}</span>
+                        <span className="text-sm font-medium text-foreground leading-snug">{item.value}</span>
+                      </div>
+                    </div>
+                  ))}
                   {activeFeatures.map((feature, index) => (
                     <Link
                       key={`${feature.key}-${index}`}
@@ -406,7 +470,7 @@ const DetailPage = async(props: {
           </div>
         ) : null}
 
-        {description ? (
+        {description && product.type !== "FURNITURE" ? (
           <div className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center">
             <h2 className="section-heading-center">{isGe ? "აღწერა" : "Description"}</h2>
             <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">{description}</p>

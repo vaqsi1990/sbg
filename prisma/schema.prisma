@@ -29,6 +29,7 @@ enum ProductType {
   PILLOW
   QUILT
   PAD
+  FURNITURE
 }
 
 model Product {
@@ -45,6 +46,7 @@ model Product {
   mattress    Mattress?
   pillow      Pillow?
   quilt       Quilt?
+  furniture   Furniture?
   catalogItems ProductCatalogItem[]
     createdAt   DateTime @default(now()) @db.Timestamp(6)
   updatedAt   DateTime @updatedAt
@@ -162,11 +164,23 @@ model Quilt {
   product       Product  @relation(fields: [id], references: [id], onDelete: Cascade)
   size1         String?
   size2         String?
-  fabric        String
-  filling       String
-  fabricEn      String
-  fillingEn     String
-  weight        String
-  minitext      String
-  minitextEn    String
+  fabric        String   @default("")
+  filling       String   @default("")
+  fabricEn      String   @default("")
+  fillingEn     String   @default("")
+  weight        String   @default("")
+  minitext      String   @default("")
+  minitextEn    String   @default("")
+  descriptionKa String   @default("")
+  descriptionEn String   @default("")
+}
+
+model Furniture {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product         Product  @relation(fields: [id], references: [id], onDelete: Cascade)
+  descriptionKa   String?
+  descriptionEn   String?
+  size1           String?
+  size2           String?
+  infoSections    Json?
 }

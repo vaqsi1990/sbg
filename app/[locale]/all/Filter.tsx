@@ -8,7 +8,7 @@ const filterBtn =
 
 function Filter({ selectedCategory, setSelectedCategory }: FilterProps) {
   const t = useTranslations("products");
-  const categories: ProductType[] = ["MATTRESS", "PILLOW", "QUILT", "PAD"];
+  const categories: ProductType[] = ["MATTRESS", "PILLOW", "QUILT", "PAD", "FURNITURE"];
 
   const btnClass = (active: boolean) =>
     `${filterBtn} ${
