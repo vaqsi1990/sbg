@@ -72,6 +72,11 @@
     "energyLabel": "მზის ენერგია",
     "cta": "ჩვენს შესახებ"
   },
+  "video": {
+    "watch": "ვიდეოს ნახვა",
+    "title": "Sleep & Bed ვიდეო",
+    "thumbnailAlt": "Sleep & Bed შოურუმის ვიდეო"
+  },
   "contactinfo": {
     "address": "ქ.ბათუმი ა.პუშკინის 117  \nქ.ქუთაისი ი.ჭავჭავაძის 51",
     "contacts": "საკონტაქტო ინფორმაცია",

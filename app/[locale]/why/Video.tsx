@@ -1,33 +1,66 @@
-/* eslint-disable @next/next/no-img-element */
-"use client"
-import React, { useState } from 'react'
-import Image from 'next/image';
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { Play } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+const YOUTUBE_ID = "jfV1TpkrP7g";
+const THUMBNAIL =
+  "/carousel/408326498_360902273177384_5389513661708983494_n.jpg";
+
 function Video() {
-    const [isPlaying, setIsPlaying] = useState(false);
+  const t = useTranslations("video");
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
-    <div className="relative rounded-lg    w-full max-w-2xl mx-auto">
-    {!isPlaying ? (
-      <div
-        className="relative rounded-lg cursor-pointer"
-        onClick={() => setIsPlaying(true)}
-      >
-     
-        <Image height={300} width={300} 
-          src="/prod/408326498_360902273177384_5389513661708983494_n.jpg"
-          alt="Video Thumbnail"
-          className="w-full  rounded-lg shadow-lg"
-        />
+    <div className="mx-auto w-full max-w-4xl">
+      <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black/25 shadow-2xl ring-1 ring-white/10 focus-within:ring-2 focus-within:ring-white/70">
+        {isPlaying ? (
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1`}
+            title={t("title")}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsPlaying(true)}
+            className="group absolute inset-0 cursor-pointer focus-visible:outline-none"
+            aria-label={t("watch")}
+          >
+            <Image
+              src={THUMBNAIL}
+              alt={t("thumbnailAlt")}
+              fill
+              sizes="(max-width: 1024px) 100vw, 896px"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/10 transition-colors duration-300 group-hover:from-black/70" />
 
-
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white/95 text-brand flex items-center justify-center rounded-full shadow-xl transition-transform duration-200 hover:scale-110">
-          <span className="ml-1 text-xl">▶</span>
-        </div>
+            <span className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+              <span className="relative flex h-16 w-16 items-center justify-center lg:h-20 lg:w-20">
+                <span className="absolute -inset-2 rounded-full bg-white/15 ring-1 ring-white/25" />
+                <span className="relative flex h-full w-full items-center justify-center rounded-full bg-white text-brand shadow-2xl transition-transform duration-300 group-hover:scale-110">
+                  <Play
+                    className="ml-0.5 h-7 w-7 fill-current lg:h-8 lg:w-8"
+                    strokeWidth={1.5}
+                  />
+                </span>
+              </span>
+              <span className="rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium tracking-wide text-white backdrop-blur-md ring-1 ring-white/20 transition-colors duration-300 group-hover:bg-white/25">
+                {t("watch")}
+              </span>
+            </span>
+          </button>
+        )}
       </div>
-    ) : (
-      <iframe width="100%" height="450" src="https://www.youtube.com/embed/jfV1TpkrP7g?si=Q4WHYxYI240ARtt0" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-    )}
-  </div>
-  )
+    </div>
+  );
 }
 
-export default Video
+export default Video;

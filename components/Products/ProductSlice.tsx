@@ -17,7 +17,7 @@ export default function ProductSlice({ products }: { products: ProductType[] }) 
           <h2 className="section-heading">{t("ourProducts")}</h2>
           <Link
             href="/all"
-            className="inline-flex items-center gap-2 rounded-full bg-brand-chrome px-5 py-2.5 text-sm font-semibold uppercase tracking-wide text-white shadow-md transition-all hover:bg-brand-chrome/90 hover:shadow-lg shrink-0"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-chrome px-5 py-2.5 md:text-[18px] text-[16px] font-semibold uppercase tracking-wide text-white shadow-md transition-all hover:bg-brand-chrome/90 hover:shadow-lg shrink-0"
           >
             <span>{t("viewAll")}</span>
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.25} />
