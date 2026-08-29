@@ -38,27 +38,27 @@ export default function AdminLogin() {
       >
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold text-black">ადმინ პანელი</h1>
-          <p className="text-sm text-gray-500">შეიყვანეთ ადმინ პაროლი</p>
+          <p className="text-base text-gray-500">შეიყვანეთ ადმინ პაროლი</p>
         </div>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium text-black">პაროლი</span>
+          <span className="text-base font-medium text-black">პაროლი</span>
           <Input
             name="password"
             type="password"
             autoComplete="current-password"
             required
-            className="text-black border-gray-700"
+            className="h-11 text-base text-black border-gray-700 md:text-base"
             placeholder="პაროლი"
           />
         </label>
 
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-base text-red-600">{error}</p> : null}
 
         <Button
           type="submit"
           disabled={pending}
-          className="w-full cursor-pointer bg-[#203e72] text-white hover:bg-[#203e72]/90"
+          className="h-11 w-full cursor-pointer bg-[#203e72] text-base text-white hover:bg-[#203e72]/90"
         >
           {pending ? "შესვლა..." : "შესვლა"}
         </Button>

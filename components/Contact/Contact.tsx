@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -20,12 +20,14 @@ const LABELS = {
     email: "Email",
     hours: "Hours",
     openMap: "Open map",
+    subtitle: "Visit a showroom or get in touch",
   },
   ge: {
     phone: "ტელეფონი",
     email: "ელ-ფოსტა",
     hours: "სამუშაო საათები",
     openMap: "რუკის გახსნა",
+    subtitle: "ეწვიეთ შოურუმს ან დაგვიკავშირდით",
   },
 } as const;
 
@@ -34,6 +36,45 @@ function formatPhone(raw: string) {
     return `+995 ${raw.slice(4, 7)} ${raw.slice(7, 10)} ${raw.slice(10)}`;
   }
   return raw;
+}
+
+function ContactRow({
+  icon: Icon,
+  label,
+  href,
+  children,
+}: {
+  icon: typeof MapPin;
+  label: string;
+  href?: string;
+  children: ReactNode;
+}) {
+  const className =
+    "group flex items-start gap-4 rounded-2xl bg-white/6 p-4 ring-1 ring-white/10 transition duration-300 hover:bg-white/12 hover:ring-white/20 lg:p-5";
+
+  const body = (
+    <>
+      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15 transition duration-300 group-hover:bg-white/20">
+        <Icon className="h-6 w-6" strokeWidth={1.75} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="mb-2 block text-sm font-semibold uppercase tracking-[0.16em] text-white/55">
+          {label}
+        </span>
+        {children}
+      </span>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a href={href} className={className}>
+        {body}
+      </a>
+    );
+  }
+
+  return <div className={className}>{body}</div>;
 }
 
 function Contact() {
@@ -50,90 +91,75 @@ function Contact() {
     <section className="page-section">
       <div className="container mx-auto px-4 lg:px-6">
         <h2 className="section-heading-center">{t("contacts")}</h2>
+       
 
-        <div className="overflow-hidden rounded-3xl border border-border shadow-lg lg:grid lg:grid-cols-2 dark:border-white/10">
-          <div className="flex flex-col justify-center gap-2 bg-brand-chrome p-6 text-white lg:p-10">
-            <div className="flex items-start gap-4 rounded-2xl p-3 transition-colors hover:bg-white/8">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
-                <MapPin className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <div>
-                <p className="mb-1 text-xs font-medium uppercase tracking-wider text-white/55">
-                  Sleep &amp; Bed
-                </p>
-                <div className="space-y-1 text-sm leading-relaxed text-white/90 lg:text-base">
+        <div className="overflow-hidden rounded-3xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="relative flex flex-col justify-center gap-3 bg-brand-chrome p-6 text-white lg:p-10">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.12),transparent_55%)]"
+            />
+
+            <div className="relative space-y-3">
+              <ContactRow icon={MapPin} label="Sleep & Bed">
+                <span className="space-y-1 text-base leading-relaxed text-white/90 lg:text-lg">
                   {t("address")
                     .split("\n")
                     .map((line) => (
-                      <p key={line}>{line.trim()}</p>
+                      <span key={line} className="block">
+                        {line.trim()}
+                      </span>
                     ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 rounded-2xl p-3 transition-colors hover:bg-white/8">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
-                <Phone className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <div>
-                <p className="mb-1 text-xs font-medium uppercase tracking-wider text-white/55">
-                  {labels.phone}
-                </p>
-                <div className="space-y-3 text-sm leading-relaxed lg:text-base">
-                  {PHONES.map(({ city, numbers }) => (
-                    <div key={city}>
-                      <p className="capitalize text-white/55">{t(city)}</p>
-                      {numbers.map((number) => (
-                        <a
-                          key={number}
-                          href={`tel:${number}`}
-                          className="block text-white/90 transition hover:text-white hover:underline"
-                        >
-                          {formatPhone(number)}
-                        </a>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <a
-              href={`mailto:${EMAIL}`}
-              className="flex items-start gap-4 rounded-2xl p-3 transition-colors hover:bg-white/8"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
-                <Mail className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <span>
-                <span className="mb-1 block text-xs font-medium uppercase tracking-wider text-white/55">
-                  {labels.email}
                 </span>
-                <span className="text-sm text-white/90 lg:text-base">{EMAIL}</span>
-              </span>
-            </a>
+              </ContactRow>
 
-            <div className="flex items-start gap-4 rounded-2xl p-3">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
-                <Clock className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <div>
-                <p className="mb-1 text-xs font-medium uppercase tracking-wider text-white/55">
-                  {labels.hours}
-                </p>
-                <p className="text-sm text-white/90 lg:text-base">
+              <ContactRow icon={Phone} label={labels.phone}>
+                <span className="flex flex-col gap-3">
+                  {PHONES.map(({ city, numbers }) => (
+                    <span key={city} className="block">
+                      <span className="mb-1.5 block text-sm capitalize text-white/60">
+                        {t(city)}
+                      </span>
+                      <span className="flex flex-wrap gap-2">
+                        {numbers.map((number) => (
+                          <a
+                            key={number}
+                            href={`tel:${number}`}
+                            className="inline-flex rounded-full bg-white/10 px-3.5 py-2 text-base text-white/95 ring-1 ring-white/10 transition hover:bg-white hover:text-brand-chrome"
+                          >
+                            {formatPhone(number)}
+                          </a>
+                        ))}
+                      </span>
+                    </span>
+                  ))}
+                </span>
+              </ContactRow>
+
+              <ContactRow icon={Mail} label={labels.email} href={`mailto:${EMAIL}`}>
+                <span className="inline-flex items-center gap-1.5 text-base text-white/90 lg:text-lg">
+                  {EMAIL}
+                  <ArrowUpRight
+                    className="h-4 w-4 opacity-70 transition group-hover:opacity-100"
+                    strokeWidth={2.25}
+                  />
+                </span>
+              </ContactRow>
+
+              <ContactRow icon={Clock} label={labels.hours}>
+                <span className="text-base text-white/90 lg:text-lg">
                   {t("mondayToFriday")} 10:00 – 19:00
-                </p>
-              </div>
+                </span>
+              </ContactRow>
             </div>
           </div>
 
-          <div className="relative min-h-[320px] bg-muted lg:min-h-full">
+          <div className="relative min-h-[340px] bg-muted lg:min-h-[540px]">
             {isClient ? (
               <iframe
                 title="Sleep & Bed Georgia"
                 src={MAP_EMBED}
-                className="absolute inset-0 h-full w-full border-0 grayscale-[20%]"
+                className="absolute inset-0 h-full w-full border-0"
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -143,7 +169,7 @@ function Contact() {
               href={MAP_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-2 text-sm font-medium text-brand-chrome shadow-md backdrop-blur-sm transition hover:bg-white dark:bg-background/90 dark:text-foreground"
+              className="absolute bottom-5 right-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-base font-semibold text-brand-chrome shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl dark:bg-background dark:text-foreground"
             >
               {labels.openMap}
               <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.25} />

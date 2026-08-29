@@ -17,7 +17,7 @@ export default function AdminSwitch({
   const [activeComponent, setActiveComponent] = useState<"all" | "form" | "features">("all");
 
   const tabClass = (isActive: boolean) =>
-    `inline-flex cursor-pointer items-center rounded-md border px-5 py-3 transition ${
+    `inline-flex cursor-pointer items-center rounded-md border px-5 py-3 text-base transition ${
       isActive
         ? "border-brand-chrome bg-brand-chrome text-white"
         : "border-border bg-card text-foreground hover:border-brand-chrome hover:bg-brand-chrome hover:text-white"

@@ -81,11 +81,11 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
 
           <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/90 px-4 py-3 backdrop-blur">
             <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
-              <p className="truncate text-sm text-muted-foreground">{status || "შეავსე სექციები და დააჭირე შექმნას"}</p>
+              <p className="truncate text-base text-muted-foreground">{status || "შეავსე სექციები და დააჭირე შექმნას"}</p>
               <Button
                 type="submit"
                 disabled={pending}
-                className="cursor-pointer bg-brand-chrome px-6 text-white hover:bg-brand-chrome/90"
+                className="h-11 cursor-pointer bg-brand-chrome px-6 text-base text-white hover:bg-brand-chrome/90"
               >
                 {pending ? "ინახება..." : "შექმენი პროდუქტი"}
               </Button>

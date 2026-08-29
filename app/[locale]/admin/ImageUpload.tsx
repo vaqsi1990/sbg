@@ -49,8 +49,8 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
           appearance={{
             container: "w-full border-none bg-transparent p-0 shadow-none",
             uploadIcon: "h-14 w-14 text-brand-chrome dark:text-brand",
-            label: "mt-3 text-base font-semibold text-brand-chrome cursor-pointer hover:text-brand-chrome/80 dark:text-brand dark:hover:text-brand/80",
-            allowedContent: "mt-1 text-sm text-muted-foreground",
+            label: "mt-3 text-lg font-semibold text-brand-chrome cursor-pointer hover:text-brand-chrome/80 dark:text-brand dark:hover:text-brand/80",
+            allowedContent: "mt-1 text-base text-muted-foreground",
             button: "hidden",
           }}
           content={{
@@ -70,7 +70,7 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
 
       {imageUrls.length > 0 ? (
         <div className="space-y-2">
-          <h2 className="text-sm font-semibold text-foreground">
+          <h2 className="text-base font-semibold text-foreground">
             ატვირთული სურათები ({imageUrls.length}
             {maxFiles ? ` / ${maxFiles}` : ""})
           </h2>
@@ -97,7 +97,7 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
           </div>
         </div>
       ) : !canUploadMore ? (
-        <p className="text-center text-sm text-muted-foreground">სურათი ჯერ არ არის ატვირთული</p>
+        <p className="text-center text-base text-muted-foreground">სურათი ჯერ არ არის ატვირთული</p>
       ) : null}
     </div>
   );

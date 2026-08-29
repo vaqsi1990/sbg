@@ -128,13 +128,13 @@ export const typeToCategory = {
 } as const;
 
 export const inputClass =
-  "w-full bg-background text-foreground placeholder:text-muted-foreground border-border";
+  "h-11 w-full bg-background text-base text-foreground placeholder:text-muted-foreground border-border md:text-base";
 
 export const textareaClass =
-  "w-full min-h-28 resize-y rounded-xl border border-border bg-background p-3 text-sm text-foreground placeholder:text-muted-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
+  "w-full min-h-32 resize-y rounded-xl border border-border bg-background p-4 text-base text-foreground placeholder:text-muted-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
 const featureChipClass =
-  "flex cursor-pointer items-start gap-2 rounded-lg border border-border bg-background/60 px-3 py-2 text-sm text-foreground transition hover:border-brand-chrome hover:bg-muted/50";
+  "flex cursor-pointer items-start gap-2 rounded-lg border border-border bg-background/60 px-3 py-2.5 text-base text-foreground transition hover:border-brand-chrome hover:bg-muted/50";
 
 function FormSection({
   step,
@@ -150,12 +150,12 @@ function FormSection({
   return (
     <section className="space-y-4 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-sm dark:bg-muted/50 dark:shadow-none">
       <div className="flex items-start gap-3 border-b border-border pb-3">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-chrome text-xs font-semibold text-white">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-chrome text-sm font-semibold text-white">
           {step}
         </span>
         <div>
-          <h2 className="text-base font-semibold text-foreground">{title}</h2>
-          {hint ? <p className="text-sm text-muted-foreground">{hint}</p> : null}
+          <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+          {hint ? <p className="text-base text-muted-foreground">{hint}</p> : null}
         </div>
       </div>
       {children}
@@ -261,7 +261,7 @@ export default function ProductFormFields({
           name="type"
           render={({ field }) => (
             <FormItem className="max-w-sm">
-              <FormLabel>ტიპი</FormLabel>
+              <FormLabel className="text-base">ტიპი</FormLabel>
               <Select
                 value={field.value}
                 disabled={lockType}
@@ -280,10 +280,10 @@ export default function ProductFormFields({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="MATTRESS">მატრასი</SelectItem>
-                  <SelectItem value="PILLOW">ბალიში</SelectItem>
-                  <SelectItem value="PAD">ტოპერი</SelectItem>
-                  <SelectItem value="QUILT">საბანი</SelectItem>
+                  <SelectItem className="text-base" value="MATTRESS">მატრასი</SelectItem>
+                  <SelectItem className="text-base" value="PILLOW">ბალიში</SelectItem>
+                  <SelectItem className="text-base" value="PAD">ტოპერი</SelectItem>
+                  <SelectItem className="text-base" value="QUILT">საბანი</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -299,7 +299,7 @@ export default function ProductFormFields({
             name="titleKa"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>სათაური (KA)</FormLabel>
+                <FormLabel className="text-base">სათაური (KA)</FormLabel>
                 <FormControl>
                   <Input placeholder="სათაური ქართულად" {...field} className={inputClass} />
                 </FormControl>
@@ -312,7 +312,7 @@ export default function ProductFormFields({
             name="titleEn"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>სათაური (EN)</FormLabel>
+                <FormLabel className="text-base">სათაური (EN)</FormLabel>
                 <FormControl>
                   <Input placeholder="Title in English" {...field} className={inputClass} />
                 </FormControl>
@@ -325,7 +325,7 @@ export default function ProductFormFields({
             name="secondtext"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>მოკლე ტექსტი (KA)</FormLabel>
+                <FormLabel className="text-base">მოკლე ტექსტი (KA)</FormLabel>
                 <FormControl>
                   <textarea placeholder="მოკლე აღწერა ქართულად" {...field} className={textareaClass} />
                 </FormControl>
@@ -338,7 +338,7 @@ export default function ProductFormFields({
             name="secondtextEn"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>მოკლე ტექსტი (EN)</FormLabel>
+                <FormLabel className="text-base">მოკლე ტექსტი (EN)</FormLabel>
                 <FormControl>
                   <textarea placeholder="Short text in English" {...field} className={textareaClass} />
                 </FormControl>
@@ -368,19 +368,19 @@ export default function ProductFormFields({
         <>
           <FormSection step={4} title="აღწერები" hint="მარცხნივ ქართული, მარჯვნივ ინგლისური">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <label className="space-y-2 text-sm font-medium text-foreground">
+              <label className="space-y-2 text-base font-medium text-foreground">
                 სრული აღწერა (KA)
                 <textarea {...form.register("descriptionKa")} placeholder="აღწერა ქართულად" className={textareaClass} />
               </label>
-              <label className="space-y-2 text-sm font-medium text-foreground">
+              <label className="space-y-2 text-base font-medium text-foreground">
                 სრული აღწერა (EN)
                 <textarea {...form.register("descriptionEn")} placeholder="Description in English" className={textareaClass} />
               </label>
-              <label className="space-y-2 text-sm font-medium text-foreground">
+              <label className="space-y-2 text-base font-medium text-foreground">
                 დამატებითი ტექსტი (KA)
                 <textarea {...form.register("minitext")} placeholder="დამატებითი ტექსტი ქართულად" className={textareaClass} />
               </label>
-              <label className="space-y-2 text-sm font-medium text-foreground">
+              <label className="space-y-2 text-base font-medium text-foreground">
                 დამატებითი ტექსტი (EN)
                 <textarea {...form.register("minitextEn")} placeholder="Extra text in English" className={textareaClass} />
               </label>
@@ -390,7 +390,7 @@ export default function ProductFormFields({
           <FormSection step={5} title="ზომა და მახასიათებლები">
             <Link
               href="/admin/features"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-chrome px-4 py-3 text-sm font-medium text-white transition hover:bg-brand-chrome/90 sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-chrome px-4 py-3 text-base font-medium text-white transition hover:bg-brand-chrome/90 sm:w-auto"
             >
               + დაამატე ახალი ზომა ან მახასიათებელი
             </Link>
@@ -400,7 +400,7 @@ export default function ProductFormFields({
                 name="height"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>სიმაღლე</FormLabel>
+                    <FormLabel className="text-base">სიმაღლე</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
                         <SelectTrigger className={inputClass}>
@@ -409,7 +409,7 @@ export default function ProductFormFields({
                       </FormControl>
                       <SelectContent>
                         {mergedHeights.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem key={option.value} className="text-base" value={option.value}>
                             {option.text}
                           </SelectItem>
                         ))}
@@ -424,7 +424,7 @@ export default function ProductFormFields({
                 name="firmnessLevel"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>სიმაგრის დონე (0–5)</FormLabel>
+                    <FormLabel className="text-base">სიმაგრის დონე (0–5)</FormLabel>
                     <Select
                       value={field.value !== undefined ? String(field.value) : undefined}
                       onValueChange={(v) => field.onChange(Number(v))}
@@ -435,9 +435,9 @@ export default function ProductFormFields({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="0">0</SelectItem>
+                        <SelectItem className="text-base" value="0">0</SelectItem>
                         {[1, 2, 3, 4, 5].map((n) => (
-                          <SelectItem key={n} value={String(n)}>
+                          <SelectItem key={n} className="text-base" value={String(n)}>
                             {n}
                           </SelectItem>
                         ))}
@@ -451,7 +451,7 @@ export default function ProductFormFields({
             <FeatureGrid options={mattressCheckboxOptions} control={form.control} catalogItems={catalogItems} />
             {extraFeatures.length > 0 ? (
               <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">დამატებული მახასიათებლები</p>
+                <p className="text-base font-medium text-foreground">დამატებული მახასიათებლები</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   {extraFeatures.map((item) => (
                     <label
@@ -504,7 +504,7 @@ export default function ProductFormFields({
           <FormSection step={4} title="ტოპერის მახასიათებლები">
             <Link
               href="/admin/features"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-chrome px-4 py-3 text-sm font-medium text-white transition hover:bg-brand-chrome/90 sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-chrome px-4 py-3 text-base font-medium text-white transition hover:bg-brand-chrome/90 sm:w-auto"
             >
               + დაამატე ახალი ზომა ან მახასიათებელი
             </Link>
@@ -516,7 +516,7 @@ export default function ProductFormFields({
                 name="height"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>სიმაღლე</FormLabel>
+                    <FormLabel className="text-base">სიმაღლე</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
                         <SelectTrigger className={inputClass}>
@@ -525,7 +525,7 @@ export default function ProductFormFields({
                       </FormControl>
                       <SelectContent>
                         {mergedHeights.map((option) => (
-                          <SelectItem key={option.value} className="rounded-2xl" value={option.value}>
+                          <SelectItem key={option.value} className="rounded-2xl text-base" value={option.value}>
                             {option.text}
                           </SelectItem>
                         ))}
@@ -539,7 +539,7 @@ export default function ProductFormFields({
             <FeatureGrid options={padCheckboxOptions} control={form.control} catalogItems={catalogItems} />
             {extraFeatures.length > 0 ? (
               <div className="space-y-2">
-                <p className="text-sm font-medium text-foreground">დამატებული მახასიათებლები</p>
+                <p className="text-base font-medium text-foreground">დამატებული მახასიათებლები</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   {extraFeatures.map((item) => (
                     <label

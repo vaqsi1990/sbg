@@ -99,41 +99,41 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
         onSubmit={onSubmit}
         className="space-y-4 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-sm dark:bg-muted/50 dark:shadow-none"
       >
-        <h1 className="text-xl font-semibold text-foreground">
+        <h1 className="text-2xl font-semibold text-foreground">
           {editingId ? "მახასიათებლის რედაქტირება" : "ახალი ზომა ან მახასიათებელი"}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           {editingId
             ? "შეცვალე სახელი ან სურათი და დააჭირე შენახვას. ძველი მახასიათებლების სახელი/სურათი საიტზეც განახლდება."
             : "ძველი მახასიათებლებიც აქ ჩანს. დააჭირე რედაქტირებას სახელის ან სურათის შესაცვლელად, ან დაამატე ახალი."}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <label className="space-y-2 text-sm font-medium text-foreground">
+          <label className="space-y-2 text-base font-medium text-foreground">
             ტიპი
             <Select
               value={kind}
               onValueChange={(value) => setKind(value as CatalogKind)}
               disabled={Boolean(editingId)}
             >
-              <SelectTrigger className="w-full border-border bg-background text-foreground">
+              <SelectTrigger className="h-11 w-full border-border bg-background text-base text-foreground">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="FEATURE">მახასიათებელი</SelectItem>
-                <SelectItem value="HEIGHT">სიმაღლე / ზომა</SelectItem>
+                <SelectItem className="text-base" value="FEATURE">მახასიათებელი</SelectItem>
+                <SelectItem className="text-base" value="HEIGHT">სიმაღლე / ზომა</SelectItem>
               </SelectContent>
             </Select>
           </label>
 
           {kind === "HEIGHT" ? (
-            <label className="space-y-2 text-sm font-medium text-foreground">
+            <label className="space-y-2 text-base font-medium text-foreground">
               სიმაღლე (სმ)
               <Input
                 value={slug}
                 onChange={(event) => setSlug(event.target.value)}
                 placeholder="მაგ. 35"
-                className="border-border bg-background text-foreground placeholder:text-muted-foreground"
+                className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
                 required
               />
             </label>
@@ -141,30 +141,30 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
             <div />
           )}
 
-          <label className="space-y-2 text-sm font-medium text-foreground">
+          <label className="space-y-2 text-base font-medium text-foreground">
             სახელი (KA)
             <Input
               value={labelKa}
               onChange={(event) => setLabelKa(event.target.value)}
               placeholder="მაგ. რბილი კომფორტის ფენა"
-              className="border-border bg-background text-foreground placeholder:text-muted-foreground"
+              className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
               required
             />
           </label>
-          <label className="space-y-2 text-sm font-medium text-foreground">
+          <label className="space-y-2 text-base font-medium text-foreground">
             სახელი (EN)
             <Input
               value={labelEn}
               onChange={(event) => setLabelEn(event.target.value)}
               placeholder="e.g. Soft Comfort Layer"
-              className="border-border bg-background text-foreground placeholder:text-muted-foreground"
+              className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
               required
             />
           </label>
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-medium text-foreground">სურათი</p>
+          <p className="mb-2 text-base font-medium text-foreground">სურათი</p>
           <ImageUpload
             key={`${editingId ?? "new"}-${image || "empty"}`}
             value={image ? [image] : []}
@@ -173,13 +173,13 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
           />
         </div>
 
-        {message ? <p className="text-sm text-brand">{message}</p> : null}
+        {message ? <p className="text-base text-brand">{message}</p> : null}
 
         <div className="flex flex-wrap gap-3">
           <Button
             type="submit"
             disabled={pending}
-            className="cursor-pointer bg-brand-chrome text-white hover:bg-brand-chrome/90"
+            className="h-11 cursor-pointer bg-brand-chrome text-base text-white hover:bg-brand-chrome/90"
           >
             {pending ? "ინახება..." : editingId ? "შენახვა" : "დამატება"}
           </Button>
@@ -220,7 +220,7 @@ function ItemList({
   onDelete: (id: string) => void;
 }) {
   if (!items.length) {
-    return <p className="text-sm text-muted-foreground">ჯერ არ არის დამატებული</p>;
+    return <p className="text-base text-muted-foreground">ჯერ არ არის დამატებული</p>;
   }
 
   return (
@@ -244,14 +244,14 @@ function ItemList({
             />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate font-medium text-foreground">{item.labelKa}</p>
-            <p className="truncate text-sm text-muted-foreground">{item.labelEn}</p>
+            <p className="truncate text-base font-medium text-foreground">{item.labelKa}</p>
+            <p className="truncate text-base text-muted-foreground">{item.labelEn}</p>
           </div>
           <div className="flex flex-col gap-1">
             <button
               type="button"
               onClick={() => onEdit(item)}
-              className="text-sm text-brand hover:underline"
+              className="text-base text-brand hover:underline"
             >
               რედაქტირება
             </button>
@@ -259,7 +259,7 @@ function ItemList({
             <button
               type="button"
               onClick={() => onDelete(item.id)}
-              className="text-sm text-destructive hover:underline"
+              className="text-base text-destructive hover:underline"
             >
               წაშლა
             </button>
