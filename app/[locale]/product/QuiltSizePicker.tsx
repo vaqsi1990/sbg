@@ -18,22 +18,22 @@ export default function QuiltSizePicker({ sizes, isGe }: QuiltSizePickerProps) {
 
   if (sizes.length === 1) {
     return (
-      <div className="elevated-card flex items-center gap-4 px-4 py-3">
+      <div className="elevated-card flex items-center justify-between gap-4 px-4 py-3.5">
         <span className="shrink-0 text-base font-medium text-foreground">
           {isGe ? "ზომა" : "Size"}
         </span>
-        <span className="text-base font-medium text-foreground">{sizes[0]}</span>
+        <span className="text-base font-semibold text-foreground">{sizes[0]}</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="elevated-card flex items-center gap-4 px-4 py-3">
       <label className="shrink-0 text-base font-medium text-foreground">
         {isGe ? "ზომა" : "Size"}
       </label>
       <Select defaultValue={sizes[0]}>
-        <SelectTrigger className="w-full max-w-xs rounded-xl border-border bg-card text-base font-medium text-foreground">
+        <SelectTrigger className="h-11 w-full rounded-xl border-border bg-background text-base font-medium text-foreground">
           <SelectValue placeholder={isGe ? "აირჩიე ზომა" : "Choose size"} />
         </SelectTrigger>
         <SelectContent className="rounded-xl">

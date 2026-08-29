@@ -8,6 +8,7 @@ import ProductCarousel from '../ProductCarousel';
 import { getAllProduct } from '@/lib/actions/actions';
 import { getCatalogItems } from '@/lib/actions/catalog';
 import QuiltSizePicker from '../QuiltSizePicker';
+import QuiltSpecs from '../QuiltSpecs';
 import FurnitureInfoAccordion from '../FurnitureInfoAccordion';
 import FurnitureHighlights from '../FurnitureHighlights';
 import { parseFurnitureInfo, toFurnitureInfoDisplay } from '@/lib/furniture-info';
@@ -91,7 +92,7 @@ const DetailPage = async(props: {
 
   if (!product) {
     return (
-      <div className="container mx-auto px-4 pt-32 pb-16 text-center">
+      <div className="container mx-auto px-4 pt-40 lg:pt-48 pb-16 text-center">
         <p className="text-lg font-semibold text-foreground">Product not found</p>
       </div>
     );
@@ -247,7 +248,7 @@ const DetailPage = async(props: {
       : product.type === "PILLOW"
       ? isGe ? "ბალიში" : "Pillow"
       : product.type === "QUILT"
-      ? isGe ? "საბნელი" : "Quilt"
+      ? isGe ? "საბანი" : "Duvet"
       : product.type === "FURNITURE"
       ? isGe ? "ავეჯი" : "Furniture"
       : isGe ? "ტოპერი" : "Topper";
@@ -267,28 +268,15 @@ const DetailPage = async(props: {
             care?: string;
             careEn?: string;
           };
+          const pick = (ka?: string | null, en?: string | null) =>
+            ((isGe ? ka : en) || ka || en || "").trim();
           return [
-            {
-              label: isGe ? "ქსოვილი" : "Fabric",
-              value: (isGe ? quilt.fabric : quilt.fabricEn) || quilt.fabric || quilt.fabricEn,
-            },
-            {
-              label: isGe ? "შევსება" : "Filling",
-              value: (isGe ? quilt.filling : quilt.fillingEn) || quilt.filling || quilt.fillingEn,
-            },
-            {
-              label: isGe ? "წონა" : "Weight",
-              value: quilt.weight,
-            },
-            {
-              label: isGe ? "შეფუთვა" : "Packaging",
-              value: (isGe ? quilt.packaging : quilt.packagingEn) || quilt.packaging || quilt.packagingEn,
-            },
-            {
-              label: isGe ? "მოვლა" : "Care",
-              value: (isGe ? quilt.care : quilt.careEn) || quilt.care || quilt.careEn,
-            },
-          ].filter((item) => Boolean(item.value?.trim()));
+            { key: "fabric", label: isGe ? "ქსოვილი" : "Fabric", value: pick(quilt.fabric, quilt.fabricEn) },
+            { key: "filling", label: isGe ? "შევსება" : "Filling", value: pick(quilt.filling, quilt.fillingEn) },
+            { key: "weight", label: isGe ? "წონა" : "Weight", value: (quilt.weight ?? "").trim() },
+            { key: "packaging", label: isGe ? "შეფუთვა" : "Packaging", value: pick(quilt.packaging, quilt.packagingEn) },
+            { key: "care", label: isGe ? "მოვლა" : "Care", value: pick(quilt.care, quilt.careEn) },
+          ].filter((item) => Boolean(item.value));
         })()
       : [];
 
@@ -303,7 +291,7 @@ const DetailPage = async(props: {
       ? null
       : isGe ? product.mattress?.minitext : product.mattress?.minitextEn;
 
-  const description =
+  const description = (
     product.type === "MATTRESS" && product.mattress
       ? isGe ? product.mattress.descriptionKa : product.mattress.descriptionEn
       : product.type === "PAD" && product.pad
@@ -314,7 +302,8 @@ const DetailPage = async(props: {
         : (product.quilt as { descriptionEn?: string }).descriptionEn
       : product.type === "FURNITURE" && furniture
       ? isGe ? furniture.descriptionKa : furniture.descriptionEn
-      : null;
+      : null
+  )?.trim() || null;
 
   const furnitureInfo = furniture
       ? [
@@ -331,10 +320,10 @@ const DetailPage = async(props: {
 
   return (
     <section className="w-full bg-background">
-      <div className="container mx-auto px-4 lg:px-6 pt-32 lg:pt-36 pb-16 lg:pb-20">
+      <div className="container mx-auto px-4 lg:px-6 pt-40 lg:pt-48 pb-16 lg:pb-20">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           <div>
-            <div className="lg:sticky lg:top-32">
+            <div className="lg:sticky lg:top-40">
               <ProductImages images={product.images} />
             </div>
             {product.type === "FURNITURE" ? <FurnitureHighlights isGe={isGe} /> : null}
@@ -355,7 +344,7 @@ const DetailPage = async(props: {
 
             {firmnessLevel !== null && (
               <div className="elevated-card p-5 lg:p-6 space-y-4">
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className="md:text-[18px] text-[16px] font-semibold text-foreground">
                   {isGe ? "მატრასის სიმაგრე" : "Mattress Firmness Level"}
                 </h3>
                 <div className="relative flex items-center justify-between px-1">
@@ -390,7 +379,7 @@ const DetailPage = async(props: {
               </div>
             )}
 
-            {minitext ? (
+            {minitext && minitext !== second ? (
               <p className="text-[15px] lg:text-base text-muted-foreground leading-relaxed">{minitext}</p>
             ) : null}
 
@@ -415,63 +404,78 @@ const DetailPage = async(props: {
 
             {(activeFeatures.length > 0 || assignedFeatures.length > 0 || quiltSpecCards.length > 0) && (
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className="md:text-[18px] text-[16px] font-semibold text-foreground">
                   {isGe ? "მახასიათებლები" : "Features"}
                 </h3>
-                <div className={cn("grid gap-2", isFlexMode ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2")}>
-                  {quiltSpecCards.map((item) => (
-                    <div
-                      key={item.label}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
-                    >
-                      <div className="flex min-w-0 flex-col">
-                        <span className="text-xs text-muted-foreground">{item.label}</span>
-                        <span className="text-sm font-medium text-foreground leading-snug">{item.value}</span>
-                      </div>
-                    </div>
-                  ))}
-                  {activeFeatures.map((feature, index) => (
-                    <Link
-                      key={`${feature.key}-${index}`}
-                      href={feature.href}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
-                    >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
-                        <Image
-                          src={feature.logo}
-                          alt=""
-                          width={36}
-                          height={36}
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-                      <span className="text-sm font-medium text-foreground leading-snug">
-                        {isGe ? feature.label : feature.labelEn}
-                      </span>
-                    </Link>
-                  ))}
-                  {assignedFeatures.map((item) => (
-                    <Link
-                      key={item.id}
-                      href={`/feature/${item.slug}`}
-                      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
-                    >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
-                        <Image
-                          src={item.image}
-                          alt={item.labelEn}
-                          width={36}
-                          height={36}
-                          className="h-full w-full object-contain"
-                          unoptimized={item.image.startsWith("http")}
-                        />
-                      </div>
-                      <span className="text-sm font-medium text-foreground leading-snug">
-                        {isGe ? item.labelKa : item.labelEn}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+                {product.type === "QUILT" ? (
+                  <QuiltSpecs items={quiltSpecCards}>
+                    {assignedFeatures.map((item) => (
+                      <Link
+                        key={item.id}
+                        href={`/feature/${item.slug}`}
+                        className="flex min-h-[88px] items-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:bg-muted/50"
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                          <Image
+                            src={item.image}
+                            alt={item.labelEn}
+                            width={36}
+                            height={36}
+                            className="h-full w-full object-contain"
+                            unoptimized={item.image.startsWith("http")}
+                          />
+                        </div>
+                        <span className="text-sm sm:text-base font-semibold text-foreground leading-snug">
+                          {isGe ? item.labelKa : item.labelEn}
+                        </span>
+                      </Link>
+                    ))}
+                  </QuiltSpecs>
+                ) : (
+                  <div className={cn("grid gap-3", isFlexMode ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2")}>
+                    {activeFeatures.map((feature, index) => (
+                      <Link
+                        key={`${feature.key}-${index}`}
+                        href={feature.href}
+                        className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                          <Image
+                            src={feature.logo}
+                            alt=""
+                            width={36}
+                            height={36}
+                            className="h-full w-full object-contain"
+                          />
+                        </div>
+                        <span className="text-sm font-medium text-foreground leading-snug">
+                          {isGe ? feature.label : feature.labelEn}
+                        </span>
+                      </Link>
+                    ))}
+                    {assignedFeatures.map((item) => (
+                      <Link
+                        key={item.id}
+                        href={`/feature/${item.slug}`}
+                        className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/50"
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-muted/60 p-1.5">
+                          <Image
+                            src={item.image}
+                            alt={item.labelEn}
+                            width={36}
+                            height={36}
+                            className="h-full w-full object-contain"
+                            unoptimized={item.image.startsWith("http")}
+                          />
+                        </div>
+                        <span className="text-sm font-medium text-foreground leading-snug">
+                          {isGe ? item.labelKa : item.labelEn}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -490,7 +494,7 @@ const DetailPage = async(props: {
           </div>
         ) : null}
 
-        {description && product.type !== "FURNITURE" ? (
+        {description && product.type !== "FURNITURE" && description !== second?.trim() ? (
           <div className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center">
             <h2 className="section-heading-center">{isGe ? "აღწერა" : "Description"}</h2>
             <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">{description}</p>
