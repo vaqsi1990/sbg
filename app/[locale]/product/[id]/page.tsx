@@ -9,6 +9,7 @@ import { getAllProduct } from '@/lib/actions/actions';
 import { getCatalogItems } from '@/lib/actions/catalog';
 import QuiltSizePicker from '../QuiltSizePicker';
 import FurnitureInfoAccordion from '../FurnitureInfoAccordion';
+import FurnitureHighlights from '../FurnitureHighlights';
 import { parseFurnitureInfo, toFurnitureInfoDisplay } from '@/lib/furniture-info';
 import { cn } from '@/lib/utils';
 type Feature = {
@@ -332,8 +333,11 @@ const DetailPage = async(props: {
     <section className="w-full bg-background">
       <div className="container mx-auto px-4 lg:px-6 pt-32 lg:pt-36 pb-16 lg:pb-20">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-          <div className="lg:sticky lg:top-28">
-            <ProductImages images={product.images} />
+          <div>
+            <div className="lg:sticky lg:top-32">
+              <ProductImages images={product.images} />
+            </div>
+            {product.type === "FURNITURE" ? <FurnitureHighlights isGe={isGe} /> : null}
           </div>
 
           <div className="flex flex-col gap-6 lg:gap-8">
