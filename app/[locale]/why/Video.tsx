@@ -10,7 +10,7 @@ const THUMBNAIL =
   "/carousel/408326498_360902273177384_5389513661708983494_n.jpg";
 
 function Video() {
-  const t = useTranslations("video");
+  const t = useTranslations("infopage");
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ function Video() {
           <iframe
             className="absolute inset-0 h-full w-full"
             src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0&modestbranding=1`}
-            title={t("title")}
+            title={t("videoTitle")}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
@@ -30,11 +30,11 @@ function Video() {
             type="button"
             onClick={() => setIsPlaying(true)}
             className="group absolute inset-0 cursor-pointer focus-visible:outline-none"
-            aria-label={t("watch")}
+            aria-label={t("videoWatch")}
           >
             <Image
               src={THUMBNAIL}
-              alt={t("thumbnailAlt")}
+              alt={t("videoThumbnailAlt")}
               fill
               sizes="(max-width: 1024px) 100vw, 896px"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -53,7 +53,7 @@ function Video() {
                 </span>
               </span>
               <span className="rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium tracking-wide text-white backdrop-blur-md ring-1 ring-white/20 transition-colors duration-300 group-hover:bg-white/25">
-                {t("watch")}
+                {t("videoWatch")}
               </span>
             </span>
           </button>

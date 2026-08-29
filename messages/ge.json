@@ -70,12 +70,10 @@
     "continentsLabel": "კონტინენტი",
     "energy": "100%",
     "energyLabel": "მზის ენერგია",
-    "cta": "ჩვენს შესახებ"
-  },
-  "video": {
-    "watch": "ვიდეოს ნახვა",
-    "title": "Sleep & Bed ვიდეო",
-    "thumbnailAlt": "Sleep & Bed შოურუმის ვიდეო"
+    "cta": "ჩვენს შესახებ",
+    "videoWatch": "ვიდეოს ნახვა",
+    "videoTitle": "Sleep & Bed ვიდეო",
+    "videoThumbnailAlt": "Sleep & Bed შოურუმის ვიდეო"
   },
   "contactinfo": {
     "address": "ქ.ბათუმი ა.პუშკინის 117  \nქ.ქუთაისი ი.ჭავჭავაძის 51",

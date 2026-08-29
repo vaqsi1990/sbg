@@ -19,12 +19,10 @@
     "continentsLabel": "Continents",
     "energy": "100%",
     "energyLabel": "Solar powered",
-    "cta": "About us"
-  },
-  "video": {
-    "watch": "Watch video",
-    "title": "Sleep & Bed video",
-    "thumbnailAlt": "Sleep & Bed showroom video"
+    "cta": "About us",
+    "videoWatch": "Watch video",
+    "videoTitle": "Sleep & Bed video",
+    "videoThumbnailAlt": "Sleep & Bed showroom video"
   },
   "contactinfo": {
     "address": "Batumi: A. Pushkin 117 \nKutaisi: I. Chavchavadze 51",
