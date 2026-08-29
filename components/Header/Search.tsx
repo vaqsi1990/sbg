@@ -7,11 +7,16 @@ import { useEffect, useState } from "react";
 import { SearchIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 
-export default function SearchComponent() {
+type SearchProps = {
+  variant?: "header" | "menu";
+};
+
+export default function SearchComponent({ variant = "header" }: SearchProps) {
   const searchParams = useSearchParams();
   const { replace, push } = useRouter();
   const pathname = usePathname();
-  const locale = useLocale(); // მოაქვს მიმდინარე ენა: "ge" ან "en"
+  const locale = useLocale();
+  const isMenu = variant === "menu";
 
   const [query, setQuery] = useState(searchParams.get("query") || "");
 
@@ -40,7 +45,7 @@ export default function SearchComponent() {
   }, 300);
 
   return (
-    <div className="relative w-44 lg:w-52">
+    <div className={isMenu ? "relative w-full" : "relative w-44 lg:w-52"}>
       <Input
         type="text"
         placeholder="Search"
@@ -49,9 +54,17 @@ export default function SearchComponent() {
           setQuery(e.target.value);
           handleSearch(e.target.value);
         }}
-        className="h-9 pl-9 pr-3 text-sm bg-white/10 border-white/20 text-white placeholder:text-white/50 rounded-full backdrop-blur-sm focus-visible:ring-white/30"
+        className={
+          isMenu
+            ? "h-10 pl-9 pr-3 text-sm bg-background border-border text-foreground placeholder:text-muted-foreground rounded-full"
+            : "h-9 pl-9 pr-3 text-sm bg-white/10 border-white/20 text-white placeholder:text-white/50 rounded-full backdrop-blur-sm focus-visible:ring-white/30"
+        }
       />
-      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+      <span
+        className={`absolute left-3 top-1/2 -translate-y-1/2 ${
+          isMenu ? "text-muted-foreground" : "text-white/50"
+        }`}
+      >
         <SearchIcon className="w-4 h-4" />
       </span>
     </div>

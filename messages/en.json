@@ -10,9 +10,16 @@
     "collection": "Sleep & Bed Full Collection ENG"
   },
   "infopage":{
-
     "Infoheading": "Ensure your peaceful sleep",
-    "Infoparagraph": "Currently, Sleep & Bed exports to more than 25 countries and 7 continents. The facility features an eco-friendly energy production system. Sleep & Bed facilities generate their own energy using solar panel systems and rely exclusively on eco-friendly and renewable energy sources."
+    "Infoparagraph": "Currently, Sleep & Bed exports to more than 25 countries and 7 continents. The facility features an eco-friendly energy production system. Sleep & Bed facilities generate their own energy using solar panel systems and rely exclusively on eco-friendly and renewable energy sources.",
+    "imageAlt": "Prestige Plus mattress from Sleep & Bed",
+    "countries": "25+",
+    "countriesLabel": "Countries",
+    "continents": "7",
+    "continentsLabel": "Continents",
+    "energy": "100%",
+    "energyLabel": "Solar powered",
+    "cta": "About us"
   },
   "contactinfo": {
     "address": "Batumi: A. Pushkin 117 \nKutaisi: I. Chavchavadze 51",
@@ -35,7 +42,8 @@
     "catalogue": "Catalogue",
     "aboutUs": "About Us",
     "whySleepAndBed": "Why Sleep & Bed?",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "menu": "Menu"
   },
   "products": {
   "all": "all",
