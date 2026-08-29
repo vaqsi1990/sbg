@@ -38,13 +38,19 @@ const HIGHLIGHTS = [
 
 export default function FurnitureHighlights({ isGe }: { isGe: boolean }) {
   return (
-    <div className="mt-6 space-y-4">
-      {HIGHLIGHTS.map((item) => {
+    <div className="grid gap-3 sm:gap-4 lg:grid-cols-2 lg:grid-rows-2 lg:h-[min(72vh,680px)]">
+      {HIGHLIGHTS.map((item, index) => {
         const copy = isGe ? item.ge : item.en;
+        const isHero = index === 0;
+
         return (
-          <div
+          <article
             key={item.src}
-            className="relative overflow-hidden rounded-2xl bg-muted/60 aspect-[16/10]"
+            className={
+              isHero
+                ? "relative isolate min-h-[280px] overflow-hidden rounded-2xl sm:rounded-3xl lg:row-span-2 lg:min-h-0"
+                : "relative isolate min-h-[220px] overflow-hidden rounded-2xl sm:rounded-3xl lg:min-h-0"
+            }
           >
             <Image
               src={item.src}
@@ -53,16 +59,29 @@ export default function FurnitureHighlights({ isGe }: { isGe: boolean }) {
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" />
-            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-              <h3 className="text-base sm:text-lg font-semibold text-white leading-snug">
+            <div className="absolute inset-0 bg-black/45" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-black/25" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-8 text-center sm:px-10 lg:px-12">
+              <h3
+                className={
+                  isHero
+                    ? "max-w-md text-xl font-semibold leading-snug text-white sm:text-2xl lg:text-[28px]"
+                    : "max-w-sm text-lg font-semibold leading-snug text-white sm:text-xl"
+                }
+              >
                 {copy.title}
               </h3>
-              <p className="mt-1.5 text-sm sm:text-[15px] text-white/90 leading-relaxed">
+              <p
+                className={
+                  isHero
+                    ? "mt-3 max-w-md text-sm leading-relaxed text-white/90 sm:text-base"
+                    : "mt-2 max-w-sm text-sm leading-relaxed text-white/90"
+                }
+              >
                 {copy.text}
               </p>
             </div>
-          </div>
+          </article>
         );
       })}
     </div>

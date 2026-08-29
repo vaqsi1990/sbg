@@ -327,12 +327,11 @@ const DetailPage = async(props: {
             <div className="lg:sticky lg:top-40">
               <ProductImages images={product.images} />
             </div>
-            {product.type === "FURNITURE" ? <FurnitureHighlights isGe={isGe} /> : null}
           </div>
 
           <div className="flex flex-col gap-6 lg:gap-8">
             <div className="space-y-4">
-              <span className="inline-flex items-center rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand">
+              <span className="inline-flex items-center rounded-full bg-brand/10 px-3 py-1 md:text-[18px] text-[16px] font-semibold uppercase tracking-wider text-brand">
                 {typeLabel}
               </span>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground leading-tight">
@@ -473,6 +472,12 @@ const DetailPage = async(props: {
           <div className="mt-12 lg:mt-16 max-w-3xl mx-auto text-center">
             <h2 className="section-heading-center">{isGe ? "აღწერა" : "Description"}</h2>
             <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">{description}</p>
+          </div>
+        ) : null}
+
+        {product.type === "FURNITURE" ? (
+          <div className="mt-12 lg:mt-16">
+            <FurnitureHighlights isGe={isGe} />
           </div>
         ) : null}
 
