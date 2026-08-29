@@ -147,6 +147,10 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             minitextEn: parsed.minitextEn,
             descriptionKa: parsed.descriptionKa,
             descriptionEn: parsed.descriptionEn,
+            packaging: parsed.packaging ?? "",
+            packagingEn: parsed.packagingEn ?? "",
+            care: parsed.care ?? "",
+            careEn: parsed.careEn ?? "",
           } as never,
         });
 
@@ -517,6 +521,10 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           minitextEn:product.minitextEn,
           descriptionKa: product.descriptionKa ?? "",
           descriptionEn: product.descriptionEn ?? "",
+          packaging: product.packaging ?? "",
+          packagingEn: product.packagingEn ?? "",
+          care: product.care ?? "",
+          careEn: product.careEn ?? "",
         } as never,
       });
     } else if (product.type === "FURNITURE") {

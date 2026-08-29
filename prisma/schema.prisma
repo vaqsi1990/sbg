@@ -173,6 +173,10 @@ model Quilt {
   minitextEn    String   @default("")
   descriptionKa String   @default("")
   descriptionEn String   @default("")
+  packaging     String   @default("")
+  packagingEn   String   @default("")
+  care          String   @default("")
+  careEn        String   @default("")
 }
 
 model Furniture {

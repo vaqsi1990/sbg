@@ -128,6 +128,10 @@ export const QuiltSchema = z.object({
   minitextEn: z.string(),
   descriptionKa: z.string(),
   descriptionEn: z.string(),
+  packaging: optionalTrimmedString,
+  packagingEn: optionalTrimmedString,
+  care: optionalTrimmedString,
+  careEn: optionalTrimmedString,
 });
 
 export const FurnitureSchema = z.object({

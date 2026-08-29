@@ -259,20 +259,36 @@ const DetailPage = async(props: {
 
   const quiltSpecCards =
     product.type === "QUILT" && product.quilt
-      ? [
-          {
-            label: isGe ? "ქსოვილი" : "Fabric",
-            value: (isGe ? product.quilt.fabric : product.quilt.fabricEn) || product.quilt.fabric || product.quilt.fabricEn,
-          },
-          {
-            label: isGe ? "შევსება" : "Filling",
-            value: (isGe ? product.quilt.filling : product.quilt.fillingEn) || product.quilt.filling || product.quilt.fillingEn,
-          },
-          {
-            label: isGe ? "წონა" : "Weight",
-            value: product.quilt.weight,
-          },
-        ].filter((item) => Boolean(item.value?.trim()))
+      ? (() => {
+          const quilt = product.quilt as typeof product.quilt & {
+            packaging?: string;
+            packagingEn?: string;
+            care?: string;
+            careEn?: string;
+          };
+          return [
+            {
+              label: isGe ? "ქსოვილი" : "Fabric",
+              value: (isGe ? quilt.fabric : quilt.fabricEn) || quilt.fabric || quilt.fabricEn,
+            },
+            {
+              label: isGe ? "შევსება" : "Filling",
+              value: (isGe ? quilt.filling : quilt.fillingEn) || quilt.filling || quilt.fillingEn,
+            },
+            {
+              label: isGe ? "წონა" : "Weight",
+              value: quilt.weight,
+            },
+            {
+              label: isGe ? "შეფუთვა" : "Packaging",
+              value: (isGe ? quilt.packaging : quilt.packagingEn) || quilt.packaging || quilt.packagingEn,
+            },
+            {
+              label: isGe ? "მოვლა" : "Care",
+              value: (isGe ? quilt.care : quilt.careEn) || quilt.care || quilt.careEn,
+            },
+          ].filter((item) => Boolean(item.value?.trim()));
+        })()
       : [];
 
   const minitext =

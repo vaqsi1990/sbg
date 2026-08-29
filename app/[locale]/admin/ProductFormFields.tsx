@@ -685,6 +685,10 @@ export default function ProductFormFields({
               <Input {...form.register("fabricEn")} placeholder="Fabric (EN)" className={inputClass} />
               <Input {...form.register("filling")} placeholder="შევსება (KA)" className={inputClass} />
               <Input {...form.register("fillingEn")} placeholder="Filling (EN)" className={inputClass} />
+              <Input {...form.register("packaging")} placeholder="შეფუთვა (KA)" className={inputClass} />
+              <Input {...form.register("packagingEn")} placeholder="Packaging (EN)" className={inputClass} />
+              <Input {...form.register("care")} placeholder="მოვლა (KA)" className={inputClass} />
+              <Input {...form.register("careEn")} placeholder="Care (EN)" className={inputClass} />
             </div>
             {extraFeatures.length > 0 ? (
               <div className="space-y-2">
