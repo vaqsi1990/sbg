@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Furniture" ADD COLUMN IF NOT EXISTS "size3" TEXT;
+ALTER TABLE "Furniture" ADD COLUMN IF NOT EXISTS "size4" TEXT;

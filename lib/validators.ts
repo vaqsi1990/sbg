@@ -139,6 +139,8 @@ export const FurnitureSchema = z.object({
   descriptionEn: optionalTrimmedString,
   size1: optionalTrimmedString,
   size2: optionalTrimmedString,
+  size3: optionalTrimmedString,
+  size4: optionalTrimmedString,
 });
 
 export const ProductSchema = z.discriminatedUnion("type", [

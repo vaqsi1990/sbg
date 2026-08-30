@@ -186,5 +186,7 @@ model Furniture {
   descriptionEn   String?
   size1           String?
   size2           String?
+  size3           String?
+  size4           String?
   infoSections    Json?
 }

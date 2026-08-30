@@ -4,7 +4,7 @@
 import { UploadDropzone } from "@/utils/uploadthing";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, Star, X } from "lucide-react";
 
 type ImageUploadProps = {
   onChange: (urls: string[]) => void;
@@ -33,7 +33,17 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
     onChange(newUrls);
   };
 
+  const setAsMain = (index: number) => {
+    if (index === 0) return;
+    const next = [...imageUrls];
+    const [selected] = next.splice(index, 1);
+    next.unshift(selected);
+    setImageUrls(next);
+    onChange(next);
+  };
+
   const canUploadMore = !maxFiles || imageUrls.length < maxFiles;
+  const canChooseMain = imageUrls.length > 1;
 
   return (
     <div className="space-y-4">
@@ -74,26 +84,58 @@ const ImageUpload = ({ onChange, value, maxFiles }: ImageUploadProps) => {
             ატვირთული სურათები ({imageUrls.length}
             {maxFiles ? ` / ${maxFiles}` : ""})
           </h2>
+          {canChooseMain ? (
+            <p className="text-sm text-muted-foreground">
+              მთავარი სურათი ჩანს პროდუქტის ბარათზე. დააჭირე ვარსკვლავს, რომ სხვა სურათი გახდეს მთავარი.
+            </p>
+          ) : null}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {imageUrls.map((url, index) => (
-              <div key={`${url}-${index}`} className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted">
-                <Image
-                  src={url}
-                  alt={`Uploaded ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="200px"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeImage(index)}
-                  className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/80"
-                  aria-label="სურათის წაშლა"
+            {imageUrls.map((url, index) => {
+              const isMain = index === 0;
+              return (
+                <div
+                  key={`${url}-${index}`}
+                  className={`group relative aspect-square overflow-hidden rounded-lg border bg-muted ${
+                    canChooseMain && isMain
+                      ? "border-brand-chrome ring-2 ring-brand-chrome/40"
+                      : "border-border"
+                  }`}
                 >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ))}
+                  <Image
+                    src={url}
+                    alt={`Uploaded ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="200px"
+                  />
+                  {canChooseMain && isMain ? (
+                    <span className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-brand-chrome px-2.5 py-1 text-xs font-semibold text-white">
+                      <Star className="h-3.5 w-3.5 fill-current" />
+                      მთავარი
+                    </span>
+                  ) : null}
+                  {canChooseMain && !isMain ? (
+                    <button
+                      type="button"
+                      onClick={() => setAsMain(index)}
+                      className="absolute left-2 top-2 flex h-8 items-center gap-1.5 rounded-full bg-black/60 px-2.5 text-xs font-medium text-white hover:bg-black/80"
+                      aria-label="მთავარ სურათად დაყენება"
+                    >
+                      <Star className="h-3.5 w-3.5" />
+                      მთავარი
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/80"
+                    aria-label="სურათის წაშლა"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       ) : !canUploadMore ? (

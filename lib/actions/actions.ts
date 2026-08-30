@@ -192,6 +192,8 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             descriptionEn: parsed.descriptionEn?.trim() || null,
             size1: parsed.size1?.trim() || null,
             size2: parsed.size2?.trim() || null,
+            size3: parsed.size3?.trim() || null,
+            size4: parsed.size4?.trim() || null,
             infoSections: normalizeFurnitureInfo(parsed.infoSections),
           } as never,
         });
@@ -536,6 +538,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           descriptionEn: product.descriptionEn?.trim() || null,
           size1: product.size1?.trim() || null,
           size2: product.size2?.trim() || null,
+          size3: product.size3?.trim() || null,
+          size4: product.size4?.trim() || null,
           infoSections: normalizeFurnitureInfo(product.infoSections),
         } as never,
         update: {
@@ -543,6 +547,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           descriptionEn: product.descriptionEn?.trim() || null,
           size1: product.size1?.trim() || null,
           size2: product.size2?.trim() || null,
+          size3: product.size3?.trim() || null,
+          size4: product.size4?.trim() || null,
           infoSections: normalizeFurnitureInfo(product.infoSections),
         } as never,
       });

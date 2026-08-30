@@ -364,7 +364,7 @@ export default function ProductFormFields({
         </div>
       </FormSection>
 
-      <FormSection step={3} title="სურათები" hint="დააჭირე ლურჯ ზონაზე ან გადაიტანე სურათები — შეგიძლია რამდენიმეს ატვირთვა">
+      <FormSection step={3} title="სურათები" hint="დააჭირე ლურჯ ზონაზე ან გადაიტანე სურათები. აირჩიე, რომელი იქნება მთავარი სურათი.">
         <FormField
           control={form.control}
           name="images"
@@ -381,7 +381,7 @@ export default function ProductFormFields({
 
       {productType === "FURNITURE" && (
         <>
-          <FormSection step={4} title="ზომა" hint="არასავალდებულო — როგორც მატრასზე">
+          <FormSection step={4} title="ზომა" hint="არასავალდებულო — შეგიძლია 4 ზომამდე, როგორც მატრასზე">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 {...form.register("size1")}
@@ -391,6 +391,16 @@ export default function ProductFormFields({
               <Input
                 {...form.register("size2")}
                 placeholder="ზომა 2 (არასავალდებულო)"
+                className={inputClass}
+              />
+              <Input
+                {...form.register("size3")}
+                placeholder="ზომა 3 (არასავალდებულო)"
+                className={inputClass}
+              />
+              <Input
+                {...form.register("size4")}
+                placeholder="ზომა 4 (არასავალდებულო)"
                 className={inputClass}
               />
             </div>
@@ -418,7 +428,7 @@ export default function ProductFormFields({
           <FormSection
             step={6}
             title="ინფორმაცია"
-            hint="არასავალდებულო — სექციები იხსნება/იხურება პროდუქტის გვერდზე"
+            hint="მარცხნივ ჩასვი ქართული სია, მარჯვნივ ინგლისური — ორივე ენა შეივსება"
           >
             <FurnitureInfoFields form={form} />
           </FormSection>

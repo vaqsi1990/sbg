@@ -39,8 +39,8 @@ export default function QuiltSizePicker({ sizes, isGe }: QuiltSizePickerProps) {
           <SelectValue placeholder={isGe ? "აირჩიე ზომა" : "Choose size"} />
         </SelectTrigger>
         <SelectContent className="rounded-xl">
-          {sizes.map((size) => (
-            <SelectItem key={size} value={size} className="text-base">
+          {sizes.map((size, index) => (
+            <SelectItem key={`${size}-${index}`} value={size} className="text-base">
               {size}
             </SelectItem>
           ))}

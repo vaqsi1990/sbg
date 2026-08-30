@@ -233,11 +233,13 @@ const DetailPage = async(props: {
       ? (product.furniture as typeof product.furniture & {
           size1?: string | null;
           size2?: string | null;
+          size3?: string | null;
+          size4?: string | null;
           infoSections?: unknown;
         })
       : null;
   const furnitureSizes = furniture
-      ? [furniture.size1, furniture.size2]
+      ? [furniture.size1, furniture.size2, furniture.size3, furniture.size4]
           .filter((size): size is string => Boolean(size?.trim()))
           .map((size) => size.trim())
       : [];
