@@ -41,6 +41,8 @@ export const BaseProductSchema = z.object({
   type: z.enum(['MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'FURNITURE']),
   featureIds: z.array(z.string()).optional(),
   infoSections: z.array(FurnitureInfoSectionSchema).optional(),
+  size3: optionalTrimmedString,
+  size4: optionalTrimmedString,
 });
 
 // Mattress-specific schema
