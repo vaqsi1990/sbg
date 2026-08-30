@@ -22,6 +22,26 @@ import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { syncProductCatalog } from "@/lib/actions/catalog";
 import { normalizeFurnitureInfo } from "@/lib/furniture-info";
 
+async function saveFurnitureSizes(
+  id: string,
+  sizes: {
+    size1?: string | null;
+    size2?: string | null;
+    size3?: string | null;
+    size4?: string | null;
+  }
+) {
+  await prisma.$executeRaw`
+    UPDATE "Furniture"
+    SET
+      size1 = ${sizes.size1?.trim() || null},
+      size2 = ${sizes.size2?.trim() || null},
+      size3 = ${sizes.size3?.trim() || null},
+      size4 = ${sizes.size4?.trim() || null}
+    WHERE id = CAST(${id} AS uuid)
+  `;
+}
+
 function formatError(error: any) {
   if (error.name === "ZodError") {
     // Handle Zod error
@@ -192,17 +212,17 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             descriptionEn: parsed.descriptionEn?.trim() || null,
             size1: parsed.size1?.trim() || null,
             size2: parsed.size2?.trim() || null,
-            size3: parsed.size3?.trim() || null,
-            size4: parsed.size4?.trim() || null,
             infoSections: normalizeFurnitureInfo(parsed.infoSections),
           } as never,
         });
+        await saveFurnitureSizes(createdProduct.id, parsed);
         break;
     }
 
     await syncProductCatalog(createdProduct.id, parsed.featureIds ?? []);
 
     revalidatePath("/admin");
+    revalidatePath("/", "layout");
 
     return { success: true, message: "Product created successfully" };
   } catch (error) {
@@ -237,6 +257,22 @@ export async function getSingleProduct(
       : product.type === "FURNITURE"
       ? await prisma.furniture.findUnique({ where: { id } })
       : await prisma.pad.findUnique({ where: { id } });
+
+  if (product.type === "FURNITURE" && extra) {
+    const sizeRows = await prisma.$queryRaw<
+      Array<{
+        size1: string | null;
+        size2: string | null;
+        size3: string | null;
+        size4: string | null;
+      }>
+    >`
+      SELECT size1, size2, size3, size4
+      FROM "Furniture"
+      WHERE id = CAST(${id} AS uuid)
+    `;
+    Object.assign(extra, sizeRows[0] ?? {});
+  }
 
   const catalogItems = await prisma.productCatalogItem.findMany({
     where: { productId: id },
@@ -538,8 +574,6 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           descriptionEn: product.descriptionEn?.trim() || null,
           size1: product.size1?.trim() || null,
           size2: product.size2?.trim() || null,
-          size3: product.size3?.trim() || null,
-          size4: product.size4?.trim() || null,
           infoSections: normalizeFurnitureInfo(product.infoSections),
         } as never,
         update: {
@@ -547,11 +581,10 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           descriptionEn: product.descriptionEn?.trim() || null,
           size1: product.size1?.trim() || null,
           size2: product.size2?.trim() || null,
-          size3: product.size3?.trim() || null,
-          size4: product.size4?.trim() || null,
           infoSections: normalizeFurnitureInfo(product.infoSections),
         } as never,
       });
+      await saveFurnitureSizes(product.id, product);
     }
 
     if (Array.isArray(product.featureIds)) {
@@ -559,6 +592,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     }
 
     revalidatePath("/admin");
+    revalidatePath("/", "layout");
 
     return {
       success: true,

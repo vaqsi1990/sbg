@@ -72,7 +72,13 @@ export default function FurnitureInfoFields({ form }: Props) {
       }
       return base;
     }
-    const next = overlayFurnitureInfoLang(base, parsed, lang);
+    const usableBase = base.filter(
+      (section) =>
+        section.titleKa ||
+        section.titleEn ||
+        (section.rows ?? []).some((row) => row.labelKa || row.labelEn || row.valueKa || row.valueEn)
+    );
+    const next = overlayFurnitureInfoLang(usableBase, parsed, lang);
     setSections(next);
     if (!silent) {
       const rowCount = next.reduce((sum, section) => sum + (section.rows?.length ?? 0), 0);
@@ -116,7 +122,7 @@ export default function FurnitureInfoFields({ form }: Props) {
         <div>
           <p className="text-base font-semibold text-foreground">ჩასვი ქართული და ინგლისური ცალ-ცალკე</p>
           <p className="text-sm text-muted-foreground">
-            მარცხნივ ჩასვი ქართული სია, მარჯვნივ ინგლისური. სექციები რიგით დაემთხვევა და ორივე ენა შეივსება.
+            მარცხნივ ჩასვი ქართული სია, მარჯვნივ ინგლისური. ყოველი კატეგორიის სათაური ცალ ხაზზე უნდა იყოს — იმდენი სექცია შეიქმნება.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

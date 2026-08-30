@@ -428,7 +428,7 @@ export default function ProductFormFields({
           <FormSection
             step={6}
             title="ინფორმაცია"
-            hint="მარცხნივ ჩასვი ქართული სია, მარჯვნივ ინგლისური — ორივე ენა შეივსება"
+            hint="მარცხნივ ქართული, მარჯვნივ ინგლისური. ყოველი სათაური ახალ სექციას ქმნის."
           >
             <FurnitureInfoFields form={form} />
           </FormSection>

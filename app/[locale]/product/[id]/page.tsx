@@ -230,11 +230,13 @@ const DetailPage = async(props: {
       : [];
   const furniture =
     product.type === "FURNITURE" && product.furniture
-      ? (product.furniture as typeof product.furniture & {
+      ? (product.furniture as {
           size1?: string | null;
           size2?: string | null;
           size3?: string | null;
           size4?: string | null;
+          descriptionKa?: string | null;
+          descriptionEn?: string | null;
           infoSections?: unknown;
         })
       : null;

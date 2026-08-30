@@ -106,6 +106,8 @@ function cellsOf(line: string): string[] {
 
   const colon = text.match(/^(.+?)\s*[:：]\s*(.+)$/);
   if (colon) return [colon[1].trim(), colon[2].trim()];
+  const dash = text.match(/^(.+?)\s+[–—]\s+(.+)$/) || text.match(/^(.+?)\s+-\s+(.+)$/);
+  if (dash) return [dash[1].trim(), dash[2].trim()];
   return [text];
 }
 
@@ -177,22 +179,65 @@ function rowIsTitle(row: FurnitureInfoRow): boolean {
   return Boolean((row.labelKa || row.labelEn) && !row.valueKa && !row.valueEn);
 }
 
-function parsePastedBlock(lines: string[]): FurnitureInfoSection | null {
-  const rows = lines.map(parsePastedLine).filter((row) => !isHeaderRow(row));
-  const usable = rows.filter((row) => row.labelKa || row.labelEn || row.valueKa || row.valueEn);
-  if (usable.length === 0) return null;
+function lineLooksLikeHeading(line: string, row: FurnitureInfoRow): boolean {
+  if (!rowIsTitle(row)) return false;
+  const text = stripBullet(line);
+  if (text.includes("\t") || text.includes("|")) return false;
+  if (/[:：]/.test(text) && /\S[:：]\s*\S/.test(text)) return false;
+  return true;
+}
 
-  let titleKa: string | undefined;
-  let titleEn: string | undefined;
-  let dataRows = usable;
+function parseLinesToSections(lines: string[]): FurnitureInfoSection[] {
+  const sections: FurnitureInfoSection[] = [];
+  let current: { title?: FurnitureInfoRow; rows: FurnitureInfoRow[] } | null = null;
 
-  if (usable.length > 1 && rowIsTitle(usable[0])) {
-    titleKa = usable[0].labelKa;
-    titleEn = usable[0].labelEn;
-    dataRows = usable.slice(1);
+  const flush = () => {
+    if (!current) return;
+    const titleKa = current.title?.labelKa;
+    const titleEn = current.title?.labelEn;
+    if (!titleKa && !titleEn && current.rows.length === 0) {
+      current = null;
+      return;
+    }
+    sections.push({
+      titleKa,
+      titleEn,
+      rows: current.rows,
+    });
+    current = null;
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\u00a0/g, " ").trim();
+    if (!line) {
+      if (current && current.rows.length > 0) flush();
+      continue;
+    }
+
+    const parsed = parsePastedLine(line);
+    if (isHeaderRow(parsed)) continue;
+    if (!parsed.labelKa && !parsed.labelEn && !parsed.valueKa && !parsed.valueEn) continue;
+
+    if (lineLooksLikeHeading(line, parsed)) {
+      if (current && current.rows.length > 0) {
+        flush();
+        current = { title: parsed, rows: [] };
+      } else if (!current) {
+        current = { title: parsed, rows: [] };
+      } else if (!current.title) {
+        current.title = parsed;
+      } else {
+        current.rows.push(parsed);
+      }
+      continue;
+    }
+
+    if (!current) current = { rows: [] };
+    current.rows.push(parsed);
   }
 
-  return { titleKa, titleEn, rows: dataRows };
+  flush();
+  return sections.filter((section) => Boolean(section.titleKa || section.titleEn || (section.rows?.length ?? 0) > 0));
 }
 
 function sectionLang(section: FurnitureInfoSection): "ka" | "en" | "both" {
@@ -303,23 +348,7 @@ export function parseFurnitureInfoText(raw: string, lang?: "ka" | "en"): Furnitu
     }
   }
 
-  const blocks: string[][] = [];
-  let current: string[] = [];
-  for (const line of text.split("\n")) {
-    if (line.trim() === "") {
-      if (current.length > 0) {
-        blocks.push(current);
-        current = [];
-      }
-      continue;
-    }
-    current.push(line.trim());
-  }
-  if (current.length > 0) blocks.push(current);
-
-  const sections = blocks
-    .map(parsePastedBlock)
-    .filter((section): section is FurnitureInfoSection => Boolean(section));
+  const sections = parseLinesToSections(text.split("\n"));
 
   const paired = pairLanguageSections(sections);
   if (lang === "ka" || lang === "en") {
