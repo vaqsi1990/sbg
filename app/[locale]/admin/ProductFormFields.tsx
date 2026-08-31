@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import ImageUpload from "./ImageUpload";
 import FurnitureInfoFields from "./FurnitureInfoFields";
@@ -137,6 +138,51 @@ export const textareaClass =
 
 const featureChipClass =
   "flex cursor-pointer items-start gap-2 rounded-lg border border-border bg-background/60 px-3 py-2.5 text-base text-foreground transition hover:border-brand-chrome hover:bg-muted/50";
+
+function FurnitureSizeFields({
+  form,
+}: {
+  form: UseFormReturn<ProductFormValues, unknown, ProductFormData>;
+}) {
+  const sizes = (form.watch("sizes") as string[] | undefined) ?? [""];
+  const values = sizes.length > 0 ? sizes : [""];
+
+  const setSizes = (next: string[]) => {
+    form.setValue("sizes" as never, (next.length > 0 ? next : [""]) as never, { shouldDirty: true });
+  };
+
+  return (
+    <div className="space-y-3">
+      {values.map((size, index) => (
+        <div key={index} className="flex items-center gap-2">
+          <Input
+            value={size}
+            onChange={(event) => {
+              const next = [...values];
+              next[index] = event.target.value;
+              setSizes(next);
+            }}
+            placeholder={`ზომა ${index + 1} (მაგ. 160X200)`}
+            className={inputClass}
+          />
+          {values.length > 1 ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 shrink-0 text-sm"
+              onClick={() => setSizes(values.filter((_, i) => i !== index))}
+            >
+              წაშლა
+            </Button>
+          ) : null}
+        </div>
+      ))}
+      <Button type="button" variant="outline" className="h-10 text-sm" onClick={() => setSizes([...values, ""])}>
+        + დაამატე ზომა
+      </Button>
+    </div>
+  );
+}
 
 function FormSection({
   step,
@@ -381,29 +427,8 @@ export default function ProductFormFields({
 
       {productType === "FURNITURE" && (
         <>
-          <FormSection step={4} title="ზომა" hint="არასავალდებულო — შეგიძლია 4 ზომამდე, როგორც მატრასზე">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                {...form.register("size1")}
-                placeholder="ზომა 1 (მაგ. 160X200)"
-                className={inputClass}
-              />
-              <Input
-                {...form.register("size2")}
-                placeholder="ზომა 2 (არასავალდებულო)"
-                className={inputClass}
-              />
-              <Input
-                {...form.register("size3")}
-                placeholder="ზომა 3 (არასავალდებულო)"
-                className={inputClass}
-              />
-              <Input
-                {...form.register("size4")}
-                placeholder="ზომა 4 (არასავალდებულო)"
-                className={inputClass}
-              />
-            </div>
+          <FormSection step={4} title="ზომა" hint="ნაგულისხმევად ერთი ზომა — დაამატე სხვა თუ გჭირდება">
+            <FurnitureSizeFields form={form} />
           </FormSection>
           <FormSection step={5} title="აღწერა" hint="არასავალდებულო — მარცხნივ ქართული, მარჯვნივ ინგლისური">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -428,7 +453,7 @@ export default function ProductFormFields({
           <FormSection
             step={6}
             title="ინფორმაცია"
-            hint="მარცხნივ ქართული, მარჯვნივ ინგლისური. ყოველი სათაური ახალ სექციას ქმნის."
+            hint="თითო სექციაში ჩასვი ქართული მარცხნივ და ინგლისური მარჯვნივ"
           >
             <FurnitureInfoFields form={form} />
           </FormSection>

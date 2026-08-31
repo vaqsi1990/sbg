@@ -43,6 +43,7 @@ export const BaseProductSchema = z.object({
   infoSections: z.array(FurnitureInfoSectionSchema).optional(),
   size3: optionalTrimmedString,
   size4: optionalTrimmedString,
+  sizes: z.array(z.string()).optional(),
 });
 
 // Mattress-specific schema
@@ -143,6 +144,7 @@ export const FurnitureSchema = z.object({
   size2: optionalTrimmedString,
   size3: optionalTrimmedString,
   size4: optionalTrimmedString,
+  sizes: z.array(z.string()).optional(),
 });
 
 export const ProductSchema = z.discriminatedUnion("type", [

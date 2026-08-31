@@ -31,6 +31,7 @@ export default function AdminProductUpdateForm({
     defaultValues: {
       featureIds: [],
       infoSections: [],
+      sizes: [""],
       ...formDefaults,
     },
   });

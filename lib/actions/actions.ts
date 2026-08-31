@@ -21,25 +21,76 @@ import {
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { syncProductCatalog } from "@/lib/actions/catalog";
 import { normalizeFurnitureInfo } from "@/lib/furniture-info";
+import { normalizeFurnitureSizes } from "@/lib/furniture-sizes";
 
 async function saveFurnitureSizes(
   id: string,
-  sizes: {
+  input: {
+    sizes?: unknown;
     size1?: string | null;
     size2?: string | null;
     size3?: string | null;
     size4?: string | null;
   }
 ) {
-  await prisma.$executeRaw`
-    UPDATE "Furniture"
-    SET
-      size1 = ${sizes.size1?.trim() || null},
-      size2 = ${sizes.size2?.trim() || null},
-      size3 = ${sizes.size3?.trim() || null},
-      size4 = ${sizes.size4?.trim() || null}
-    WHERE id = CAST(${id} AS uuid)
-  `;
+  const list = normalizeFurnitureSizes(input);
+  try {
+    await prisma.$executeRawUnsafe(
+      `UPDATE "Furniture"
+       SET size1 = $1, size2 = $2, size3 = $3, size4 = $4, sizes = $5::text[]
+       WHERE id = $6::uuid`,
+      list[0] ?? null,
+      list[1] ?? null,
+      list[2] ?? null,
+      list[3] ?? null,
+      list,
+      id
+    );
+  } catch {
+    await prisma.$executeRawUnsafe(
+      `UPDATE "Furniture"
+       SET size1 = $1, size2 = $2, size3 = $3, size4 = $4
+       WHERE id = $5::uuid`,
+      list[0] ?? null,
+      list[1] ?? null,
+      list[2] ?? null,
+      list[3] ?? null,
+      id
+    );
+  }
+}
+
+async function loadFurnitureSizeRow(id: string) {
+  try {
+    const rows = await prisma.$queryRaw<
+      Array<{
+        size1: string | null;
+        size2: string | null;
+        size3: string | null;
+        size4: string | null;
+        sizes: string[] | null;
+      }>
+    >`
+      SELECT size1, size2, size3, size4, sizes
+      FROM "Furniture"
+      WHERE id = CAST(${id} AS uuid)
+    `;
+    return rows[0] ?? null;
+  } catch {
+    const rows = await prisma.$queryRaw<
+      Array<{
+        size1: string | null;
+        size2: string | null;
+        size3: string | null;
+        size4: string | null;
+      }>
+    >`
+      SELECT size1, size2, size3, size4
+      FROM "Furniture"
+      WHERE id = CAST(${id} AS uuid)
+    `;
+    return rows[0] ?? null;
+  }
 }
 
 function formatError(error: any) {
@@ -259,19 +310,13 @@ export async function getSingleProduct(
       : await prisma.pad.findUnique({ where: { id } });
 
   if (product.type === "FURNITURE" && extra) {
-    const sizeRows = await prisma.$queryRaw<
-      Array<{
-        size1: string | null;
-        size2: string | null;
-        size3: string | null;
-        size4: string | null;
-      }>
-    >`
-      SELECT size1, size2, size3, size4
-      FROM "Furniture"
-      WHERE id = CAST(${id} AS uuid)
-    `;
-    Object.assign(extra, sizeRows[0] ?? {});
+    const row = await loadFurnitureSizeRow(id);
+    if (row) {
+      Object.assign(extra, {
+        ...row,
+        sizes: normalizeFurnitureSizes(row),
+      });
+    }
   }
 
   const catalogItems = await prisma.productCatalogItem.findMany({

@@ -12,6 +12,7 @@ import QuiltSpecs from '../QuiltSpecs';
 import FurnitureInfoAccordion from '../FurnitureInfoAccordion';
 import FurnitureHighlights from '../FurnitureHighlights';
 import { parseFurnitureInfo, toFurnitureInfoDisplay } from '@/lib/furniture-info';
+import { normalizeFurnitureSizes } from '@/lib/furniture-sizes';
 import { cn } from '@/lib/utils';
 type Feature = {
   key:
@@ -235,16 +236,13 @@ const DetailPage = async(props: {
           size2?: string | null;
           size3?: string | null;
           size4?: string | null;
+          sizes?: unknown;
           descriptionKa?: string | null;
           descriptionEn?: string | null;
           infoSections?: unknown;
         })
       : null;
-  const furnitureSizes = furniture
-      ? [furniture.size1, furniture.size2, furniture.size3, furniture.size4]
-          .filter((size): size is string => Boolean(size?.trim()))
-          .map((size) => size.trim())
-      : [];
+  const furnitureSizes = furniture ? normalizeFurnitureSizes(furniture) : [];
   const sizeOptions =
     product.type === "QUILT"
       ? quiltSizes

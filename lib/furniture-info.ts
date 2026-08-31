@@ -187,6 +187,50 @@ function lineLooksLikeHeading(line: string, row: FurnitureInfoRow): boolean {
   return true;
 }
 
+function parseLinesToSingleSection(lines: string[]): FurnitureInfoSection | null {
+  let title: FurnitureInfoRow | undefined;
+  const rows: FurnitureInfoRow[] = [];
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\u00a0/g, " ").trim();
+    if (!line) continue;
+
+    const parsed = parsePastedLine(line);
+    if (isHeaderRow(parsed)) continue;
+    if (!parsed.labelKa && !parsed.labelEn && !parsed.valueKa && !parsed.valueEn) continue;
+
+    if (!title && rows.length === 0 && lineLooksLikeHeading(line, parsed)) {
+      title = parsed;
+      continue;
+    }
+
+    rows.push(parsed);
+  }
+
+  if (!title && rows.length === 0) return null;
+  return {
+    titleKa: title?.labelKa,
+    titleEn: title?.labelEn,
+    rows,
+  };
+}
+
+function collapseToOneSection(sections: FurnitureInfoSection[]): FurnitureInfoSection[] {
+  if (sections.length <= 1) return sections;
+  const first = sections[0];
+  const rows = [...(first.rows ?? [])];
+  for (const extra of sections.slice(1)) {
+    if (extra.titleKa || extra.titleEn) {
+      rows.push({
+        labelKa: extra.titleKa,
+        labelEn: extra.titleEn,
+      });
+    }
+    rows.push(...(extra.rows ?? []));
+  }
+  return [{ ...first, rows }];
+}
+
 function parseLinesToSections(lines: string[]): FurnitureInfoSection[] {
   const sections: FurnitureInfoSection[] = [];
   let current: { title?: FurnitureInfoRow; rows: FurnitureInfoRow[] } | null = null;
@@ -329,7 +373,11 @@ function forceSectionLang(section: FurnitureInfoSection, lang: "ka" | "en"): Fur
   };
 }
 
-export function parseFurnitureInfoText(raw: string, lang?: "ka" | "en"): FurnitureInfoSection[] {
+export function parseFurnitureInfoText(
+  raw: string,
+  lang?: "ka" | "en",
+  options?: { singleSection?: boolean }
+): FurnitureInfoSection[] {
   const text = raw.replace(/\r\n/g, "\n").trim();
   if (!text) return [];
 
@@ -338,19 +386,25 @@ export function parseFurnitureInfoText(raw: string, lang?: "ka" | "en"): Furnitu
       const json = JSON.parse(text) as unknown;
       const parsed = parseFurnitureInfo(Array.isArray(json) ? json : [json]);
       if (parsed.length > 0) {
+        const sections = options?.singleSection ? collapseToOneSection(parsed) : parsed;
         if (lang === "ka" || lang === "en") {
-          return parsed.map((section) => forceSectionLang(section, lang));
+          return sections.map((section) => forceSectionLang(section, lang));
         }
-        return parsed;
+        return sections;
       }
     } catch {
       // Fall through to plain-text parsing.
     }
   }
 
-  const sections = parseLinesToSections(text.split("\n"));
+  const sections = options?.singleSection
+    ? (() => {
+        const one = parseLinesToSingleSection(text.split("\n"));
+        return one ? [one] : [];
+      })()
+    : parseLinesToSections(text.split("\n"));
 
-  const paired = pairLanguageSections(sections);
+  const paired = options?.singleSection ? sections : pairLanguageSections(sections);
   if (lang === "ka" || lang === "en") {
     return paired.map((section) => forceSectionLang(section, lang));
   }

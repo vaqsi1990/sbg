@@ -6,6 +6,7 @@ import { redirect } from "@/i18n/navigation";
 import { getCatalogItems } from "@/lib/actions/catalog";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { parseFurnitureInfo } from "@/lib/furniture-info";
+import { sizesForForm } from "@/lib/furniture-sizes";
 import type { ProductFormData } from "../../ProductFormFields";
 
 const DetailPage = async (props: {
@@ -36,6 +37,13 @@ const DetailPage = async (props: {
           infoSections: parseFurnitureInfo(
             (product.furniture as { infoSections?: unknown }).infoSections
           ),
+          sizes: sizesForForm(product.furniture as {
+            sizes?: unknown;
+            size1?: string | null;
+            size2?: string | null;
+            size3?: string | null;
+            size4?: string | null;
+          }),
         }
       : {}),
     featureIds: product.catalogItems?.map((row) => row.itemId) ?? [],

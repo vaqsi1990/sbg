@@ -32,6 +32,7 @@ export default function AdminForm({ catalogItems = [] }: { catalogItems?: Catalo
       size2: "",
       size3: "",
       size4: "",
+      sizes: [""],
       firmnessLevel: 0,
       secondtextEn: "",
       secondtext: "",

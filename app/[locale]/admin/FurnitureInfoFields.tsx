@@ -13,6 +13,9 @@ const inputClass =
 const textareaClass =
   "w-full min-h-40 resize-y rounded-xl border border-border bg-background p-4 text-base text-foreground placeholder:text-muted-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
+const sectionTextareaClass =
+  "w-full min-h-40 resize-y rounded-xl border border-border bg-background p-3 text-base text-foreground placeholder:text-muted-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]";
+
 const PASTE_PLACEHOLDER_KA = `საზომი ინფორმაცია
 ბრენდი: Sleeper
 სიგანე: 45 სმ
@@ -29,6 +32,14 @@ Height: 55 cm
 Product details
 Color: Beige`;
 
+const SECTION_PLACEHOLDER_KA = `საზომი ინფორმაცია
+ბრენდი: Sleeper
+სიგანე: 45 სმ`;
+
+const SECTION_PLACEHOLDER_EN = `Measurement information
+Brand: Sleeper
+Width: 45 cm`;
+
 const emptyRow = (): FurnitureInfoRow => ({
   labelKa: "",
   labelEn: "",
@@ -41,6 +52,99 @@ const emptySection = (): FurnitureInfoSection => ({
   titleEn: "",
   rows: [emptyRow()],
 });
+
+function firstParsedSection(raw: string, lang: "ka" | "en"): FurnitureInfoSection | null {
+  const parsed = parseFurnitureInfoText(raw, lang, { singleSection: true });
+  return parsed[0] ?? null;
+}
+
+function SectionPaste({
+  onApply,
+}: {
+  onApply: (lang: "ka" | "en", incoming: FurnitureInfoSection) => void;
+}) {
+  const [pasteKa, setPasteKa] = useState("");
+  const [pasteEn, setPasteEn] = useState("");
+  const [message, setMessage] = useState("");
+
+  const apply = (raw: string, lang: "ka" | "en") => {
+    const incoming = firstParsedSection(raw, lang);
+    if (!incoming) {
+      setMessage(
+        lang === "ka"
+          ? "ქართული ტექსტი ვერ წავიკითხე."
+          : "Could not read the English text."
+      );
+      return;
+    }
+    onApply(lang, incoming);
+    const count = incoming.rows?.length ?? 0;
+    setMessage(
+      lang === "ka"
+        ? `ქართული შეივსო ამ სექციაში (${count} სტრიქონი).`
+        : `English filled in this section (${count} rows).`
+    );
+  };
+
+  const applyBoth = () => {
+    if (!pasteKa.trim() && !pasteEn.trim()) {
+      setMessage("ჩასვი ამ სექციის ქართული და/ან ინგლისური.");
+      return;
+    }
+    if (pasteKa.trim()) apply(pasteKa, "ka");
+    if (pasteEn.trim()) apply(pasteEn, "en");
+  };
+
+  return (
+    <div className="space-y-2 rounded-lg border border-dashed border-brand-chrome/30 bg-brand-chrome/5 p-3">
+      <p className="text-sm text-muted-foreground">ჩასვი მხოლოდ ამ სექციის ტექსტი</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label className="space-y-1 text-sm font-medium text-foreground">
+          ქართული
+          <textarea
+            value={pasteKa}
+            onChange={(event) => setPasteKa(event.target.value)}
+            onPaste={(event) => {
+              const clipboard = event.clipboardData.getData("text");
+              if (!clipboard.trim()) return;
+              const target = event.currentTarget;
+              window.setTimeout(() => {
+                setPasteKa(target.value);
+                apply(target.value, "ka");
+              }, 0);
+            }}
+            placeholder={SECTION_PLACEHOLDER_KA}
+            className={sectionTextareaClass}
+          />
+        </label>
+        <label className="space-y-1 text-sm font-medium text-foreground">
+          English
+          <textarea
+            value={pasteEn}
+            onChange={(event) => setPasteEn(event.target.value)}
+            onPaste={(event) => {
+              const clipboard = event.clipboardData.getData("text");
+              if (!clipboard.trim()) return;
+              const target = event.currentTarget;
+              window.setTimeout(() => {
+                setPasteEn(target.value);
+                apply(target.value, "en");
+              }, 0);
+            }}
+            placeholder={SECTION_PLACEHOLDER_EN}
+            className={sectionTextareaClass}
+          />
+        </label>
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button type="button" variant="outline" className="h-9 text-sm" onClick={applyBoth}>
+          ამ სექციის შევსება
+        </Button>
+        {message ? <p className="text-sm text-muted-foreground">{message}</p> : null}
+      </div>
+    </div>
+  );
+}
 
 type Props = {
   form: UseFormReturn<any>;
@@ -120,9 +224,9 @@ export default function FurnitureInfoFields({ form }: Props) {
     <div className="space-y-4">
       <div className="space-y-3 rounded-xl border border-dashed border-brand-chrome/40 bg-brand-chrome/5 p-4">
         <div>
-          <p className="text-base font-semibold text-foreground">ჩასვი ქართული და ინგლისური ცალ-ცალკე</p>
+          <p className="text-base font-semibold text-foreground">ყველა სექცია ერთად (არასავალდებულო)</p>
           <p className="text-sm text-muted-foreground">
-            მარცხნივ ჩასვი ქართული სია, მარჯვნივ ინგლისური. ყოველი კატეგორიის სათაური ცალ ხაზზე უნდა იყოს — იმდენი სექცია შეიქმნება.
+            ან დაამატე სექცია ქვემოთ და ჩასვი თითო კატეგორია ცალ-ცალკე — ქართული მარცხნივ, ინგლისური მარჯვნივ.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -200,6 +304,17 @@ export default function FurnitureInfoFields({ form }: Props) {
               წაშლა
             </Button>
           </div>
+          <SectionPaste
+            key={sectionIndex}
+            onApply={(lang, incoming) => {
+              const current =
+                ((form.getValues() as { infoSections?: FurnitureInfoSection[] }).infoSections ??
+                  []) as FurnitureInfoSection[];
+              const base = current[sectionIndex] ?? emptySection();
+              const merged = overlayFurnitureInfoLang([base], [incoming], lang)[0] ?? incoming;
+              setSections(current.map((section, i) => (i === sectionIndex ? merged : section)));
+            }}
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Input
               value={section.titleKa ?? ""}

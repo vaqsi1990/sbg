@@ -188,5 +188,6 @@ model Furniture {
   size2           String?
   size3           String?
   size4           String?
+  sizes           String[] @default([])
   infoSections    Json?
 }
