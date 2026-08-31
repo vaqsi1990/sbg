@@ -1,5 +1,5 @@
 import { getAllProduct } from "@/lib/actions/actions";
-import React from "react";
+
 
 import Items from "./Items";
 

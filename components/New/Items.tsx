@@ -13,7 +13,7 @@ function Items({ products }: { products: ProductType[] }) {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-10">
         <h2 className="section-heading">{t("ourProducts")}</h2>
         <Link
-          href="/matrass"
+          href="/all"
           className="inline-flex items-center gap-2 rounded-full bg-brand-chrome px-5 py-2.5 md:text-[18px] text-[16px] font-semibold uppercase tracking-wide text-white shadow-md transition-all hover:bg-brand-chrome/90 hover:shadow-lg shrink-0"
         >
           <span>{t("viewAll")}</span>
