@@ -180,7 +180,7 @@ export async function createCatalogItem(input: {
     return { success: false, message: "შეავსე სახელები და ატვირთე სურათი" };
   }
 
-  const slug = toSlug(input.slug || input.labelEn);
+  const slug = toSlug(input.slug || labelEn);
 
   try {
     const count = await prisma.catalogItem.count({ where: { kind: input.kind } });
