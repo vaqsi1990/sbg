@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaEdit, FaTrash } from "react-icons/fa";
+import { SearchIcon } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { Input } from "@/components/ui/input";
 import { deleteProduct } from "@/lib/actions/actions";
 import { ProductType } from "@/lib/ProductType";
 
@@ -50,15 +52,25 @@ export default function All({ products }: { products: ProductType[] }) {
   const [productList, setProductList] = useState(products);
   const [currentPage, setCurrentPage] = useState(1);
   const [category, setCategory] = useState<ProductType["type"] | "ALL">("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setProductList(products);
   }, [products]);
 
-  const filteredProducts = useMemo(
-    () => (category === "ALL" ? productList : productList.filter((product) => product.type === category)),
-    [productList, category]
-  );
+  const filteredProducts = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    return productList.filter((product) => {
+      if (category !== "ALL" && product.type !== category) return false;
+      if (!query) return true;
+
+      return (
+        product.titleKa.toLowerCase().includes(query) ||
+        product.titleEn.toLowerCase().includes(query)
+      );
+    });
+  }, [productList, category, searchQuery]);
 
   const pageCount = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
 
@@ -96,6 +108,20 @@ export default function All({ products }: { products: ProductType[] }) {
           <p className="text-sm text-muted-foreground">
             {from}–{to} / {filteredProducts.length}
           </p>
+        </div>
+        <div className="relative w-full max-w-md">
+          <Input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+              setCurrentPage(1);
+            }}
+            placeholder="ძებნა სახელით (KA / EN)..."
+            aria-label="ძებნა პროდუქტის სახელით"
+            className="h-11 pl-10 pr-4 border-border bg-card text-foreground placeholder:text-muted-foreground"
+          />
+          <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map((item) => {
@@ -135,7 +161,7 @@ export default function All({ products }: { products: ProductType[] }) {
             {pageProducts.length === 0 ? (
               <tr>
                 <td colSpan={4} className="p-8 text-center text-muted-foreground">
-                  პროდუქტი არ მოიძებნა.
+                  {searchQuery.trim() ? "პროდუქტი ამ სახელით არ მოიძებნა." : "პროდუქტი არ მოიძებნა."}
                 </td>
               </tr>
             ) : (
