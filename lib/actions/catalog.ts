@@ -84,6 +84,15 @@ function toSlug(value: string) {
   return slug || `item-${Date.now()}`;
 }
 
+const DEFAULT_HEIGHT_IMAGE = "/filters/25.jpg";
+
+function heightLabels(slug: string) {
+  return {
+    labelKa: `${slug} სმ`,
+    labelEn: `${slug} cm`,
+  };
+}
+
 export async function getCatalogItems(kind?: CatalogKind): Promise<CatalogItemDTO[]> {
   try {
     await ensureBuiltInCatalogItems();
@@ -115,9 +124,9 @@ export async function getCatalogItemBySlug(slug: string) {
 
 export async function createCatalogItem(input: {
   kind: CatalogKind;
-  labelKa: string;
-  labelEn: string;
-  image: string;
+  labelKa?: string;
+  labelEn?: string;
+  image?: string;
   slug?: string;
   forMattress?: boolean;
   forPad?: boolean;
@@ -126,21 +135,52 @@ export async function createCatalogItem(input: {
     return { success: false, message: "Unauthorized" };
   }
 
-  const labelKa = input.labelKa.trim();
-  const labelEn = input.labelEn.trim();
-  const image = input.image.trim();
+  if (input.kind === "HEIGHT") {
+    const slug = toSlug(input.slug ?? "");
+    if (!/^\d+$/.test(slug)) {
+      return { success: false, message: "სიმაღლე უნდა იყოს რიცხვი, მაგ. 35" };
+    }
+
+    const { labelKa, labelEn } = heightLabels(slug);
+    const image = input.image?.trim() || DEFAULT_HEIGHT_IMAGE;
+
+    try {
+      const count = await prisma.catalogItem.count({ where: { kind: input.kind } });
+      await prisma.catalogItem.create({
+        data: {
+          kind: input.kind,
+          slug,
+          labelKa,
+          labelEn,
+          image,
+          forMattress: input.forMattress ?? true,
+          forPad: input.forPad ?? true,
+          sortOrder: count + 1,
+          href: `/feature/${slug}`,
+        },
+      });
+      revalidatePath("/admin");
+      revalidatePath("/admin/features");
+      revalidatePath("/all");
+      revalidatePath(`/feature/${slug}`);
+      return { success: true, message: "დაემატა" };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Could not save";
+      if (message.includes("Unique") || message.includes("slug")) {
+        return { success: false, message: "ეს ზომა/მახასიათებელი უკვე არსებობს" };
+      }
+      return { success: false, message };
+    }
+  }
+
+  const labelKa = input.labelKa?.trim() ?? "";
+  const labelEn = input.labelEn?.trim() ?? "";
+  const image = input.image?.trim() ?? "";
   if (!labelKa || !labelEn || !image) {
     return { success: false, message: "შეავსე სახელები და ატვირთე სურათი" };
   }
 
-  const slug =
-    input.kind === "HEIGHT"
-      ? toSlug(input.slug || labelEn)
-      : toSlug(input.slug || input.labelEn);
-
-  if (input.kind === "HEIGHT" && !/^\d+$/.test(slug)) {
-    return { success: false, message: "სიმაღლე უნდა იყოს რიცხვი, მაგ. 35" };
-  }
+  const slug = toSlug(input.slug || input.labelEn);
 
   try {
     const count = await prisma.catalogItem.count({ where: { kind: input.kind } });
@@ -173,9 +213,9 @@ export async function createCatalogItem(input: {
 
 export async function updateCatalogItem(input: {
   id: string;
-  labelKa: string;
-  labelEn: string;
-  image: string;
+  labelKa?: string;
+  labelEn?: string;
+  image?: string;
   slug?: string;
 }) {
   if (!(await isAdminAuthenticated())) {
@@ -187,44 +227,65 @@ export async function updateCatalogItem(input: {
     return { success: false, message: "ვერ მოიძებნა" };
   }
 
-  const labelKa = input.labelKa.trim();
-  const labelEn = input.labelEn.trim();
-  const image = input.image.trim();
+  if (existing.kind === "HEIGHT") {
+    const slug = toSlug(input.slug || existing.slug);
+    if (!/^\d+$/.test(slug)) {
+      return { success: false, message: "სიმაღლე უნდა იყოს რიცხვი, მაგ. 35" };
+    }
+
+    const { labelKa, labelEn } = heightLabels(slug);
+    const image = input.image?.trim() || existing.image || DEFAULT_HEIGHT_IMAGE;
+
+    try {
+      if (slug !== existing.slug) {
+        await prisma.mattress.updateMany({
+          where: { height: existing.slug },
+          data: { height: slug },
+        });
+        await prisma.pad.updateMany({
+          where: { height: existing.slug },
+          data: { height: slug },
+        });
+      }
+
+      await prisma.catalogItem.update({
+        where: { id: input.id },
+        data: { labelKa, labelEn, image, slug },
+      });
+
+      revalidatePath("/admin");
+      revalidatePath("/admin/features");
+      revalidatePath("/all");
+      revalidatePath(`/feature/${existing.slug}`);
+      revalidatePath(`/feature/${slug}`);
+      if (existing.href) revalidatePath(existing.href);
+      return { success: true, message: "განახლდა" };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Could not save";
+      if (message.includes("Unique") || message.includes("slug")) {
+        return { success: false, message: "ეს ზომა/მახასიათებელი უკვე არსებობს" };
+      }
+      return { success: false, message };
+    }
+  }
+
+  const labelKa = input.labelKa?.trim() ?? "";
+  const labelEn = input.labelEn?.trim() ?? "";
+  const image = input.image?.trim() ?? "";
   if (!labelKa || !labelEn || !image) {
     return { success: false, message: "შეავსე სახელები და ატვირთე სურათი" };
   }
 
-  const slug =
-    existing.kind === "HEIGHT"
-      ? toSlug(input.slug || existing.slug)
-      : existing.slug;
-
-  if (existing.kind === "HEIGHT" && !/^\d+$/.test(slug)) {
-    return { success: false, message: "სიმაღლე უნდა იყოს რიცხვი, მაგ. 35" };
-  }
-
   try {
-    if (existing.kind === "HEIGHT" && slug !== existing.slug) {
-      await prisma.mattress.updateMany({
-        where: { height: existing.slug },
-        data: { height: slug },
-      });
-      await prisma.pad.updateMany({
-        where: { height: existing.slug },
-        data: { height: slug },
-      });
-    }
-
     await prisma.catalogItem.update({
       where: { id: input.id },
-      data: { labelKa, labelEn, image, slug },
+      data: { labelKa, labelEn, image },
     });
 
     revalidatePath("/admin");
     revalidatePath("/admin/features");
     revalidatePath("/all");
     revalidatePath(`/feature/${existing.slug}`);
-    revalidatePath(`/feature/${slug}`);
     if (existing.href) revalidatePath(existing.href);
     return { success: true, message: "განახლდა" };
   } catch (error) {

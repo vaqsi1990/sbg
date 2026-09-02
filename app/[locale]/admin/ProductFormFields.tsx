@@ -501,6 +501,16 @@ export default function ProductFormFields({
                 placeholder="ზომა 2 (არასავალდებულო)"
                 className={inputClass}
               />
+              <Input
+                {...form.register("size3")}
+                placeholder="ზომა 3 (არასავალდებულო)"
+                className={inputClass}
+              />
+              <Input
+                {...form.register("size4")}
+                placeholder="ზომა 4 (არასავალდებულო)"
+                className={inputClass}
+              />
               <FormField
                 control={form.control}
                 name="height"

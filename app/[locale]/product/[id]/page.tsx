@@ -225,7 +225,7 @@ const DetailPage = async(props: {
       : [];
   const mattressSizes =
     product.type === "MATTRESS" && product.mattress
-      ? [product.mattress.size1, product.mattress.size2]
+      ? [product.mattress.size1, product.mattress.size2, product.mattress.size3, product.mattress.size4]
           .filter((size): size is string => Boolean(size?.trim()))
           .map((size) => size.trim())
       : [];

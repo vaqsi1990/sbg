@@ -5,7 +5,7 @@ const globalForPrisma = global as unknown as {
   prismaRev?: number;
 };
 
-const PRISMA_REV = 3;
+const PRISMA_REV = 4;
 
 export const prisma =
   globalForPrisma.prismaRev === PRISMA_REV && globalForPrisma.prisma

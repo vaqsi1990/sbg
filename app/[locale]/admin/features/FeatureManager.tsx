@@ -61,18 +61,15 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
     const result = editingId
       ? await updateCatalogItem({
           id: editingId,
-          labelKa,
-          labelEn,
-          image,
-          slug: kind === "HEIGHT" ? slug : undefined,
+          ...(kind === "HEIGHT"
+            ? { slug }
+            : { labelKa, labelEn, image }),
         })
-      : await createCatalogItem({
-          kind,
-          labelKa,
-          labelEn,
-          image,
-          slug: kind === "HEIGHT" ? slug : undefined,
-        });
+      : await createCatalogItem(
+          kind === "HEIGHT"
+            ? { kind, slug }
+            : { kind, labelKa, labelEn, image }
+        );
 
     setPending(false);
     setMessage(result.message);
@@ -103,7 +100,11 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
           {editingId ? "მახასიათებლის რედაქტირება" : "ახალი ზომა ან მახასიათებელი"}
         </h1>
         <p className="text-base text-muted-foreground">
-          {editingId
+          {kind === "HEIGHT"
+            ? editingId
+              ? "შეცვალე სიმაღლე და დააჭირე შენახვას."
+              : "სიმაღლის/ზომის დამატებისთვის საკმარისია მხოლოდ რიცხვი (სმ)."
+            : editingId
             ? "შეცვალე სახელი ან სურათი და დააჭირე შენახვას. ძველი მახასიათებლების სახელი/სურათი საიტზეც განახლდება."
             : "ძველი მახასიათებლებიც აქ ჩანს. დააჭირე რედაქტირებას სახელის ან სურათის შესაცვლელად, ან დაამატე ახალი."}
         </p>
@@ -127,51 +128,53 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
           </label>
 
           {kind === "HEIGHT" ? (
-            <label className="space-y-2 text-base font-medium text-foreground">
+            <label className="space-y-2 text-base font-medium text-foreground md:col-span-2">
               სიმაღლე (სმ)
               <Input
                 value={slug}
-                onChange={(event) => setSlug(event.target.value)}
+                onChange={(event) => setSlug(event.target.value.replace(/[^\d]/g, ""))}
                 placeholder="მაგ. 35"
-                className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
+                className="h-11 max-w-xs border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
                 required
               />
             </label>
           ) : (
-            <div />
+            <>
+              <label className="space-y-2 text-base font-medium text-foreground">
+                სახელი (KA)
+                <Input
+                  value={labelKa}
+                  onChange={(event) => setLabelKa(event.target.value)}
+                  placeholder="მაგ. რბილი კომფორტის ფენა"
+                  className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
+                  required
+                />
+              </label>
+              <label className="space-y-2 text-base font-medium text-foreground">
+                სახელი (EN)
+                <Input
+                  value={labelEn}
+                  onChange={(event) => setLabelEn(event.target.value)}
+                  placeholder="e.g. Soft Comfort Layer"
+                  className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
+                  required
+                />
+              </label>
+            </>
           )}
-
-          <label className="space-y-2 text-base font-medium text-foreground">
-            სახელი (KA)
-            <Input
-              value={labelKa}
-              onChange={(event) => setLabelKa(event.target.value)}
-              placeholder="მაგ. რბილი კომფორტის ფენა"
-              className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
-              required
-            />
-          </label>
-          <label className="space-y-2 text-base font-medium text-foreground">
-            სახელი (EN)
-            <Input
-              value={labelEn}
-              onChange={(event) => setLabelEn(event.target.value)}
-              placeholder="e.g. Soft Comfort Layer"
-              className="h-11 border-border bg-background text-base text-foreground placeholder:text-muted-foreground md:text-base"
-              required
-            />
-          </label>
         </div>
 
-        <div>
-          <p className="mb-2 text-base font-medium text-foreground">სურათი</p>
-          <ImageUpload
-            key={`${editingId ?? "new"}-${image || "empty"}`}
-            value={image ? [image] : []}
-            maxFiles={1}
-            onChange={(urls) => setImage(urls[0] ?? "")}
-          />
-        </div>
+        {kind === "FEATURE" ? (
+          <div>
+            <p className="mb-2 text-base font-medium text-foreground">სურათი</p>
+            <ImageUpload
+              key={`${editingId ?? "new"}-${image || "empty"}`}
+              value={image ? [image] : []}
+              maxFiles={1}
+              onChange={(urls) => setImage(urls[0] ?? "")}
+            />
+          </div>
+        ) : null}
 
         {message ? <p className="text-base text-brand">{message}</p> : null}
 
@@ -198,7 +201,7 @@ export default function FeatureManager({ items }: { items: CatalogItemDTO[] }) {
 
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-foreground">სიმაღლეები</h2>
-        <ItemList items={heights} editingId={editingId} onEdit={startEdit} onDelete={onDelete} />
+        <ItemList items={heights} editingId={editingId} onEdit={startEdit} onDelete={onDelete} showAsHeight />
       </section>
       <section className="space-y-3">
         <h2 className="text-lg font-semibold text-foreground">მახასიათებლები</h2>
@@ -213,11 +216,13 @@ function ItemList({
   editingId,
   onEdit,
   onDelete,
+  showAsHeight = false,
 }: {
   items: CatalogItemDTO[];
   editingId: string | null;
   onEdit: (item: CatalogItemDTO) => void;
   onDelete: (id: string) => void;
+  showAsHeight?: boolean;
 }) {
   if (!items.length) {
     return <p className="text-base text-muted-foreground">ჯერ არ არის დამატებული</p>;
@@ -235,17 +240,27 @@ function ItemList({
           }`}
         >
           <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-border">
-            <Image
-              src={item.image}
-              alt={item.labelEn}
-              fill
-              className="object-contain"
-              unoptimized={item.image.startsWith("http")}
-            />
+            {showAsHeight ? (
+              <div className="flex h-full w-full items-center justify-center text-base font-semibold text-foreground">
+                {item.slug}
+              </div>
+            ) : (
+              <Image
+                src={item.image}
+                alt={item.labelEn}
+                fill
+                className="object-contain"
+                unoptimized={item.image.startsWith("http")}
+              />
+            )}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-base font-medium text-foreground">{item.labelKa}</p>
-            <p className="truncate text-base text-muted-foreground">{item.labelEn}</p>
+            <p className="truncate text-base font-medium text-foreground">
+              {showAsHeight ? `${item.slug} სმ` : item.labelKa}
+            </p>
+            <p className="truncate text-base text-muted-foreground">
+              {showAsHeight ? `${item.slug} cm` : item.labelEn}
+            </p>
           </div>
           <div className="flex flex-col gap-1">
             <button

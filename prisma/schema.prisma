@@ -89,6 +89,8 @@ model Mattress {
   height          String
   size1           String?
   size2           String?
+  size3           String?
+  size4           String?
   firmnessLevel   Int      @default(0)
   descriptionEn String
   descriptionKa String
