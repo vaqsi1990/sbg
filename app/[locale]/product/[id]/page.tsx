@@ -425,7 +425,7 @@ const DetailPage = async(props: {
                           className="h-full w-full object-contain"
                         />
                       </div>
-                      <span className="text-sm font-medium text-foreground leading-snug">
+                      <span className="text-[16px] font-medium text-foreground leading-snug">
                         {isGe ? feature.label : feature.labelEn}
                       </span>
                     </Link>
@@ -446,7 +446,7 @@ const DetailPage = async(props: {
                           unoptimized={item.image.startsWith("http")}
                         />
                       </div>
-                      <span className="text-sm font-medium text-foreground leading-snug">
+                      <span className="text-[16px] font-medium text-foreground leading-snug">
                         {isGe ? item.labelKa : item.labelEn}
                       </span>
                     </Link>
@@ -503,7 +503,7 @@ const DetailPage = async(props: {
                       unoptimized={item.image.startsWith("http")}
                     />
                   </div>
-                  <span className="text-sm sm:text-base font-semibold text-foreground leading-snug">
+                  <span className="text-[16px] font-semibold text-foreground leading-snug">
                     {isGe ? item.labelKa : item.labelEn}
                   </span>
                 </Link>
